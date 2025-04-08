@@ -1,5 +1,7 @@
 
+using clothes_backend.Inteface;
 using clothes_backend.Models;
+using clothes_backend.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -45,6 +47,10 @@ namespace clothes_backend
 
             });
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+            //
+            builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            builder.Services.AddScoped<ProductRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

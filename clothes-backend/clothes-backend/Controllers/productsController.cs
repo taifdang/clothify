@@ -1,11 +1,13 @@
 ﻿using clothes_backend.Inteface;
 using clothes_backend.Models;
+using clothes_backend.Repository;
 using clothes_backend.Service;
 using clothes_backend.Utils;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace clothes_backend.Controllers
 {
@@ -15,16 +17,19 @@ namespace clothes_backend.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly DatabaseContext _db;
-       
-        public productsController(IConfiguration configuration, DatabaseContext db)
+        private readonly ProductRepository _productRepo;
+
+        public productsController(IConfiguration configuration, DatabaseContext db, ProductRepository productRepository)
         {
             this.configuration = configuration;
-            this._db = db;          
+            this._db = db;
+            _productRepo = productRepository;
         }
         [HttpGet]
-        public IActionResult getList()
+        public async Task<IActionResult> getList()
         {
-            var data = _db.orders.ToList();          
+            //var data = _db.orders.ToList();
+            var data = await _productRepo.get();
             return Ok(data);
         }
         [HttpGet("filter")]
