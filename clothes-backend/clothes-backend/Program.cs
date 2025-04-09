@@ -2,6 +2,7 @@
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -16,6 +17,11 @@ namespace clothes_backend
             // Add services to the container.
 
             builder.Services.AddControllers();
+            //error handle
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(op =>
@@ -50,7 +56,8 @@ namespace clothes_backend
             //
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             builder.Services.AddScoped<ProductRepository>();
-
+            //
+            builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

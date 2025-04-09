@@ -14,29 +14,43 @@ namespace clothes_backend.Repository
             _dbSet = _db.Set<T>();
         }
 
-        public virtual Task add(T entity)
+        public virtual async Task add(T entity)
         {
-            throw new NotImplementedException();
+            await _dbSet.AddAsync(entity);      
         }
 
-        public virtual Task delete(int id)
+        public virtual async Task delete(int id)
         {
-            throw new NotImplementedException();
+            var item = await _dbSet.FindAsync(id);
+            if(item != null)
+            {
+               _db.Remove(id);
+               await _db.SaveChangesAsync();             
+            }
         }
-
         public virtual async Task<IEnumerable<T>> get()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public virtual Task<T> getId(int id)
+        public virtual async Task<T> getId(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
-        public virtual Task update(int id, T entity)
-        {
-            throw new NotImplementedException();
+        public virtual IEnumerable<T> pagination(IEnumerable<T> entity, int currentPage, int limit)
+        {       
+            int skip = (currentPage - 1) * limit;
+            entity =  entity.Skip(skip).Take(limit);
+            return entity;
         }
+
+        public virtual async Task update(int id, T entity)
+        {
+            var item = await _dbSet.FindAsync(id);
+            if (item == null) throw new NotImplementedException();
+            _db.Entry(item).CurrentValues.SetValues(entity);//same value,type
+        }
+        
     }
 }

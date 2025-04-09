@@ -7,5 +7,7 @@
         Task add(T entity);
         Task update(int id,T entity);
         Task delete(int id);
+        IEnumerable<T> pagination(IEnumerable<T> entity, int currentPage, int limit);
+        
     }
 }
