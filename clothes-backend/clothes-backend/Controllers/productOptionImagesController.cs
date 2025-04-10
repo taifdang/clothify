@@ -1,0 +1,40 @@
+﻿using clothes_backend.DTO;
+using clothes_backend.Models;
+using clothes_backend.Repository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace clothes_backend.Controllers
+{
+    [Route("api/images")]
+    [ApiController]
+    public class productOptionImagesController : ControllerBase
+    {
+        private readonly ProductOptionImageRepository _imageRepo;
+        public productOptionImagesController(ProductOptionImageRepository imageRepo) 
+        {
+            _imageRepo = imageRepo;
+        }
+        [HttpPost("add")]
+        public async Task<IActionResult> add([FromForm]imageDTO DTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+
+                return BadRequest(GenericResponse<Products>.Fail(fullErrorMessage));
+            }
+            var data = await _imageRepo.add(DTO);
+            if (data == null) return BadRequest(GenericResponse<Products>.Fail());
+            return Ok(GenericResponse<Products>.Success(null));
+        }
+    }
+}

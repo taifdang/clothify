@@ -4,6 +4,7 @@ using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 
 namespace clothes_backend
@@ -56,6 +57,7 @@ namespace clothes_backend
             //
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             builder.Services.AddScoped<ProductRepository>();
+            builder.Services.AddScoped<ProductOptionImageRepository>();
             //
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
@@ -66,11 +68,15 @@ namespace clothes_backend
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+                RequestPath = "/Images"
+            });
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

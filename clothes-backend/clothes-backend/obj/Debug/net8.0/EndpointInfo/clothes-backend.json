@@ -5,6 +5,59 @@
     "version": "v1"
   },
   "paths": {
+    "/api/images/add": {
+      "post": {
+        "tags": [
+          "productOptionImages"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "option_value_id",
+                  "product_id"
+                ],
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "option_value_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "product_id": {
+                  "style": "form"
+                },
+                "option_value_id": {
+                  "style": "form"
+                },
+                "files": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/products": {
       "get": {
         "tags": [

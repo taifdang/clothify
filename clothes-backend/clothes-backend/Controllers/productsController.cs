@@ -39,7 +39,7 @@ namespace clothes_backend.Controllers
             var data = await _productRepo.getId(id);
             if (data is null) return BadRequest(GenericResponse<Products>.Fail());
 
-            return Ok(GenericResponse<Products>.OK(data));
+            return Ok(GenericResponse<Products>.Success(data));
         }
         [HttpGet("filter")]
         public IActionResult filter(SortType type)
@@ -76,7 +76,7 @@ namespace clothes_backend.Controllers
             {
                 return BadRequest(GenericResponse<Products>.Fail());
             }
-            return Ok(GenericResponse<Products>.OK(result));
+            return Ok(GenericResponse<Products>.Success(result));
         }
         [HttpPost("update")]
         public async Task<IActionResult> update(int id, [FromForm] productDTO DTO)
@@ -87,7 +87,7 @@ namespace clothes_backend.Controllers
             }
             var result = await _productRepo.update(id, DTO);
             if (result == null) return BadRequest(GenericResponse<Products>.Fail());
-            return Ok(GenericResponse<Products>.OK(result));
+            return Ok(GenericResponse<Products>.Success(result));
 
         }
         [HttpDelete("delete")]
@@ -99,7 +99,7 @@ namespace clothes_backend.Controllers
             }
             var result = await _productRepo.delete(id);
             if (result == null) return BadRequest(GenericResponse<Products>.Fail());
-            return Ok(GenericResponse<Products?>.OK(null));
+            return Ok(GenericResponse<Products?>.Success(null));
 
         }
     }

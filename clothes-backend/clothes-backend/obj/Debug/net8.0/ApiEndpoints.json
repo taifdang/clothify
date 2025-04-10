@@ -1,5 +1,31 @@
 [
   {
+    "ContainingType": "clothes_backend.Controllers.productOptionImagesController",
+    "Method": "add",
+    "RelativePath": "api/images/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "product_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "option_value_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "files",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "clothes_backend.Controllers.productsController",
     "Method": "getList",
     "RelativePath": "api/products",
