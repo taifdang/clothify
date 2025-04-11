@@ -3,6 +3,7 @@ using clothes_backend.DTO;
 using clothes_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace clothes_backend.Repository
 {
@@ -29,7 +30,7 @@ namespace clothes_backend.Repository
             return base.add(entity);
         }
         //overload
-        public async Task<Products?> add([FromForm] productDTO DTO)
+        public async Task<Products?> add([FromForm] productsDTO DTO)
         {
             using var tracsaction = _db.Database.BeginTransaction();
             try
@@ -56,7 +57,7 @@ namespace clothes_backend.Repository
                 return null;
             }         
         }
-        public async Task<Products?> update(int id, [FromForm]productDTO DTO)
+        public async Task<Products?> update(int id, [FromForm]productsDTO DTO)
         {
             try
             {
@@ -78,11 +79,28 @@ namespace clothes_backend.Repository
         {
             var data = await _db.products.FindAsync(id);
             if (data == null) return false;
+            //var match = Regex.Match(file_name.src, @"[a-zA-Z]+-[0-9]"); //regex => "S-S"
+            //remove image?          
+            await _db.Entry(data).Collection(img => img.product_option_images).LoadAsync();
+            var files = data.product_option_images.ToList();
+            if(files != null)
+            {
+                var full_path = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+                foreach(var file in files)
+                {
+                    var path = Path.Combine(full_path, file.src);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
+            }
+            
             _db.products.Remove(data);
             await _db.SaveChangesAsync();
             return true;
 
-            //remove image?
+            
         }
         public override IEnumerable<Products> pagination(IEnumerable<Products> entity, int currentPage, int limit)
         {

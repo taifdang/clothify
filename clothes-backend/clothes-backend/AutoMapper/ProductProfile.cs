@@ -8,7 +8,7 @@ namespace clothes_backend.AutoMapper
     {
        public ProductProfile()
        {
-            CreateMap<productDTO,Products >()
+            CreateMap<productsDTO,Products >()
                 .ForMember(pro=>pro.id,opt=>opt.Ignore());
        }
     }

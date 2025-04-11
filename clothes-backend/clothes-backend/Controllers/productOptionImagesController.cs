@@ -17,7 +17,7 @@ namespace clothes_backend.Controllers
             _imageRepo = imageRepo;
         }
         [HttpPost("add")]
-        public async Task<IActionResult> add([FromForm]imageDTO DTO)
+        public async Task<IActionResult> add([FromForm]imagesDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -32,9 +32,17 @@ namespace clothes_backend.Controllers
 
                 return BadRequest(GenericResponse<Products>.Fail(fullErrorMessage));
             }
-            var data = await _imageRepo.add(DTO);
-            if (data == null) return BadRequest(GenericResponse<Products>.Fail());
+            var result = await _imageRepo.add(DTO);
+            if (result == null) return BadRequest(GenericResponse<Products>.Fail());
             return Ok(GenericResponse<Products>.Success(null));
         }
+        [HttpDelete("delete")]
+        public async Task<IActionResult> delete(int id)
+        {
+            var result = await _imageRepo.delete(id);
+            if (result == null) return BadRequest(GenericResponse<Products>.Fail());
+            return Ok(GenericResponse<Products>.Success(null));
+        }
+
     }
 }

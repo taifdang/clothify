@@ -8,7 +8,7 @@ namespace clothes_backend.AutoMapper
     {
         public ImageProfile()
         {
-            CreateMap<imageDTO, ProductOptionImages>();
+            CreateMap<imagesDTO, ProductOptionImages>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace clothes_backend.DTO
 {
-    public class productDTO
+    public class productsDTO
     {
         public int id { get; set; }
         public int category_id { get; set; }

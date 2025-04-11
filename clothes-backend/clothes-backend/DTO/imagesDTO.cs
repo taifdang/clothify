@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace clothes_backend.DTO
 {
-    public class imageDTO
+    public class imagesDTO
     {
         [Required]
         public int product_id { get; set; }

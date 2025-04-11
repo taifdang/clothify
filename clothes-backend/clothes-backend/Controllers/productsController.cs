@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace clothes_backend.Controllers
@@ -57,7 +58,7 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpPost("add")]
-        public async Task<ActionResult<GenericResponse<Products>>> add([FromForm] productDTO DTO)
+        public async Task<ActionResult<GenericResponse<Products>>> add([FromForm] productsDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +80,7 @@ namespace clothes_backend.Controllers
             return Ok(GenericResponse<Products>.Success(result));
         }
         [HttpPost("update")]
-        public async Task<IActionResult> update(int id, [FromForm] productDTO DTO)
+        public async Task<IActionResult> update(int id, [FromForm] productsDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +101,7 @@ namespace clothes_backend.Controllers
             var result = await _productRepo.delete(id);
             if (result == null) return BadRequest(GenericResponse<Products>.Fail());
             return Ok(GenericResponse<Products?>.Success(null));
-
+            
         }
     }
 }

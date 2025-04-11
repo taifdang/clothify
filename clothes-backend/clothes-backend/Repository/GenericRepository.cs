@@ -24,7 +24,7 @@ namespace clothes_backend.Repository
             var item = await _dbSet.FindAsync(id);
             if(item != null)
             {
-               _db.Remove(id);
+               _dbSet.Remove(item);
                await _db.SaveChangesAsync();             
             }
         }
