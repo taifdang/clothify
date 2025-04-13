@@ -3,6 +3,8 @@ using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace clothes_backend.Controllers
 {
@@ -12,9 +14,11 @@ namespace clothes_backend.Controllers
     {
 
         private readonly ProductVariantsRepository _productVariantsRepo;
-        public productVariantsController(ProductVariantsRepository productVariantsRepo)
+        private readonly DatabaseContext _db;
+        public productVariantsController(ProductVariantsRepository productVariantsRepo,DatabaseContext databaseContext)
         {
             _productVariantsRepo = productVariantsRepo;
+            _db = databaseContext;
         }
 
         [HttpPost("add")]
@@ -32,12 +36,15 @@ namespace clothes_backend.Controllers
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
                 return BadRequest(GenericResponse<ProductVariants>.Fail(fullErrorMessage));
             }
-            object? result = await _productVariantsRepo.ADD(DTO);
+
+            //
+            object? result = await _productVariantsRepo.add(DTO);
             if (result == null)
             {
-                return BadRequest(GenericResponse<ProductVariants>.Fail());
+                return BadRequest(GenericResponse<ProductVariants>.Fail((string?)result));
             }
             return Ok(result);
         }
+       
     }
 }

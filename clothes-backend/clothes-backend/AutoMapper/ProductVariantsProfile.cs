@@ -8,12 +8,18 @@ namespace clothes_backend.AutoMapper
     {
         public ProductVariantsProfile()
         {
+            //CreateMap<productVariantsDTO, ProductVariants>()
+            //    .ForMember(opt => opt.id, x => x.Ignore())              
+            //    .ForMember(opt => opt.percent, x => x.MapFrom(src =>
+            //         (src.old_price > 0)
+            //            ? (decimal)Math.Ceiling((src.old_price - src.price) / src.old_price * 100)
+            //            : 0));
             CreateMap<productVariantsDTO, ProductVariants>()
-                .ForMember(opt => opt.id, x => x.Ignore())              
-                .ForMember(opt => opt.percent, x => x.MapFrom(src =>
-                     (src.old_price > 0)
-                        ? (decimal)Math.Ceiling((src.old_price - src.price) / src.old_price * 100)
-                        : 0));
+               .ForMember(opt => opt.id, x => x.Ignore())
+               .ForMember(opt => opt.percent, x => x.MapFrom(src =>
+                    (src.old_price > 0)
+                       ? (decimal)Math.Ceiling((src.old_price - src.price) / src.old_price * 100)
+                       : 0));
 
         }
     }  

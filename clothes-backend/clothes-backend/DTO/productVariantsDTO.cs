@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using clothes_backend.Utils;
 
 namespace clothes_backend.DTO
 {
@@ -18,7 +19,8 @@ namespace clothes_backend.DTO
         public decimal old_price { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative value")]
         public int quantity { get; set; }
-        [Required]        
+        [Required]
+        [NonEmptyListInt(ErrorMessage ="Not empty list")]
         public List<int> options { get; set; }
        
     }

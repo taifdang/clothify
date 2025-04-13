@@ -2,6 +2,7 @@
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Repository;
+using clothes_backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -53,13 +54,18 @@ namespace clothes_backend
                 });
 
             });
+           
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<ICacheService, CacheService>();
+            //builder.Services.AddLogging();
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
             //
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+           
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
-            //
+           
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
 

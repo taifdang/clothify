@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "F4TL+ROyS8g=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\taida\\Project\\clothes-backend\\test_aspire\\test_aspire\\test_aspire.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\taida\\.nuget\\packages\\microsoft.dotnet.ilcompiler\\8.0.13\\microsoft.dotnet.ilcompiler.8.0.13.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.13\\microsoft.net.illink.tasks.8.0.13.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\runtime.win-x64.microsoft.dotnet.ilcompiler\\8.0.13\\runtime.win-x64.microsoft.dotnet.ilcompiler.8.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}
