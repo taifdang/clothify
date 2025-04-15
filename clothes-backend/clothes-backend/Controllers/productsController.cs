@@ -31,7 +31,13 @@ namespace clothes_backend.Controllers
         [HttpGet]
         public async Task<IActionResult> getList()
         {
-            var data = await _productRepo.get();
+            var data = await _productRepo.getAll();
+            return Ok(data);
+        }
+        [HttpGet("test")]
+        public async Task<IActionResult> getListTest()
+        {
+            var data = await _productRepo.getTest();
             return Ok(data);
         }
         [HttpGet("id")]
@@ -53,9 +59,9 @@ namespace clothes_backend.Controllers
         [HttpGet("pagination")]
         public async Task<IActionResult> pagination()
         {
-            var product = await _productRepo.get();
-            var data = _productRepo.pagination(product, 1, 2);
-            return Ok(data);
+            //var product = await _productRepo.get();
+            //var data = _productRepo.pagination(product, 1, 2);
+            return Ok();
         }
         [HttpPost("add")]
         public async Task<ActionResult<GenericResponse<Products>>> add([FromForm] productsDTO DTO)

@@ -2,10 +2,7 @@
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Text.RegularExpressions;
-using static Dapper.SqlMapper;
+
 namespace clothes_backend.Repository
 {
     public class ProductOptionImageRepository : GenericRepository<ProductOptionImages>,IImageProcessing

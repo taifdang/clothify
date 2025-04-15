@@ -20,7 +20,13 @@ namespace clothes_backend.Controllers
             _productVariantsRepo = productVariantsRepo;
             _db = databaseContext;
         }
-
+        [HttpGet("getId")]
+        public async Task<IActionResult> getId(int id)
+        {
+            var result = await _productVariantsRepo.getId(id);
+            if(result is null) return BadRequest(GenericResponse<ProductVariants>.Fail());
+            return Ok(GenericResponse<ProductVariants>.Success(result));
+        }
         [HttpPost("add")]
         public async Task<ActionResult<GenericResponse<ProductVariants>>> add([FromForm] productVariantsDTO DTO)
         {
@@ -45,6 +51,12 @@ namespace clothes_backend.Controllers
             }
             return Ok(result);
         }
-       
+        [HttpDelete]
+        public async Task<IActionResult> delete(int id)
+        {
+            var result = await _productVariantsRepo.delete(id);
+            if(result == 400)  return BadRequest(GenericResponse<ProductVariants>.Fail());
+            return Ok(GenericResponse<ProductVariants>.Success(null));
+        }
     }
 }

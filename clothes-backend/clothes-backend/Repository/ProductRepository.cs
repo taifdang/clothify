@@ -1,29 +1,85 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using clothes_backend.DTO;
+
+using clothes_backend.DTO.PRODUCT_DTO;
+using clothes_backend.Inteface;
 using clothes_backend.Models;
+using clothes_backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 
 namespace clothes_backend.Repository
 {
-    public class ProductRepository : GenericRepository<Products>
+    public class ProductRepository : GenericRepository<Products>,ICacheProduct
     {
         private readonly IMapper _mapper;
-        public ProductRepository(DatabaseContext db, IMapper mapper) : base(db)
+        private readonly ICacheService _cache;
+        public ProductRepository(DatabaseContext db, IMapper mapper, ICacheService _cache) : base(db)
         {
             _mapper = mapper;
-        }    
-        public override async Task<IEnumerable<Products>> get()
-        {          
-            var products = await _db.products.ToListAsync();
-            return products;
+        }       
+        //custom list variants = product => product_variants => variants => option_values => options
+         public async Task<object?> getTest()
+         {
+            //var variants = await _db.product_variants                 
+            //          .Include(v => v.variants)
+            //              .ThenInclude(ov => ov.option_values)
+            //                  .ThenInclude(os => os.options)
+            //          .Where(p => p.product_id == 15)
+            //          .SelectMany(vs => vs.variants)
+            //          .GroupBy(ovid => ovid.option_values.option_id)
+            //          .Select(x => new listVariantDTO
+            //          {
+            //              option_id = x.Key,
+            //              title = x.Select(x => x.option_values.options.title).FirstOrDefault(),
+            //              values = x.Select(a => a.option_values.value).Distinct().ToList()
+            //          })
+            //          .ToListAsync();
+            //    
+            var image =  _db.product_option_images
+                  .Where(p => p.product_id == 15)
+                  .OrderBy(x => x.id)
+                  .GroupBy(op => op.option_value_id)
+                  .Select(g => g.First())
+                  .AsEnumerable()
+                  .Select(x => new
+                  {
+                      x.id,
+                      x.src
+                  })
+                  .ToList();
+            var images =  _db.product_option_images
+            .Where(p => p.product_id == 15)
+            .OrderBy(x => x.id)
+            .AsEnumerable()
+            .GroupBy(p => p.option_value_id) 
+            .SelectMany(g => g.OrderBy(x => x.id).Take(1)) 
+            .Select(x => new
+            {
+                id = x.id,
+                src = x.src
+            })
+            .ToList();
+      
+            return images;
         }
-        public override async Task<Products?> getId(int id)
-        {
-            var result = await _db.products.FirstOrDefaultAsync(x => x.id == id);
-            if (result == null) return null;
-            return result;
+        //custom list images = products => product_options_image => options_value => options 
+        public async Task<object?> getAll()
+        {           
+            var product = await _db.products
+                .AsNoTracking()
+                .Where(p => p.id == 15)
+                .ProjectTo<product_DTO>(_mapper.ConfigurationProvider)       
+                .AsSingleQuery()
+                .ToListAsync();    
+          
+            if (product == null) return null;
+
+            return product;
         }
         public override Task add(Products entity)
         {
@@ -105,6 +161,18 @@ namespace clothes_backend.Repository
         public override IEnumerable<Products> pagination(IEnumerable<Products> entity, int currentPage, int limit)
         {
             return base.pagination(entity, currentPage, limit);
+        }
+
+        public async Task<Dictionary<int, Products>> getCacheProduct(string cacheKey)
+        {
+            if (_cache.isCached(CacheKeys.products_cacheKey))
+            {
+                return _cache.Get<Dictionary<int, Products>>(CacheKeys.products_cacheKey);
+            }
+            //??
+            var products = await _db.products.AsNoTracking().Include(x => x.categories).Include(x => x.product_option_images).Include(x => x.product_options).ToDictionaryAsync(p => p.id, p => p);
+            _cache.Set(CacheKeys.products_cacheKey, products, TimeSpan.FromMinutes(10));
+            return products;
         }
     }
 }

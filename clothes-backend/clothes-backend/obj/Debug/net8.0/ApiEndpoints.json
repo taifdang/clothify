@@ -43,6 +43,22 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.productVariantsController",
+    "Method": "delete",
+    "RelativePath": "api/product-variants",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.productVariantsController",
     "Method": "add",
     "RelativePath": "api/product-variants/add",
     "HttpMethod": "POST",
@@ -91,6 +107,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.productVariantsController",
+    "Method": "getId",
+    "RelativePath": "api/product-variants/getId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "clothes_backend.Controllers.productsController",
@@ -210,6 +242,16 @@
     "ContainingType": "clothes_backend.Controllers.productsController",
     "Method": "pagination",
     "RelativePath": "api/products/pagination",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.productsController",
+    "Method": "getListTest",
+    "RelativePath": "api/products/test",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

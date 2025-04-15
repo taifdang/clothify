@@ -6,6 +6,8 @@ C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\clothes-backend.runtimeconfig.json
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\clothes-backend.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\clothes-backend.pdb
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Dapper.dll
@@ -153,5 +155,3 @@ C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\clothes-backend.pdb
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\clothes-backend.genruntimeconfig.cache
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\ref\clothes-backend.dll
-C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\AutoMapper.dll
-C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

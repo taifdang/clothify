@@ -92,6 +92,18 @@
         }
       }
     },
+    "/api/products/test": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/products/id": {
       "get": {
         "tags": [
@@ -344,6 +356,28 @@
         }
       }
     },
+    "/api/product-variants/getId": {
+      "get": {
+        "tags": [
+          "productVariants"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/product-variants/add": {
       "post": {
         "tags": [
@@ -435,6 +469,28 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/product-variants": {
+      "delete": {
+        "tags": [
+          "productVariants"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
