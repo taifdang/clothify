@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 # Ignore all environment-based appsettings
 appsettings.json
 appsettings.*.json
+.vs/

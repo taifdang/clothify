@@ -366,3 +366,8 @@ bin/
 obj/
 appsettings.json
 appsettings.*.json
+/clothes-backend/clothes-backend/clothes-backend.csproj
+/clothes-backend/clothes-backend/appsettings.json
+/clothes-backend/clothes-backend/appsettings.Development.json
+/clothes-backend/clothes-backend/appsettings.json
+.vs/
