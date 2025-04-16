@@ -150,19 +150,15 @@ namespace clothes_backend.Repository
                         File.Delete(path);
                     }
                 }
-            }
-            
+            }           
             _db.products.Remove(data);
             await _db.SaveChangesAsync();
-            return true;
-
-            
+            return true;       
         }
         public override IEnumerable<Products> pagination(IEnumerable<Products> entity, int currentPage, int limit)
         {
             return base.pagination(entity, currentPage, limit);
         }
-
         public async Task<Dictionary<int, Products>> getCacheProduct(string cacheKey)
         {
             if (_cache.isCached(CacheKeys.products_cacheKey))

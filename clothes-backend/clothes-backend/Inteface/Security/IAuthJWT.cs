@@ -1,9 +1,11 @@
-﻿namespace clothes_backend.Inteface.JWT
+﻿using clothes_backend.Models;
+
+namespace clothes_backend.Inteface.JWT
 {
     public interface IAuthJWT
     {
-        void verify();
-        void hash();
-        void generate_token();
+        void verifyJWT();
+        void hashToken();
+        void generateToken(Users user, out string token);
     }
 }

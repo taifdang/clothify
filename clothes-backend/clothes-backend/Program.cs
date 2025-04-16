@@ -3,10 +3,13 @@ using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace clothes_backend
 {
@@ -58,8 +61,25 @@ namespace clothes_backend
             builder.Services.AddMemoryCache();
             builder.Services.AddSingleton<ICacheService, CacheService>();
             //builder.Services.AddLogging();
+            //Database
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+            //JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(option => 
+                {
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,                
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                    };
+
+                });
+
             //
+
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
            
             builder.Services.AddScoped<ProductRepository>();

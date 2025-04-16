@@ -155,3 +155,4 @@ C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\clothes-backend.pdb
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\clothes-backend.genruntimeconfig.cache
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\ref\clothes-backend.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

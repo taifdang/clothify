@@ -17,14 +17,14 @@ namespace clothes_backend.Repository
         public UserRepositpory(DatabaseContext db, AuthService auth) : base(db)
         {
             _auth = auth;
-        }
-      
+        }      
         public async Task<object?> login([FromForm] loginDTO DTO)
         {
             var user = await _db.users.FirstOrDefaultAsync(x => x.email == DTO.email);
             if (user == null) return null;
             //verify
             if (!_auth.verifyPassword(DTO.password, user.password, user.passwordSalt)) return null;
+            //jwt: create access + refresh_token       
             return user;
         }
         public async Task<object?> register([FromForm] registerDTO DTO)
@@ -52,11 +52,7 @@ namespace clothes_backend.Repository
             {
                 Console.WriteLine(ex);
                 return null;
-            }
-
-           
-        }
-
-       
+            } 
+        }     
     }
 }

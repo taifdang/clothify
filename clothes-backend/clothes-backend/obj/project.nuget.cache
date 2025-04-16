@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3fmR/JnFivs=",
+  "dgSpecHash": "vE70GNqNtHY=",
   "success": true,
   "projectFilePath": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\clothes-backend.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\taida\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.15\\microsoft.aspnetcore.authentication.jwtbearer.8.0.15.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
