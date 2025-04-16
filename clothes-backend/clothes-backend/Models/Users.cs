@@ -14,16 +14,18 @@ namespace clothes_backend.Models
         [StringLength(100,ErrorMessage ="The {0} must be at least {2} and at most {1} characters long.",MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string password { get; set; }
+
+        public byte[] passwordSalt { get; set; }
         [Required(ErrorMessage ="Password is required")]
         [Phone(ErrorMessage = "Invalid Phone Number.")]
         public string phone { get; set; }
         [Required(ErrorMessage = "Name is required")]
         public string name { get; set; }
-        [Required(ErrorMessage ="Role is required")]
-        public string role { get; set; }
+        [Required(ErrorMessage = "Role is required")]
+        public string role { get; set; } = "user";
         public string? avatar { get; set; }
         [Required(ErrorMessage = "Lock status is required")]
-        public bool is_lock { get; set; }
+        public bool is_lock { get; set; } = false;
         public string? refresh_token { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime? expiry_time { get; set; }       

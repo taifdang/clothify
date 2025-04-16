@@ -65,7 +65,9 @@ namespace clothes_backend
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
-           
+            builder.Services.AddScoped<UserRepositpory>();
+            builder.Services.AddScoped<AuthService>();
+
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
 
