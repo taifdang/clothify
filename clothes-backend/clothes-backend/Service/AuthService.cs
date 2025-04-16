@@ -14,11 +14,13 @@ namespace clothes_backend.Service
     public class AuthService : IAuth,IAuthJWT
     {
         private readonly IConfiguration _config;
-        public AuthService(IConfiguration configuration)
+        private readonly DatabaseContext _db;
+        public AuthService(IConfiguration configuration, DatabaseContext db)
         {
             _config = configuration;
+            _db = db;
         }
-        public void generateToken(Users user, out string token)
+        public void generateAccessToken(Users user, out string token)
         {
             var token_handle = new JwtSecurityTokenHandler();       
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
@@ -40,6 +42,15 @@ namespace clothes_backend.Service
             token = token_handle.WriteToken(access_token);        
         }
 
+        public void generateRefreshToken(Users user, out string refreshToken)
+        {
+            refreshToken = generateToken();
+            //save
+            user.refresh_token = refreshToken;
+            user.expiry_time = DateTime.UtcNow.AddHours(1);
+            _db.SaveChanges();
+        }
+
         public void hashPassword(string password, out string passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -50,9 +61,14 @@ namespace clothes_backend.Service
             }
         }
 
-        public void hashToken()
+        public string generateToken()
         {
-            throw new NotImplementedException();
+            var token_random = new byte[64];
+            using (var number = RandomNumberGenerator.Create())
+            {
+                number.GetBytes(token_random);
+                return Convert.ToBase64String(token_random);
+            }
         }
 
         public void verifyJWT()

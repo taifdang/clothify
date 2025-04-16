@@ -2,6 +2,7 @@
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
+using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,8 +28,10 @@ namespace clothes_backend.Controllers
             }
             Users data = (Users)await _userRepo.login(DTO);
             if (data == null) return Unauthorized("Invalid client");
-            _auth.generateToken(data, out string access_token);
-            return Ok(access_token);
+            _auth.generateAccessToken(data, out string access_token);
+            _auth.generateRefreshToken(data, out string refreshToken);
+            //check token
+            return Ok(new TokenReponse { accessToken = access_token ,refreshToken = refreshToken });
         }
         [HttpPost("register")]
         public async Task<IActionResult> register([FromForm] registerDTO DTO)
