@@ -1,15 +1,21 @@
 
 using clothes_backend.Inteface;
+using clothes_backend.Middleware;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace clothes_backend
 {
@@ -69,6 +75,8 @@ namespace clothes_backend
                 {
                     option.TokenValidationParameters = new TokenValidationParameters
                     {
+                        RequireExpirationTime = false,
+                        //
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,                
@@ -79,9 +87,7 @@ namespace clothes_backend
                 });
 
             //
-
-            builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-           
+            builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));          
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
@@ -106,6 +112,38 @@ namespace clothes_backend
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            //
+            app.Use(async (context, next) =>
+            {
+                //check token
+                var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                if (!string.IsNullOrEmpty(access_token))
+                {
+                    //Check expired
+                    var check_token = new JwtSecurityTokenHandler().ReadToken(access_token) as JwtSecurityToken;
+                    if(check_token.ValidTo <= DateTime.UtcNow)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await context.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
+                        return;
+                    }
+                    using (var scope = app.Services.CreateScope())
+                    {
+                        var _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                        var isblockToken = _db.blacklist_token.Any(x => x.token == access_token);
+                        if (isblockToken)
+                        {
+                            //block request
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;                        
+                            await context.Response.WriteAsync("Token is revoked");
+                            Console.WriteLine("Token is revoked");
+                            return;
+                        }
+                    }
+                }
+                await next(context);
+            });
+            //app.UseMiddleware<UserMiddleware>();
 
             app.MapControllers();
 

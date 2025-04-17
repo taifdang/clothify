@@ -81,7 +81,8 @@ namespace clothes_backend.Controllers
             {
                 var bl_token = new BlackListToken()
                 {
-                    token = string.Join("_","bl", token_auth),
+                    //string.Join("_","bl", token_auth),
+                    token = token_auth,
                     create_at = expiry
                 };
                 _db.blacklist_token.Add(bl_token);
