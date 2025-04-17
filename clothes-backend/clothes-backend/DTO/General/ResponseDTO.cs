@@ -1,4 +1,6 @@
-﻿namespace clothes_backend.DTO.General
+﻿using clothes_backend.Utils.Enum;
+
+namespace clothes_backend.DTO.General
 {
     public static class ResponseDTO<T>
     {
@@ -6,9 +8,9 @@
         {
             return new PayloadDTO<T> { success = true, data = data };
         }
-        public static PayloadDTO<T> fail(string message)
+        public static PayloadDTO<T> fail(ErrorType statusCode)
         {
-            return new PayloadDTO<T> { success = false, message = message };
+            return new PayloadDTO<T> { success = false, statusCode = statusCode };
         }
     }
 }

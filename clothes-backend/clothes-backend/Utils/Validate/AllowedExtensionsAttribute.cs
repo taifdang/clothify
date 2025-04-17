@@ -1,7 +1,6 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace clothes_backend.Utils
+namespace clothes_backend.Utils.Validate
 {
     public class AllowedExtensionsAttribute: ValidationAttribute
     {

@@ -1,4 +1,4 @@
-﻿namespace clothes_backend.Utils
+﻿namespace clothes_backend.Utils.Enum
 {
     public enum SortType
     {

@@ -3,7 +3,7 @@ using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
-using clothes_backend.Utils;
+using clothes_backend.Utils.Enum;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

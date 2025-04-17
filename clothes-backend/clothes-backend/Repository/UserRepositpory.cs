@@ -5,6 +5,7 @@ using clothes_backend.Inteface.Security;
 using clothes_backend.Inteface.User;
 using clothes_backend.Models;
 using clothes_backend.Service;
+using clothes_backend.Utils.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -57,7 +58,7 @@ namespace clothes_backend.Repository
         public async Task<PayloadDTO<Users>> get_user(int id)
         {           
             var data = await _db.users.FirstOrDefaultAsync(x => x.id == id);
-            if (data == null) return ResponseDTO<Users>.fail($"Không tìm thấy {id}");
+            if (data == null) return ResponseDTO<Users>.fail(ErrorType.NotFound);
             return ResponseDTO<Users>.success(data);
         }
     }

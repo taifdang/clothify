@@ -1,6 +1,6 @@
 ﻿using clothes_backend.Inteface;
 using clothes_backend.Models;
-using clothes_backend.Utils;
+using clothes_backend.Utils.Enum;
 
 namespace clothes_backend.Service
 {

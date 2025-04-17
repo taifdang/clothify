@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using clothes_backend.Utils;
+using clothes_backend.Utils.Validate;
 
 namespace clothes_backend.DTO
 {
