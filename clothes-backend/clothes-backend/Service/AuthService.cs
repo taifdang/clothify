@@ -70,12 +70,6 @@ namespace clothes_backend.Service
                 return Convert.ToBase64String(token_random);
             }
         }
-
-        public void verifyJWT()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool verifyPassword(string password, string storeHash, byte[] storeSalt)//no key => random => salt
         {
             using (var hmac = new HMACSHA512(storeSalt))
@@ -85,6 +79,14 @@ namespace clothes_backend.Service
                 bool isMatch = computeHash.SequenceEqual(Convert.FromBase64String(storeHash));
                 return isMatch;
             }
+        }
+
+        public object? verifyJWT(int user_id, string refresh_token)
+        {
+            var user = _db.users.FirstOrDefault(x => x.id == user_id);          
+            if(user is null||user.refresh_token != refresh_token || user.expiry_time <= DateTime.UtcNow) return null;
+            return user;
+            
         }
     }
 }

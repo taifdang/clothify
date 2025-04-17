@@ -1,10 +1,12 @@
-﻿using clothes_backend.DTO.USER;
+﻿using Azure.Core;
+using clothes_backend.DTO.USER;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace clothes_backend.Controllers
 {
@@ -29,6 +31,7 @@ namespace clothes_backend.Controllers
             Users data = (Users)await _userRepo.login(DTO);
             if (data == null) return Unauthorized("Invalid client");
             _auth.generateAccessToken(data, out string access_token);
+            //renewal
             _auth.generateRefreshToken(data, out string refreshToken);
             //check token
             return Ok(new TokenReponse { accessToken = access_token ,refreshToken = refreshToken });
@@ -43,6 +46,15 @@ namespace clothes_backend.Controllers
             Users data = (Users)await _userRepo.register(DTO);
             if (data == null) return BadRequest(GenericResponse<Users>.Fail(null));
             return Ok(GenericResponse<Users>.Success(data));
+        }
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> refreshToken([FromForm]refreshTokenDTO DTO)
+        {
+            var user = _auth.verifyJWT(DTO.user_id, DTO.refreshToken);
+            if (user == null) return BadRequest("Invalid user");       
+            _auth.generateAccessToken((Users)user, out string access_token);
+            _auth.generateRefreshToken((Users)user, out string refreshToken);     
+            return Ok(new TokenReponse { accessToken = access_token, refreshToken = refreshToken });
         }
     }
 }

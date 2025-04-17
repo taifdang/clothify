@@ -23,8 +23,7 @@ namespace clothes_backend.Repository
             var user = await _db.users.FirstOrDefaultAsync(x => x.email == DTO.email);
             if (user == null) return null;
             //verify
-            if (!_auth.verifyPassword(DTO.password, user.password, user.passwordSalt)) return null;
-            //jwt: create access + refresh_token       
+            if (!_auth.verifyPassword(DTO.password, user.password, user.passwordSalt)) return null;          
             return user;
         }
         public async Task<object?> register([FromForm] registerDTO DTO)

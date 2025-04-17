@@ -604,6 +604,48 @@
         }
       }
     },
+    "/api/users/refresh-token": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "refreshToken",
+                  "user_id"
+                ],
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "refreshToken": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "user_id": {
+                  "style": "form"
+                },
+                "refreshToken": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/WeatherForecast": {
       "get": {
         "tags": [
