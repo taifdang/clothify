@@ -5,21 +5,23 @@ namespace clothes_backend.DTO.General
 {
     public class PayloadDTO<T>
     {
-        public bool success { get; set; }
-        public T data { get; set; }
-        public string message { get; set; }
-        public ErrorType statusCode { get; set; }
-        public string errorMessage
+        //public bool success { get; set; }
+        
+        //public string message { get; set; }
+        public StatusCode statusCode { get; set; }
+        public string message
         {
-            get { return ErrorMessage.getMessage(statusCode); }
+            get { return MessageResponse.getMessage(statusCode); }
         }
-        //public static PayloadDTO<T> OK(T data)
-        //{
-        //    return new PayloadDTO<T> { success = true, data = data };
-        //}
-        //public static PayloadDTO<T> Error(string message)
-        //{
-        //    return new PayloadDTO<T> { success = false, message = message };
-        //}
+        public T data { get; set; }
+       
+        public static PayloadDTO<T> OK(T data)
+        {
+            return new PayloadDTO<T> { data = data, statusCode = StatusCode.Success};
+        }
+        public static PayloadDTO<T> Error(StatusCode statusCode)
+        {
+            return new PayloadDTO<T> { statusCode = statusCode };
+        }
     }
 }

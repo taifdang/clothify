@@ -1,4 +1,5 @@
-﻿using clothes_backend.DTO.General;
+﻿using AutoMapper;
+using clothes_backend.DTO.General;
 using clothes_backend.DTO.USER;
 using clothes_backend.Inteface;
 using clothes_backend.Inteface.Security;
@@ -16,9 +17,11 @@ namespace clothes_backend.Repository
     public class UserRepositpory : GenericRepository<Users>,IUsers
     {
         private readonly AuthService _auth;
-        public UserRepositpory(DatabaseContext db, AuthService auth) : base(db)
+        private readonly IMapper _mapper;
+        public UserRepositpory(DatabaseContext db, AuthService auth, IMapper mapper) : base(db)
         {
             _auth = auth;
+            _mapper = mapper;
         }      
         public async Task<object?> login([FromForm] loginDTO DTO)
         {
@@ -55,11 +58,13 @@ namespace clothes_backend.Repository
                 return null;
             } 
         }     
-        public async Task<PayloadDTO<Users>> get_user(int id)
+        public async Task<PayloadDTO<userInfoDTO>> get_user(int id)
         {           
             var data = await _db.users.FirstOrDefaultAsync(x => x.id == id);
-            if (data == null) return ResponseDTO<Users>.fail(ErrorType.NotFound);
-            return ResponseDTO<Users>.success(data);
+            if (data == null) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
+            //tranfers data
+            var result = _mapper.Map<userInfoDTO>(data);
+            return PayloadDTO<userInfoDTO>.OK(result);
         }
     }
 }

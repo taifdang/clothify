@@ -3,10 +3,10 @@ using clothes_backend.DTO.USER;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
+using clothes_backend.Utils.Enum;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace clothes_backend.Controllers
 {
@@ -60,7 +60,7 @@ namespace clothes_backend.Controllers
         public async Task<IActionResult> test_get_id(int id)
         {
             var data = await _userRepo.get_user(id);
-          
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
     }
