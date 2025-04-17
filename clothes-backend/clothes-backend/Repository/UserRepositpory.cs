@@ -89,5 +89,18 @@ namespace clothes_backend.Repository
             var result = _mapper.Map<userInfoDTO>(data);
             return PayloadDTO<userInfoDTO>.OK(result);
         }
+        //public async Task<PayloadDTO<Users>> logout()
+        //{
+        //    //get token from header
+        //    var token = 
+        //    var bl_token = new BlackListToken()
+        //    {
+        //        token = string.Join("_", "bl",)
+        //    };
+        //    _db.blacklist_token.Add()
+        //    return PayloadDTO<Users>.OK(user);
+
+
+        //}
     }
 }

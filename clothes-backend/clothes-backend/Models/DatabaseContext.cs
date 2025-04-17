@@ -5,7 +5,6 @@ namespace clothes_backend.Models
     public class DatabaseContext:DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
-
         public DbSet<ProductTypes> product_types { get; set; }
         public DbSet<Categories> categories { get; set; }
         public DbSet<Products> products { get; set; }
@@ -20,7 +19,7 @@ namespace clothes_backend.Models
         public DbSet<CartItems> cart_items { get; set; }
         public DbSet<Orders> orders { get; set; }
         public DbSet<OrderDetails> order_details { get; set; }
-
+        public DbSet<BlackListToken> blacklist_token { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

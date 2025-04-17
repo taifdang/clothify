@@ -10,8 +10,7 @@ namespace clothes_backend.DTO.General
         {
             get { return MessageResponse.getMessage(statusCode); }
         }
-        public T data { get; set; }
-       
+        public T data { get; set; }       
         public static PayloadDTO<T> OK(T data)
         {
             return new PayloadDTO<T> { data = data, statusCode = StatusCode.Success};

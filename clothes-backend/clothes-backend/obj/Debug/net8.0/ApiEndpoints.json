@@ -348,6 +348,16 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
+    "Method": "logout",
+    "RelativePath": "api/users/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.usersController",
     "Method": "refreshToken",
     "RelativePath": "api/users/refresh-token",
     "HttpMethod": "POST",

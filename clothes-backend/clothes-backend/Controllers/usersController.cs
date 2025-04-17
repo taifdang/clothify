@@ -8,6 +8,9 @@ using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using clothes_backend.DTO.General;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace clothes_backend.Controllers
 {
@@ -17,10 +20,12 @@ namespace clothes_backend.Controllers
     {
         private readonly UserRepositpory _userRepo;
         private readonly AuthService _auth;
-        public usersController(UserRepositpory userRepo, AuthService auth)
+        private readonly DatabaseContext _db;
+        public usersController(UserRepositpory userRepo, AuthService auth, DatabaseContext database)
         {
             _userRepo = userRepo;
             _auth = auth;
+            _db = database;
         }
         [HttpPost("login")]
         public async Task<IActionResult> login([FromForm] loginDTO DTO)
@@ -62,6 +67,32 @@ namespace clothes_backend.Controllers
             var data = await _userRepo.get_user(id);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
+        }
+        [HttpPost("logout")]
+        public async Task<IActionResult> logout()
+        {
+            var token_auth = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //check user have token_auth
+            if (string.IsNullOrEmpty(token_auth)) return null;
+            //read token => get expiry(datetime) of current access_token
+            var access_token = new JwtSecurityTokenHandler().ReadToken(token_auth) as JwtSecurityToken;
+            var expiry = access_token.ValidTo;
+            try
+            {
+                var bl_token = new BlackListToken()
+                {
+                    token = string.Join("_","bl", token_auth),
+                    create_at = expiry
+                };
+                _db.blacklist_token.Add(bl_token);
+                await _db.SaveChangesAsync();
+                return Ok(bl_token);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex);
+            }
         }
     }
 }
