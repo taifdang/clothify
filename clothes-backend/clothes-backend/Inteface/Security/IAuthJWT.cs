@@ -3,10 +3,10 @@
 namespace clothes_backend.Inteface.JWT
 {
     public interface IAuthJWT
-    {
-        object verifyJWT(int user_id,string refresh_token);
+    {    
+        Task<Users?> verifyJWT(int user_id, string refresh_token);
         string generateToken();
-        void generateAccessToken(Users user, out string accessToken);
-        void generateRefreshToken(Users user, out string refreshToken);
+        void generateAccessToken(Users user, out string accessToken);    
+        Task<string> generateRefreshToken(Users user);
     }
 }

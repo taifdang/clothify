@@ -2,6 +2,7 @@
 using clothes_backend.Inteface.Security;
 using clothes_backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,8 +24,8 @@ namespace clothes_backend.Service
         public void generateAccessToken(Users user, out string token)
         {
             var token_handle = new JwtSecurityTokenHandler();       
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"] ?? string.Empty));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"] ?? string.Empty));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             //
             var token_info = new SecurityTokenDescriptor()
@@ -39,18 +40,10 @@ namespace clothes_backend.Service
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
             var access_token = token_handle.CreateToken(token_info);
+            //return
             token = token_handle.WriteToken(access_token);        
         }
-
-        public void generateRefreshToken(Users user, out string refreshToken)
-        {
-            refreshToken = generateToken();
-            //save
-            user.refresh_token = refreshToken;
-            user.expiry_time = DateTime.UtcNow.AddHours(1);
-            _db.SaveChanges();
-        }
-
+    
         public void hashPassword(string password, out string passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -81,12 +74,22 @@ namespace clothes_backend.Service
             }
         }
 
-        public object? verifyJWT(int user_id, string refresh_token)
+        public async Task<Users?> verifyJWT(int user_id, string refresh_token)
         {
-            var user = _db.users.FirstOrDefault(x => x.id == user_id);          
-            if(user is null||user.refresh_token != refresh_token || user.expiry_time <= DateTime.UtcNow) return null;
+            var user = await _db.users.FirstOrDefaultAsync(x => x.id == user_id);          
+            if(user is null||user.refresh_token != refresh_token || user.expiry_time <= DateTime.Now) return null;
             return user;
             
+        }
+        public async Task<string> generateRefreshToken(Users user)
+        {
+            var refreshToken = generateToken();
+            //save
+            user.refresh_token = refreshToken;
+            user.expiry_time = DateTime.Now.AddDays(1);
+
+            await _db.SaveChangesAsync();
+            return refreshToken;
         }
     }
 }

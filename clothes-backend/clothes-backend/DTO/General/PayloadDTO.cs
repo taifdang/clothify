@@ -4,10 +4,7 @@ using clothes_backend.Utils.Enum;
 namespace clothes_backend.DTO.General
 {
     public class PayloadDTO<T>
-    {
-        //public bool success { get; set; }
-        
-        //public string message { get; set; }
+    {      
         public StatusCode statusCode { get; set; }
         public string message
         {

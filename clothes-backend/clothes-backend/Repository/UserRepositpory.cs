@@ -6,12 +6,10 @@ using clothes_backend.Inteface.Security;
 using clothes_backend.Inteface.User;
 using clothes_backend.Models;
 using clothes_backend.Service;
+using clothes_backend.Utils;
 using clothes_backend.Utils.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
-
 namespace clothes_backend.Repository
 {
     public class UserRepositpory : GenericRepository<Users>,IUsers
@@ -23,17 +21,39 @@ namespace clothes_backend.Repository
             _auth = auth;
             _mapper = mapper;
         }      
-        public async Task<object?> login([FromForm] loginDTO DTO)
+        public async Task<PayloadDTO<TokenReponse>> login([FromForm] loginDTO DTO)
         {
             var user = await _db.users.FirstOrDefaultAsync(x => x.email == DTO.email);
-            if (user == null) return null;
+            if (user == null) return PayloadDTO<TokenReponse>.Error(StatusCode.NotFound);
             //verify
-            if (!_auth.verifyPassword(DTO.password, user.password, user.passwordSalt)) return null;          
-            return user;
+            if (!_auth.verifyPassword(DTO.password, user.password, user.passwordSalt)) return PayloadDTO<TokenReponse>.Error(StatusCode.Isvalid);         
+            var data = await createToken(user);
+            return data;
+
         }
-        public async Task<object?> register([FromForm] registerDTO DTO)
+        public async Task<PayloadDTO<TokenReponse>> createToken(Users user)
         {
-            if (await _db.users.AnyAsync(x => x.email == DTO.email)) return null;
+            try
+            {
+                _auth.generateAccessToken(user, out string access_token);
+                var refreshToken = await _auth.generateRefreshToken(user);
+                var payload = new TokenReponse() { accessToken = access_token, refreshToken = refreshToken };
+                return PayloadDTO<TokenReponse>.OK(payload);
+            }
+            catch
+            {
+                return PayloadDTO<TokenReponse>.Error(StatusCode.Isvalid);
+            }
+        }
+        public async Task<PayloadDTO<TokenReponse>> verify([FromForm] refreshTokenDTO DTO)
+        {
+            var user = await _auth.verifyJWT(DTO.user_id, DTO.refreshToken);
+            var data = await createToken(user!);
+            return data;
+        }
+        public async Task<PayloadDTO<userInfoDTO>> register([FromForm] registerDTO DTO)
+        {
+            if (await _db.users.AnyAsync(x => x.email == DTO.email)) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
             //hash password
             try
             {
@@ -50,12 +70,15 @@ namespace clothes_backend.Repository
                 };
                 _db.users.Add(user);
                 await _db.SaveChangesAsync();
-                return user;
+                //mapper
+                var data = _mapper.Map<userInfoDTO>(user);
+
+                return PayloadDTO<userInfoDTO>.OK(data);
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex);
-                return null;
+                return PayloadDTO<userInfoDTO>.Error(StatusCode.None);
             } 
         }     
         public async Task<PayloadDTO<userInfoDTO>> get_user(int id)

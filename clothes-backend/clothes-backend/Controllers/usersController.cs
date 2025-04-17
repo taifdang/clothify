@@ -7,6 +7,7 @@ using clothes_backend.Utils.Enum;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using clothes_backend.DTO.General;
 
 namespace clothes_backend.Controllers
 {
@@ -28,13 +29,10 @@ namespace clothes_backend.Controllers
             {
                 return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
             }
-            Users data = (Users)await _userRepo.login(DTO);
-            if (data == null) return Unauthorized("Invalid client");
-            _auth.generateAccessToken(data, out string access_token);
-            //renewal
-            _auth.generateRefreshToken(data, out string refreshToken);
-            //check token
-            return Ok(new TokenReponse { accessToken = access_token ,refreshToken = refreshToken });
+            var data = await _userRepo.login(DTO);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return Unauthorized(data);
+          
+            return Ok(data);
         }
         [HttpPost("register")]
         public async Task<IActionResult> register([FromForm] registerDTO DTO)
@@ -43,18 +41,20 @@ namespace clothes_backend.Controllers
             {
                 return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
             }
-            Users data = (Users)await _userRepo.register(DTO);
-            if (data == null) return BadRequest(GenericResponse<Users>.Fail(null));
-            return Ok(GenericResponse<Users>.Success(data));
+            var data = await _userRepo.register(DTO);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
+            return Ok(data);
         }
         [HttpPost("refresh-token")]
         public async Task<IActionResult> refreshToken([FromForm]refreshTokenDTO DTO)
-        {
-            var user = _auth.verifyJWT(DTO.user_id, DTO.refreshToken);
-            if (user == null) return BadRequest("Invalid user");       
-            _auth.generateAccessToken((Users)user, out string access_token);
-            _auth.generateRefreshToken((Users)user, out string refreshToken);     
-            return Ok(new TokenReponse { accessToken = access_token, refreshToken = refreshToken });
+        {           
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
+            }
+            var data = await _userRepo.verify(DTO);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
+            return Ok(data);
         }
         [HttpPost("get-id")]
         public async Task<IActionResult> test_get_id(int id)
