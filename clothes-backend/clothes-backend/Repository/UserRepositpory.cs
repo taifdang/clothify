@@ -1,4 +1,5 @@
-﻿using clothes_backend.DTO.USER;
+﻿using clothes_backend.DTO.General;
+using clothes_backend.DTO.USER;
 using clothes_backend.Inteface;
 using clothes_backend.Inteface.Security;
 using clothes_backend.Inteface.User;
@@ -53,5 +54,11 @@ namespace clothes_backend.Repository
                 return null;
             } 
         }     
+        public async Task<PayloadDTO<Users>> get_user(int id)
+        {           
+            var data = await _db.users.FirstOrDefaultAsync(x => x.id == id);
+            if (data == null) return ResponseDTO<Users>.fail($"Không tìm thấy {id}");
+            return ResponseDTO<Users>.success(data);
+        }
     }
 }

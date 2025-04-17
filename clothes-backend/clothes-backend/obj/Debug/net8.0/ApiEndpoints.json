@@ -311,6 +311,22 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
+    "Method": "test_get_id",
+    "RelativePath": "api/users/get-id",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.usersController",
     "Method": "login",
     "RelativePath": "api/users/login",
     "HttpMethod": "POST",

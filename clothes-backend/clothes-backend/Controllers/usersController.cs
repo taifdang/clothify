@@ -56,5 +56,12 @@ namespace clothes_backend.Controllers
             _auth.generateRefreshToken((Users)user, out string refreshToken);     
             return Ok(new TokenReponse { accessToken = access_token, refreshToken = refreshToken });
         }
+        [HttpPost("get-id")]
+        public async Task<IActionResult> test_get_id(int id)
+        {
+            var data = await _userRepo.get_user(id);
+          
+            return Ok(data);
+        }
     }
 }
