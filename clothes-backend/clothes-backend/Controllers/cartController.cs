@@ -12,12 +12,10 @@ namespace clothes_backend.Controllers
     [ApiController]
     public class cartController : ControllerBase
     {
-        private readonly CartRepository _cartRepo;
-        private readonly DatabaseContext _db;
-        public cartController(CartRepository cartRepo, DatabaseContext db)
+        private readonly CartRepository _cartRepo;      
+        public cartController(CartRepository cartRepo)
         {
-            _cartRepo = cartRepo;
-            _db = db;
+            _cartRepo = cartRepo;       
         }
         [HttpGet("getCart")]
         public async Task<IActionResult> getId()
@@ -34,6 +32,17 @@ namespace clothes_backend.Controllers
                 return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
             }
             var data = await _cartRepo.addCartItem(DTO);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
+            return Ok(data);
+        }
+        [HttpPost("updateCartItem")]
+        public async Task<IActionResult> updateCartItem([FromForm]CartItemDTO DTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
+            }
+            var data = await _cartRepo.updateCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }

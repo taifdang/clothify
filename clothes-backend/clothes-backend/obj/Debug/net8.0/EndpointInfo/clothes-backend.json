@@ -69,6 +69,58 @@
         }
       }
     },
+    "/api/cart/updateCartItem": {
+      "post": {
+        "tags": [
+          "cart"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "product_variant_id",
+                  "quantity"
+                ],
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "product_variant_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "quantity": {
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                }
+              },
+              "encoding": {
+                "id": {
+                  "style": "form"
+                },
+                "product_variant_id": {
+                  "style": "form"
+                },
+                "quantity": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/cart/delete": {
       "delete": {
         "tags": [
