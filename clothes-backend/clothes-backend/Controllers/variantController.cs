@@ -10,12 +10,12 @@ namespace clothes_backend.Controllers
 {
     [Route("api/product-variants")]
     [ApiController]
-    public class productVariantsController : ControllerBase
+    public class variantController : ControllerBase
     {
 
         private readonly ProductVariantsRepository _productVariantsRepo;
         private readonly DatabaseContext _db;
-        public productVariantsController(ProductVariantsRepository productVariantsRepo,DatabaseContext databaseContext)
+        public variantController(ProductVariantsRepository productVariantsRepo,DatabaseContext databaseContext)
         {
             _productVariantsRepo = productVariantsRepo;
             _db = databaseContext;

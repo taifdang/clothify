@@ -16,13 +16,13 @@ namespace clothes_backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class productsController : ControllerBase
+    public class productController : ControllerBase
     {
         private readonly IConfiguration configuration;
         private readonly DatabaseContext _db;
         private readonly ProductRepository _productRepo;
 
-        public productsController(IConfiguration configuration, DatabaseContext db, ProductRepository productRepository)
+        public productController(IConfiguration configuration, DatabaseContext db, ProductRepository productRepository)
         {
             this.configuration = configuration;
             this._db = db;

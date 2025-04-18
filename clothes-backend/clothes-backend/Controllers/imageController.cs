@@ -9,10 +9,10 @@ namespace clothes_backend.Controllers
 {
     [Route("api/images")]
     [ApiController]
-    public class productOptionImagesController : ControllerBase
+    public class imageController : ControllerBase
     {
         private readonly ProductOptionImageRepository _imageRepo;
-        public productOptionImagesController(ProductOptionImageRepository imageRepo) 
+        public imageController(ProductOptionImageRepository imageRepo) 
         {
             _imageRepo = imageRepo;
         }

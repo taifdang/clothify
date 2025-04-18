@@ -78,7 +78,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productOptionImagesController",
+    "ContainingType": "clothes_backend.Controllers.imageController",
     "Method": "add",
     "RelativePath": "api/images/add",
     "HttpMethod": "POST",
@@ -104,7 +104,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productOptionImagesController",
+    "ContainingType": "clothes_backend.Controllers.imageController",
     "Method": "delete",
     "RelativePath": "api/images/delete",
     "HttpMethod": "DELETE",
@@ -120,7 +120,17 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productVariantsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
+    "Method": "getList",
+    "RelativePath": "api/product",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.variantController",
     "Method": "delete",
     "RelativePath": "api/product-variants",
     "HttpMethod": "DELETE",
@@ -136,7 +146,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productVariantsController",
+    "ContainingType": "clothes_backend.Controllers.variantController",
     "Method": "add",
     "RelativePath": "api/product-variants/add",
     "HttpMethod": "POST",
@@ -187,7 +197,7 @@
     ]
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productVariantsController",
+    "ContainingType": "clothes_backend.Controllers.variantController",
     "Method": "getId",
     "RelativePath": "api/product-variants/getId",
     "HttpMethod": "GET",
@@ -203,19 +213,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
-    "Method": "getList",
-    "RelativePath": "api/products",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "add",
-    "RelativePath": "api/products/add",
+    "RelativePath": "api/product/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -269,9 +269,9 @@
     ]
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "delete",
-    "RelativePath": "api/products/delete",
+    "RelativePath": "api/product/delete",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -285,9 +285,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "filter",
-    "RelativePath": "api/products/filter",
+    "RelativePath": "api/product/filter",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -301,9 +301,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "getId",
-    "RelativePath": "api/products/id",
+    "RelativePath": "api/product/id",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -317,9 +317,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "pagination",
-    "RelativePath": "api/products/pagination",
+    "RelativePath": "api/product/pagination",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -327,9 +327,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "getListTest",
-    "RelativePath": "api/products/test",
+    "RelativePath": "api/product/test",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -337,9 +337,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "clothes_backend.Controllers.productsController",
+    "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "update",
-    "RelativePath": "api/products/update",
+    "RelativePath": "api/product/update",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
