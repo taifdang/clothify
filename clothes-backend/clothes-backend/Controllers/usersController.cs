@@ -19,9 +19,9 @@ namespace clothes_backend.Controllers
     public class usersController : ControllerBase
     {
         private readonly UserRepositpory _userRepo;
-        private readonly AuthService _auth;
+        private readonly UserService _auth;
         private readonly DatabaseContext _db;
-        public usersController(UserRepositpory userRepo, AuthService auth, DatabaseContext database)
+        public usersController(UserRepositpory userRepo, UserService auth, DatabaseContext database)
         {
             _userRepo = userRepo;
             _auth = auth;

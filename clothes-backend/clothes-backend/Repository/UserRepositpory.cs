@@ -14,9 +14,9 @@ namespace clothes_backend.Repository
 {
     public class UserRepositpory : GenericRepository<Users>,IUsers
     {
-        private readonly AuthService _auth;
+        private readonly UserService _auth;
         private readonly IMapper _mapper;
-        public UserRepositpory(DatabaseContext db, AuthService auth, IMapper mapper) : base(db)
+        public UserRepositpory(DatabaseContext db, UserService auth, IMapper mapper) : base(db)
         {
             _auth = auth;
             _mapper = mapper;

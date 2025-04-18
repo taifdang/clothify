@@ -1,5 +1,6 @@
 
 using clothes_backend.Inteface;
+using clothes_backend.Inteface.User;
 using clothes_backend.Middleware;
 using clothes_backend.Models;
 using clothes_backend.Repository;
@@ -95,10 +96,11 @@ namespace clothes_backend
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
             builder.Services.AddScoped<UserRepositpory>();
-            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<UserService>();
             //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<CartRepository>();
-            
+            builder.Services.AddScoped<IAuthService,AuthService>();
+
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
 
