@@ -5,6 +5,18 @@
     "version": "v1"
   },
   "paths": {
+    "/api/cart/getCart": {
+      "get": {
+        "tags": [
+          "cart"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/cart/addCartItem": {
       "post": {
         "tags": [
@@ -57,22 +69,20 @@
         }
       }
     },
-    "/api/cart": {
-      "get": {
+    "/api/cart/delete": {
+      "delete": {
         "tags": [
           "cart"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
-        }
-      }
-    },
-    "/api/cart/Test": {
-      "post": {
-        "tags": [
-          "cart"
         ],
         "responses": {
           "200": {

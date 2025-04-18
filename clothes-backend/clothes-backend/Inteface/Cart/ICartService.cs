@@ -8,9 +8,9 @@ namespace clothes_backend.Inteface.Cart
     public interface ICartService
     {
         Task<PayloadDTO<CartItemDTO>> addCartItem([FromForm]CartItemDTO DTO);
-        Task<PayloadDTO<CartItemDTO>> removeCartItem(int id);
+        Task<PayloadDTO<CartItems>> removeCartItem(int id);
         Task<PayloadDTO<CartItemDTO>> updateCartItem([FromForm]CartItemDTO DTO);
-        Task<PayloadDTO<CartItemDTO>> getCart(int user_id);
+        Task<PayloadDTO<List<CartItemDTO>>> getCart();
         //void mergeCart();
     }
 }

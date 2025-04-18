@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using clothes_backend.DTO.CART;
 using clothes_backend.DTO.General;
 using clothes_backend.Inteface.Cart;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using System.Security;
+using System.Security.Cryptography.Xml;
 
 namespace clothes_backend.Repository
 {
@@ -55,30 +57,25 @@ namespace clothes_backend.Repository
             {
                 return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.None);
             }              
-        }
-        public async Task<PayloadDTO<CartItemDTO>> getCart(int user_id)
+        }      
+        //test
+        public async Task<PayloadDTO<List<CartItemDTO>>> getCart()
         {
             try
             {
-                var carts = await _db.carts.FindAsync(user_id);
-                if (carts == null) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.NotFound);
-                await _db.Entry(carts).Collection(x => x.cartItems).LoadAsync();
-                //automapper
-                var cartItem = _mapper.Map<CartItemDTO>(carts.cartItems);
-                return PayloadDTO<CartItemDTO>.OK(cartItem);
+                getAuth(out int user_id);
+                //
+                var carts = await _db.carts.FirstOrDefaultAsync(x => x.user_id == user_id);
+                if (carts == null) return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.NotFound);
+                var listCartItem = await _db.cart_items.Where(x => x.cart_id == carts.id).ProjectTo<CartItemDTO>(_mapper.ConfigurationProvider).ToListAsync();
+                return PayloadDTO<List<CartItemDTO>>.OK(listCartItem);
             }
             catch
             {
-                return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Isvalid);
+                return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.Isvalid);
             }
-          
-        }
 
-        public Task<PayloadDTO<CartItemDTO>> removeCartItem(int id)
-        {
-            throw new NotImplementedException();
         }
-
         public Task<PayloadDTO<CartItemDTO>> updateCartItem([FromForm] CartItemDTO DTO)
         {
             throw new NotImplementedException();
@@ -97,25 +94,24 @@ namespace clothes_backend.Repository
                 Console.WriteLine("User ID not found.");
             }
            
-        }
-        public object getIsUser()
+        }      
+        public async Task<PayloadDTO<CartItems>> removeCartItem(int id)
         {
-            
-            var httpContext = _context.HttpContext;
-            if (httpContext != null && httpContext.Items.ContainsKey("IsUser"))
+            try
             {
-                var value =  httpContext.Items["IsUser"];
-                Console.WriteLine($"User ID: {value}");
-                return value;
+                 getAuth(out int user);
+                if (user == 0) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Unauthorized);
+                //kiem tra gio hang cua user
+                var cartItem = await _db.cart_items.Include(x => x.carts).FirstOrDefaultAsync(x => x.carts.user_id == user && x.id == id);
+                if (cartItem == null) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.NotFound);
+                _db.cart_items.Remove(cartItem); //neu ton tai thi xoa
+                await _db.SaveChangesAsync();
+                return PayloadDTO<CartItems>.OK(cartItem);
             }
-            else
+            catch
             {
-                
-                Console.WriteLine("User ID not found.");
-                return null;
+                return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Isvalid);
             }
-           
         }
-
     }
 }

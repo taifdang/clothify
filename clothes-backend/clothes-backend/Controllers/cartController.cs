@@ -4,6 +4,7 @@ using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace clothes_backend.Controllers
 {
@@ -12,9 +13,18 @@ namespace clothes_backend.Controllers
     public class cartController : ControllerBase
     {
         private readonly CartRepository _cartRepo;
-        public cartController(CartRepository cartRepo)
+        private readonly DatabaseContext _db;
+        public cartController(CartRepository cartRepo, DatabaseContext db)
         {
             _cartRepo = cartRepo;
+            _db = db;
+        }
+        [HttpGet("getCart")]
+        public async Task<IActionResult> getId()
+        {         
+            var data = await _cartRepo.getCart();
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
+            return Ok(data);
         }
         [HttpPost("addCartItem")]
         public async Task<IActionResult> addCartItem([FromForm]CartItemDTO DTO)
@@ -27,12 +37,16 @@ namespace clothes_backend.Controllers
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
-        [HttpGet]
-        public async Task<IActionResult> get()
+        [HttpDelete("delete")]
+        public async Task<IActionResult> deleteCartItem(int id)
         {
-            var data = _cartRepo.getIsUser();
-            return Ok(data);        
-        }
-        
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
+            }
+            var data = await _cartRepo.removeCartItem(id);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
+            return Ok(data);
+        }     
     }
 }
