@@ -21,6 +21,11 @@
         "Name": "quantity",
         "Type": "System.Int32",
         "IsRequired": false
+      },
+      {
+        "Name": "row_version",
+        "Type": "System.Byte[]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -72,6 +77,11 @@
       {
         "Name": "quantity",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "row_version",
+        "Type": "System.Byte[]",
         "IsRequired": false
       }
     ],

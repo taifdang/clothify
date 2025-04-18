@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace clothes_backend.Models
 {
@@ -20,6 +21,7 @@ namespace clothes_backend.Models
         public DbSet<Orders> orders { get; set; }
         public DbSet<OrderDetails> order_details { get; set; }
         public DbSet<BlackListToken> blacklist_token { get; set; }
+        public DbSet<OrderHistory> order_history { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -119,7 +121,10 @@ namespace clothes_backend.Models
              .WithMany(x => x.order_details)
              .HasForeignKey(s => s.product_variant_id)
              .OnDelete(DeleteBehavior.Cascade);
+            //UTILS
+            modelBuilder.Entity<CartItems>()
+            .Property(p => p.row_version)
+            .IsRowVersion();
         }
-
     }
 }

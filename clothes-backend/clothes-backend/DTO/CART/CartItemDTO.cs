@@ -10,5 +10,6 @@ namespace clothes_backend.DTO.CART
         [Required]
         [Range(1,100,ErrorMessage ="Quantity cart item must be between 1 and 100")]
         public int quantity { get; set; }
+        public byte[]? row_version { get; set; } = null;
     }
 }

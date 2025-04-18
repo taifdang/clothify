@@ -21,7 +21,7 @@ namespace clothes_backend.Models
         [Range(0, 100, ErrorMessage = "Percent must be between 0 and 100")]
         [Column(TypeName = "decimal(5,2)")]
         public decimal percent { get; set; }
-        public string? sku { get; set; }
+        public string? sku { get; set; }      
         [JsonIgnore]
         public Products products { get; set; }
         public ICollection<Variants> variants { get; set; }

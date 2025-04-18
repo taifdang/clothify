@@ -45,6 +45,10 @@
                     "minimum": 1,
                     "type": "integer",
                     "format": "int32"
+                  },
+                  "row_version": {
+                    "type": "string",
+                    "format": "byte"
                   }
                 }
               },
@@ -56,6 +60,9 @@
                   "style": "form"
                 },
                 "quantity": {
+                  "style": "form"
+                },
+                "row_version": {
                   "style": "form"
                 }
               }
@@ -97,6 +104,10 @@
                     "minimum": 1,
                     "type": "integer",
                     "format": "int32"
+                  },
+                  "row_version": {
+                    "type": "string",
+                    "format": "byte"
                   }
                 }
               },
@@ -108,6 +119,9 @@
                   "style": "form"
                 },
                 "quantity": {
+                  "style": "form"
+                },
+                "row_version": {
                   "style": "form"
                 }
               }
@@ -884,6 +898,11 @@
             "minimum": 1,
             "type": "integer",
             "format": "int32"
+          },
+          "row_version": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         },
         "additionalProperties": false
