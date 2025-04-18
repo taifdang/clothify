@@ -36,7 +36,7 @@ namespace clothes_backend.Service
                     new Claim(ClaimTypes.Email,user.email),
                     new Claim(ClaimTypes.Role,user.role)    
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(60),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
             var access_token = token_handle.CreateToken(token_info);

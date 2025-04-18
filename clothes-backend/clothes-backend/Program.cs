@@ -14,8 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
-using System.Text.Json.Serialization;
+
 
 namespace clothes_backend
 {
@@ -87,13 +88,17 @@ namespace clothes_backend
                 });
 
             //
+            builder.Services.AddHttpContextAccessor();
+            //
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));          
             builder.Services.AddScoped<ProductRepository>();
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
             builder.Services.AddScoped<UserRepositpory>();
             builder.Services.AddScoped<AuthService>();
-
+            //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddScoped<CartRepository>();
+            
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();
 
@@ -110,12 +115,14 @@ namespace clothes_backend
             });
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
             //
+           
+            app.UseAuthentication();
+            app.UseAuthorization();
+            //MIDDLEWARE
+            //check token
             app.Use(async (context, next) =>
-            {
-                //check token
+            {              
                 var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
                 if (!string.IsNullOrEmpty(access_token))
                 {
@@ -130,7 +137,7 @@ namespace clothes_backend
                     using (var scope = app.Services.CreateScope())
                     {
                         var _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                        var isblockToken = _db.blacklist_token.Any(x => x.token == access_token);
+                        var isblockToken = await _db.blacklist_token.AnyAsync(x => x.token == access_token);
                         if (isblockToken)
                         {
                             //block request
@@ -141,12 +148,23 @@ namespace clothes_backend
                         }
                     }
                 }
+                //save current user
                 await next(context);
             });
             //app.UseMiddleware<UserMiddleware>();
-
+            //store user
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api/cart"))
+                {
+                    if (context.User.Identity.IsAuthenticated)
+                    {
+                        context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
+                    }
+                }              
+                await next();
+            });          
             app.MapControllers();
-
             app.Run();
         }
     }
