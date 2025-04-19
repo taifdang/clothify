@@ -29,7 +29,15 @@ namespace clothes_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+                return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));               
             }
             var data = await _cartRepo.addCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
@@ -40,7 +48,15 @@ namespace clothes_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+                return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));
             }
             var data = await _cartRepo.updateCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
@@ -51,7 +67,15 @@ namespace clothes_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<CartItems>.Fail(ModelState.Values.ToString()));
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+                return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));
             }
             var data = await _cartRepo.removeCartItem(id);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);

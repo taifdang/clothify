@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace clothes_backend.Controllers
 {
-    [Route("api/product-variants")]
+    [Route("api/[controller]")]
     [ApiController]
     public class variantController : ControllerBase
     {

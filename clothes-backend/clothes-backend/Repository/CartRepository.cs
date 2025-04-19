@@ -8,6 +8,7 @@ using clothes_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using static Dapper.SqlMapper;
 namespace clothes_backend.Repository
 {
     public class CartRepository : GenericRepository<Carts>,ICartService,ICartUtils
@@ -65,7 +66,7 @@ namespace clothes_backend.Repository
                 if (user_id == 0) return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);             
                 var carts = await _db.carts.FirstOrDefaultAsync(x => x.user_id == user_id);
                 if (carts == null) return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.NotFound);
-                var listCartItem = await _db.cart_items.Where(x => x.cart_id == carts.id).ProjectTo<CartItemDTO>(_mapper.ConfigurationProvider).ToListAsync();
+                var listCartItem = await _db.cart_items.Where(x => x.cart_id == carts.id).ProjectTo<CartItemDTO>(_mapper.ConfigurationProvider).ToListAsync();              
                 return PayloadDTO<List<CartItemDTO>>.OK(listCartItem);
             }
             catch
@@ -84,8 +85,15 @@ namespace clothes_backend.Repository
                 var cartItem = await checkCartItems(id, user_id);
                 if (cartItem == null) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.NotFound);
                 _db.cart_items.Remove(cartItem); //neu ton tai thi xoa
-                await _db.SaveChangesAsync();
-                return PayloadDTO<CartItems>.OK(cartItem);
+                try
+                {
+                    await _db.SaveChangesAsync();
+                    return PayloadDTO<CartItems>.OK(null!);
+                }
+                catch (DBConcurrencyException)
+                {
+                    return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Conflict);
+                }
             }
             catch
             {
@@ -102,20 +110,21 @@ namespace clothes_backend.Repository
                 if (user_id == 0) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Unauthorized);
                 var cartItem = await checkCartItems(DTO.id, user_id);
                 if (cartItem == null) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.NotFound);
-                //check row_version
-                var entity = _mapper.Map<CartItems>(DTO);
-                _db.Entry(entity).Property(p => p.row_version).OriginalValue = DTO.row_version;
-                 //update
+                
                 cartItem.product_variant_id = DTO.product_variant_id;
                 cartItem.quantity = DTO.quantity;
-                _db.cart_items.Update(cartItem);
+            
+                _db.Entry(cartItem).Property(p => p.row_version).OriginalValue = DTO.row_version;
+                Console.WriteLine(BitConverter.ToInt64(DTO.row_version, 0));           
                 try
                 {
                     await _db.SaveChangesAsync();
                     return PayloadDTO<CartItemDTO>.OK(null!);
                 }
-                catch(DBConcurrencyException)
+                catch(DbUpdateConcurrencyException ex)
                 {
+                    //neu that bai => reload rowversion
+                    ex.Entries.Single().Reload();
                     return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Conflict);
                 }
             }

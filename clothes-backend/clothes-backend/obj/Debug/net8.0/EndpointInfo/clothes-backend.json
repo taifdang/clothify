@@ -693,7 +693,7 @@
         }
       }
     },
-    "/api/product-variants/getId": {
+    "/api/variant/getId": {
       "get": {
         "tags": [
           "variant"
@@ -715,7 +715,7 @@
         }
       }
     },
-    "/api/product-variants/add": {
+    "/api/variant/add": {
       "post": {
         "tags": [
           "variant"
@@ -810,7 +810,7 @@
         }
       }
     },
-    "/api/product-variants": {
+    "/api/variant": {
       "delete": {
         "tags": [
           "variant"
