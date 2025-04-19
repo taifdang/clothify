@@ -23,7 +23,7 @@ namespace clothes_backend.Service
                 StatusCode.Unauthorized,"Không có quyền truy cập"
             },
             {
-                StatusCode.Conflict,"Xung đột dữ liệu"
+                StatusCode.Conflict,"Xung đột dữ liệu hoặc dữ liệu đã được thay đổi bởi một tiến trình khác"
             }
 
         };

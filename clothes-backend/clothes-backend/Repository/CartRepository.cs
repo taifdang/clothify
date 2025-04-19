@@ -75,31 +75,29 @@ namespace clothes_backend.Repository
             }
         }
         //Concurrenttly conflict 1
-        public async Task<PayloadDTO<CartItems>> removeCartItem(int id)
+        public async Task<PayloadDTO<CartItems>> removeCartItem([FromForm] deleteCartItemDTO DTO)
         {
             try
             {
                 var user_id = _authService.convertToInt(_authService.getValueAuth());
                 if (user_id == 0) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Unauthorized);
                 //kiem tra gio hang cua user            
-                var cartItem = await checkCartItems(id, user_id);
+                var cartItem = await checkCartItems(DTO.id, user_id);
                 if (cartItem == null) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.NotFound);
-                _db.cart_items.Remove(cartItem); //neu ton tai thi xoa
-                try
-                {
-                    await _db.SaveChangesAsync();
-                    return PayloadDTO<CartItems>.OK(null!);
-                }
-                catch (DBConcurrencyException)
+                if (!cartItem.row_version.SequenceEqual(DTO.row_version))//neu row_version khac nhau thi loi
                 {
                     return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Conflict);
                 }
+                _db.cart_items.Remove(cartItem); //neu ton tai thi xoa                
+                await _db.SaveChangesAsync();
+                return PayloadDTO<CartItems>.OK(null!);               
             }
             catch
             {
                 return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Isvalid);
             }
         }
+        //kiem tra cart cua user co cartItem do thi xoa
         public async Task<CartItems?> checkCartItems(int? cartItem_id, int user) => await _db.cart_items.Include(x => x.carts).FirstOrDefaultAsync(x => x.carts.user_id == user && x.id == cartItem_id) ?? null;    
         //Concurrenttly conflict 2  
         public async Task<PayloadDTO<CartItemDTO>> updateCartItem([FromForm] CartItemDTO DTO)

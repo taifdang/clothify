@@ -63,7 +63,7 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpDelete("delete")]
-        public async Task<IActionResult> deleteCartItem(int id)
+        public async Task<IActionResult> deleteCartItem([FromForm] deleteCartItemDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace clothes_backend.Controllers
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
                 return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));
             }
-            var data = await _cartRepo.removeCartItem(id);
+            var data = await _cartRepo.removeCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }     
