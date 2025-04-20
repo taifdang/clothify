@@ -2,7 +2,7 @@
   {
     "ContainingType": "clothes_backend.Controllers.cartController",
     "Method": "addCartItem",
-    "RelativePath": "api/cart/addCartItem",
+    "RelativePath": "api/cart/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -54,7 +54,7 @@
   {
     "ContainingType": "clothes_backend.Controllers.cartController",
     "Method": "getId",
-    "RelativePath": "api/cart/getCart",
+    "RelativePath": "api/cart/get",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -64,7 +64,7 @@
   {
     "ContainingType": "clothes_backend.Controllers.cartController",
     "Method": "updateCartItem",
-    "RelativePath": "api/cart/updateCartItem",
+    "RelativePath": "api/cart/update",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -129,6 +129,52 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.orderController",
+    "Method": "add",
+    "RelativePath": "api/order",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "note",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "payment_type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "cartItem_id",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],

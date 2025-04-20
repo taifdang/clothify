@@ -18,6 +18,7 @@ namespace clothes_backend.Models
         public int quantity { get; set; }
         [JsonIgnore]
         public Orders orders { get; set; }
+        [JsonIgnore]
         public ProductVariants product_variants { get; set; }
     }
 }

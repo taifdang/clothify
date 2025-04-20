@@ -5,7 +5,7 @@
     "version": "v1"
   },
   "paths": {
-    "/api/cart/getCart": {
+    "/api/cart/get": {
       "get": {
         "tags": [
           "cart"
@@ -17,7 +17,7 @@
         }
       }
     },
-    "/api/cart/addCartItem": {
+    "/api/cart/add": {
       "post": {
         "tags": [
           "cart"
@@ -76,7 +76,7 @@
         }
       }
     },
-    "/api/cart/updateCartItem": {
+    "/api/cart/update": {
       "post": {
         "tags": [
           "cart"
@@ -246,6 +246,78 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/order": {
+      "post": {
+        "tags": [
+          "order"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "payment_type": {
+                    "type": "string"
+                  },
+                  "cartItem_id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "user_id": {
+                  "style": "form"
+                },
+                "status": {
+                  "style": "form"
+                },
+                "note": {
+                  "style": "form"
+                },
+                "phone": {
+                  "style": "form"
+                },
+                "address": {
+                  "style": "form"
+                },
+                "payment_type": {
+                  "style": "form"
+                },
+                "cartItem_id": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -957,9 +1029,6 @@
             "minimum": 1,
             "type": "integer",
             "format": "int32"
-          },
-          "product_variants": {
-            "$ref": "#/components/schemas/ProductVariants"
           }
         },
         "additionalProperties": false

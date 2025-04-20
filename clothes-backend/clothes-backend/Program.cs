@@ -100,6 +100,7 @@ namespace clothes_backend
             //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<CartRepository>();
             builder.Services.AddScoped<IAuthService,AuthService>();
+            builder.Services.AddScoped<OrderRepository>();
 
             builder.Services.AddAutoMapper(typeof(Program));
             var app = builder.Build();

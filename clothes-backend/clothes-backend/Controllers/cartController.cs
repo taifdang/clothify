@@ -17,14 +17,14 @@ namespace clothes_backend.Controllers
         {
             _cartRepo = cartRepo;       
         }
-        [HttpGet("getCart")]
+        [HttpGet("get")]
         public async Task<IActionResult> getId()
         {         
             var data = await _cartRepo.getCart();
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
-        [HttpPost("addCartItem")]
+        [HttpPost("add")]
         public async Task<IActionResult> addCartItem([FromForm]CartItemDTO DTO)
         {
             if (!ModelState.IsValid)
@@ -43,7 +43,7 @@ namespace clothes_backend.Controllers
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
-        [HttpPost("updateCartItem")]
+        [HttpPost("update")]
         public async Task<IActionResult> updateCartItem([FromForm]CartItemDTO DTO)
         {
             if (!ModelState.IsValid)

@@ -108,19 +108,16 @@ namespace clothes_backend.Repository
                 if (user_id == 0) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Unauthorized);
                 var cartItem = await checkCartItems(DTO.id, user_id);
                 if (cartItem == null) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.NotFound);
-                
                 cartItem.product_variant_id = DTO.product_variant_id;
-                cartItem.quantity = DTO.quantity;
-            
-                _db.Entry(cartItem).Property(p => p.row_version).OriginalValue = DTO.row_version;
-                Console.WriteLine(BitConverter.ToInt64(DTO.row_version, 0));           
+                cartItem.quantity = DTO.quantity;            
+                _db.Entry(cartItem).Property(p => p.row_version).OriginalValue = DTO.row_version;                         
                 try
                 {
                     await _db.SaveChangesAsync();
                     return PayloadDTO<CartItemDTO>.OK(null!);
                 }
                 catch(DbUpdateConcurrencyException ex)
-                {
+                {                   
                     //neu that bai => reload rowversion
                     ex.Entries.Single().Reload();
                     return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Conflict);
