@@ -323,6 +323,34 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "order"
+        ],
+        "parameters": [
+          {
+            "name": "product_varinat_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "slmua",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/api/product": {

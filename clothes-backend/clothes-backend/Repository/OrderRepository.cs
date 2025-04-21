@@ -1,31 +1,46 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
 using clothes_backend.DTO.General;
 using clothes_backend.DTO.ORDER;
+using clothes_backend.Inteface;
 using clothes_backend.Inteface.Order;
 using clothes_backend.Models;
+using clothes_backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace clothes_backend.Repository
 {
     public class OrderRepository : GenericRepository<Orders>,IOrderService
     {
-        public OrderRepository(DatabaseContext db) : base(db)
+        private readonly IMapper _mapper;
+        private readonly IMemoryCache _cache;
+        public OrderRepository(DatabaseContext db, IMapper mapper, IMemoryCache cache) : base(db)
         {
+            _mapper = mapper;
+            _cache = cache;
         }
         //lay list item tu cart/ co the khong lay het
         public async Task<PayloadDTO<Orders>> add([FromForm]orderItemDTO DTO)
         {
             try
-            {
+            {               
                 //kiem tra user, cartItem co ton tai khong              
                 //lay gio hang hien tai cua user            
-                ////load cartItem                          
+                ////load cartItem        
+                //slban + sl mua > sl ton return false;               
                 var cartItem = await _db.cart_items
                       .Include(x => x.product_variants)
                       .Where(x => DTO.cartItem_id.Contains(x.id) && x.carts.user_id == DTO.user_id)
                       .ToListAsync();
-                if(!cartItem.Any()) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.NotFound);              
+
+                if(!cartItem.Any()) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.NotFound);
+                if (cartItem.Count != DTO.cartItem_id.Count) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.Isvalid);
+                //kiem tra so luong
+                              
+                var orderDetail_ATM = _mapper.Map<List<OrderDetails>>(cartItem);
+
                 var order = new Orders()
                 {
                     user_id = DTO.user_id,
@@ -33,23 +48,10 @@ namespace clothes_backend.Repository
                     phone = DTO.phone,
                     payment_type = DTO.payment_type,
                     address = DTO.address,
-                    order_details = new List<OrderDetails>(),
+                    order_details = orderDetail_ATM,
                     note = DTO.note,
-                    create_at = DateTime.Now
+                    total = orderDetail_ATM.Sum(x => x.price*x.quantity),                 
                 };
-                foreach (var item in cartItem) //temporary key: khoa tam
-                {
-                    var price = item.product_variants.price;
-                    var quantity = item.quantity;
-                    var orderDetail = new OrderDetails
-                    {
-                        product_variant_id = item.product_variant_id,
-                        price = price,
-                        quantity = quantity,
-                    };
-                    order.total += (price * quantity);
-                    order.order_details.Add(orderDetail);
-                }
                 _db.orders.Add(order);
                 _db.cart_items.RemoveRange(cartItem);//xoa cartItem da order
                 await _db.SaveChangesAsync();
@@ -58,21 +60,13 @@ namespace clothes_backend.Repository
             catch
             {
                 return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.Isvalid);
-            }
-           
-        }
-        
+            }         
+        }                   
         public Task<PayloadDTO<Orders>> getAll()
         {
             throw new NotImplementedException();
         }
-
         public Task<PayloadDTO<Orders>> getId()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PayloadDTO<Orders>> remove()
         {
             throw new NotImplementedException();
         }

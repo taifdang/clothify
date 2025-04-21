@@ -181,6 +181,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "clothes_backend.Controllers.orderController",
+    "Method": "test",
+    "RelativePath": "api/order",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "product_varinat_id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "slmua",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "getList",
     "RelativePath": "api/product",

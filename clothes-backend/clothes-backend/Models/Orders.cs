@@ -22,7 +22,7 @@ namespace clothes_backend.Models
         [Required]
         public string payment_type { get; set; }
         [DataType(DataType.DateTime)]
-        public DateTime create_at { get; set; }
+        public DateTime create_at { get; set; } = DateTime.Now;
         [JsonIgnore]
         public Users users { get; set; }
         public ICollection<OrderDetails> order_details { get; set; }
