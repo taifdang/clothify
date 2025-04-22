@@ -10,7 +10,7 @@ namespace clothes_backend.Models
         public int? user_id { get; set; }
         public int? session_id { get; set; }
         [Required]
-        public string status { get; set; }
+        public string status { get; set; } = "PENDING";
         public string? note { get; set; }
         [Range(0.01, double.MaxValue, ErrorMessage = "Total Price is not be negative")]
         [Column(TypeName = "decimal(18,2)")]

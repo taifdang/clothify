@@ -148,11 +148,6 @@
         "IsRequired": false
       },
       {
-        "Name": "status",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
         "Name": "note",
         "Type": "System.String",
         "IsRequired": false
@@ -173,7 +168,7 @@
         "IsRequired": false
       },
       {
-        "Name": "cartItem_id",
+        "Name": "cartItem",
         "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }

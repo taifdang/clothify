@@ -268,14 +268,12 @@
                     "type": "integer",
                     "format": "int32"
                   },
-                  "status": {
-                    "type": "string"
-                  },
                   "note": {
                     "type": "string"
                   },
                   "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "tel"
                   },
                   "address": {
                     "type": "string"
@@ -283,7 +281,7 @@
                   "payment_type": {
                     "type": "string"
                   },
-                  "cartItem_id": {
+                  "cartItem": {
                     "type": "array",
                     "items": {
                       "type": "integer",
@@ -294,9 +292,6 @@
               },
               "encoding": {
                 "user_id": {
-                  "style": "form"
-                },
-                "status": {
                   "style": "form"
                 },
                 "note": {
@@ -311,7 +306,7 @@
                 "payment_type": {
                   "style": "form"
                 },
-                "cartItem_id": {
+                "cartItem": {
                   "style": "form"
                 }
               }

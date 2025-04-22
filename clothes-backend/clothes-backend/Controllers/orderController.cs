@@ -25,7 +25,7 @@ namespace clothes_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> add([FromForm]orderItemDTO DTO)
         {
-            var data = await _orderRepo.add(DTO);
+            var data = await _orderRepo.addorder(DTO);
             return Ok(data);
         }
         [HttpGet]
