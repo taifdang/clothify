@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using clothes_backend.DTO;
+using clothes_backend.DTO.VARIANT;
 using clothes_backend.Models;
 
 namespace clothes_backend.AutoMapper

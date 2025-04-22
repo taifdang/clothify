@@ -25,36 +25,15 @@ namespace clothes_backend.Controllers
         [HttpPost]
         public async Task<IActionResult> add([FromForm]orderItemDTO DTO)
         {
-            var data = await _orderRepo.addorder(DTO);
+            var data = await _orderRepo.add(DTO);
             return Ok(data);
         }
         [HttpGet]
-        public async Task<IActionResult> test(int product_varinat_id, int slmua)
+        public async Task<IActionResult> getAll(int user)
         {
-            //sl ban
-            int slban = await getCacheSold(product_varinat_id);
-            var slkho = await _db.product_variants.AsNoTracking().Where(y=>y.id == product_varinat_id).Select(x => x.quantity).FirstOrDefaultAsync();             
-            if(slban + slmua > slkho)
-            {
-                return BadRequest("HET HANG");
-            }
-            slban += slmua;
-            if(slban > slkho) return BadRequest("LOI DAT HANG");          
-            _db.SaveChanges();
-            return Ok("DAT HANG THANH CONG");
+            var data = await _orderRepo.getAll(user);
+            return Ok(data);
         }
-        [NonAction]
-        public async Task<int> getCacheSold(int product_varinat_id)
-        {
-            string cacheKey = $"cache_variant_{product_varinat_id}";
-            if (_cache.isCached(cacheKey))
-            {
-                return _cache.Get<int>(cacheKey);
-            }
-            //??
-            var slban = await _db.order_history.AsNoTracking().Where(y => y.id == product_varinat_id).Select(x => x.sold_quantity).FirstOrDefaultAsync();
-            _cache.Set(cacheKey, slban, TimeSpan.FromMinutes(60));
-            return slban;
-        }
+
     }
 }

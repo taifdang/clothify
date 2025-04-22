@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using clothes_backend.AutoMapper;
-using clothes_backend.DTO;
+using clothes_backend.DTO.VARIANT;
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Utils;
@@ -109,8 +109,7 @@ namespace clothes_backend.Repository
                 return null;
             }
         }
-        //
-      
+        //    
         public async Task<Dictionary<int,Products>> getCache()
         {         
             if (_cache.isCached(CacheKeys.products_cacheKey))

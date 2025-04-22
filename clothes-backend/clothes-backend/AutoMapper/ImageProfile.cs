@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using clothes_backend.DTO;
+using clothes_backend.DTO.IMAGE;
 using clothes_backend.Models;
 
 namespace clothes_backend.AutoMapper
@@ -8,7 +8,7 @@ namespace clothes_backend.AutoMapper
     {
         public ImageProfile()
         {
-            CreateMap<imagesDTO, ProductOptionImages>();
+            CreateMap<imageUploadDTO, ProductOptionImages>();
         }
     }
 }

@@ -27,15 +27,10 @@
             "multipart/form-data": {
               "schema": {
                 "required": [
-                  "product_variant_id",
                   "quantity"
                 ],
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
                   "product_variant_id": {
                     "type": "integer",
                     "format": "int32"
@@ -45,24 +40,14 @@
                     "minimum": 1,
                     "type": "integer",
                     "format": "int32"
-                  },
-                  "row_version": {
-                    "type": "string",
-                    "format": "byte"
                   }
                 }
               },
               "encoding": {
-                "id": {
-                  "style": "form"
-                },
                 "product_variant_id": {
                   "style": "form"
                 },
                 "quantity": {
-                  "style": "form"
-                },
-                "row_version": {
                   "style": "form"
                 }
               }
@@ -325,15 +310,7 @@
         ],
         "parameters": [
           {
-            "name": "product_varinat_id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "slmua",
+            "name": "user",
             "in": "query",
             "schema": {
               "type": "integer",

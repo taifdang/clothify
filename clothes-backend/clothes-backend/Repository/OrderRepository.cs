@@ -13,12 +13,10 @@ namespace clothes_backend.Repository
 {
     public class OrderRepository : GenericRepository<Orders>,IOrderService
     {
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        public OrderRepository(DatabaseContext db, IMapper mapper, IMemoryCache cache) : base(db)
+        private readonly IMapper _mapper;      
+        public OrderRepository(DatabaseContext db, IMapper mapper) : base(db)
         {
             _mapper = mapper;
-            _cache = cache;
         }     
         public async Task<PayloadDTO<Orders>> add([FromForm] orderItemDTO request)
         {
@@ -33,19 +31,20 @@ namespace clothes_backend.Repository
             //kiem tra so luong (slban, slmua, slkho)
             //1.lay so luong ban
             //2.lay so luong ton kho
-            var _sold = _db.order_history //slban cua variant co the = null
-                .Where(x => request.cartItem.Contains(x.product_variant_id)).ToList();
+            var getItem = cartItem.Select(x => x.product_variant_id).ToList();
+            var _sold = await _db.order_history //slban cua variant co the = null
+                .Where(x => getItem.Contains(x.product_variant_id)).ToListAsync();
                 //.ToDictionary(x => x.product_variant_id, y => y.sold_quantity);
             var orderHistoriesAdd = new List<OrderHistory>();
             var orderHistoriesUpdate = new List<OrderHistory>();
             //kiem tra
             foreach (var item in cartItem)
-           {
+            {
                 //var sold_quantity = _sold.TryGetValue(item.id, out int value) ? value : 0;
                 var sold_quantity = _sold.FirstOrDefault(x => x.product_variant_id == item.product_variant_id)?.sold_quantity ?? 0;
                 //if (sold_quantity + item.quantity > item.product_variants.quantity) return PayloadDTO<List<Orders>>.Error(Utils.Enum.StatusCode.Isvalid);
                 if (sold_quantity + item.quantity > item.product_variants.quantity) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.Isvalid);
-           }
+            }
             //dat hang
             //chi tiet don hang
             var orderDetail = _mapper.Map<List<OrderDetails>>(cartItem);//tempory key
@@ -64,15 +63,18 @@ namespace clothes_backend.Repository
             foreach(var item in cartItem)
             {
                 var IsSold = _sold.FirstOrDefault(x=>x.product_variant_id == item.product_variant_id);
-                if(IsSold == null) orderHistoriesAdd.Add(new OrderHistory { product_variant_id = item.product_variant_id, sold_quantity = item.quantity });
+                if(IsSold == null)
+                {
+                    orderHistoriesAdd.Add(new OrderHistory { product_variant_id = item.product_variant_id, sold_quantity = item.quantity });
+                }
                 else
                 {
                     IsSold.sold_quantity += item.quantity;
                     orderHistoriesUpdate.Add(IsSold);
                 }           
-            }
-            if (orderHistoriesAdd.Count() > 0) _db.order_history.AddRange(orderHistoriesAdd);
-            if (orderHistoriesAdd.Count() > 0) _db.order_history.UpdateRange(orderHistoriesUpdate);
+            }       
+            if (orderHistoriesUpdate.Count() > 0) _db.order_history.UpdateRange(orderHistoriesUpdate);
+            if (orderHistoriesAdd.Count() > 0) _db.order_history.AddRange(orderHistoriesAdd);           
                 //xoa cartItem cu
             _db.cart_items.RemoveRange(cartItem);
             _db.SaveChanges();          

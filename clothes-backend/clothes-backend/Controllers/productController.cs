@@ -1,4 +1,4 @@
-﻿using clothes_backend.DTO;
+﻿using clothes_backend.DTO.PRODUCT;
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using clothes_backend.Repository;

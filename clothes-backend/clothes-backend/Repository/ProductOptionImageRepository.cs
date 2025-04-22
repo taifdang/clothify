@@ -1,4 +1,4 @@
-﻿using clothes_backend.DTO;
+﻿using clothes_backend.DTO.IMAGE;
 using clothes_backend.Inteface;
 using clothes_backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace clothes_backend.Repository
         public ProductOptionImageRepository(DatabaseContext db) : base(db)
         {
         }
-        public async Task<object> add([FromForm]imagesDTO DTO)
+        public async Task<object> add([FromForm]imageUploadDTO DTO)
         {          
             try
             {          

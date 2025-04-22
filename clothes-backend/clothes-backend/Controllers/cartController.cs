@@ -25,7 +25,7 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpPost("add")]
-        public async Task<IActionResult> addCartItem([FromForm]CartItemDTO DTO)
+        public async Task<IActionResult> addCartItem([FromForm] addCartDTO DTO)
         {
             if (!ModelState.IsValid)
             {

@@ -9,24 +9,24 @@ namespace clothes_backend.AutoMapper
        public ProductProfile()
        {
             //variants
-            CreateMap<ProductVariants, variants_DTO>();
+            CreateMap<ProductVariants, variantsDTO>();
 
-            CreateMap<Products, product_DTO>()
+            CreateMap<Products, listProductDTO>()
                 .ForMember(x => x.variants, y => y.MapFrom(src => src.product_variants))
                 .ForMember(target => target.options_value, opt => opt.MapFrom(src =>
                     src.product_option_images
                         .GroupBy(x => x.options_values.options.title)
-                        .Select(group_option => new OptionValueImageGroupDTO
+                        .Select(group_option => new optionImageDTO
                         {
                             title = group_option.Key,
                             option_id = group_option.Select(k => k.options_values.option_id).FirstOrDefault() ?? null,
                             options = group_option
                                 .GroupBy(v => v.options_values.value)
-                                .Select(group_option_value => new option_value_DTO
+                                .Select(group_option_value => new optionValueDTO
                                 {
                                     //image =  valueGroup.Select(i => i.src).ToList()
                                     title = group_option_value.Key,
-                                    image = group_option_value.Select(i => new image_DTO { id = i.id, src = i.src }).ToList()
+                                    image = group_option_value.Select(i => new imageDTO { id = i.id, src = i.src }).ToList()
                                 })
                                 .ToList()
                         })

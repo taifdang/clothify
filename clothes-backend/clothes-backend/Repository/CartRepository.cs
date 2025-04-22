@@ -20,7 +20,7 @@ namespace clothes_backend.Repository
             _mapper = mapper;        
             _authService = authService;
         }
-        public async Task<PayloadDTO<CartItemDTO>> addCartItem([FromForm] CartItemDTO DTO)
+        public async Task<PayloadDTO<CartItemDTO>> addCartItem([FromForm] addCartDTO DTO)
         {
             try
             {

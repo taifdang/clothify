@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using clothes_backend.DTO;
-
+using clothes_backend.DTO.PRODUCT;
 using clothes_backend.DTO.PRODUCT_DTO;
 using clothes_backend.Inteface;
 using clothes_backend.Models;
@@ -73,7 +72,7 @@ namespace clothes_backend.Repository
             var product = await _db.products
                 .AsNoTracking()
                 .Where(p => p.id == 15)
-                .ProjectTo<product_DTO>(_mapper.ConfigurationProvider)       
+                .ProjectTo<listProductDTO>(_mapper.ConfigurationProvider)       
                 .AsSingleQuery()
                 .ToListAsync();    
           

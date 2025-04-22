@@ -1,4 +1,4 @@
-﻿using clothes_backend.DTO;
+﻿using clothes_backend.DTO.IMAGE;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ namespace clothes_backend.Controllers
             _imageRepo = imageRepo;
         }
         [HttpPost("add")]
-        public async Task<IActionResult> add([FromForm]imagesDTO DTO)
+        public async Task<IActionResult> add([FromForm]imageUploadDTO DTO)
         {
             if (!ModelState.IsValid)
             {

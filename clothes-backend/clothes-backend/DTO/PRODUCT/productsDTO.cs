@@ -1,4 +1,4 @@
-﻿namespace clothes_backend.DTO
+﻿namespace clothes_backend.DTO.PRODUCT
 {
     public class productsDTO
     {

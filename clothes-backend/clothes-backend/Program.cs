@@ -154,7 +154,7 @@ namespace clothes_backend
                 //save current user
                 await next(context);
             });
-            //app.UseMiddleware<UserMiddleware>();
+          
             //store user
             app.Use(async (context, next) =>
             {

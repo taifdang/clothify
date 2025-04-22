@@ -1,4 +1,4 @@
-﻿using clothes_backend.DTO;
+﻿using clothes_backend.DTO.VARIANT;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;

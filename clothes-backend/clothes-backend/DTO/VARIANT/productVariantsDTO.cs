@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using clothes_backend.Utils.Validate;
 
-namespace clothes_backend.DTO
+namespace clothes_backend.DTO.VARIANT
 {
     public class productVariantsDTO
     {

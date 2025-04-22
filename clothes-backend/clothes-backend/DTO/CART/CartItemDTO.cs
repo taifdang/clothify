@@ -8,7 +8,7 @@ namespace clothes_backend.DTO.CART
 {
     public class CartItemDTO
     {
-        public int? id { get; set; }
+        public int id { get; set; }
         [Required(ErrorMessage = "Product variant id is not empty")]
         public int product_variant_id { get; set; }
         [Required]

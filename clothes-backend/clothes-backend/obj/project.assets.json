@@ -89,6 +89,9 @@
           }
         }
       },
+      "EFCore.BulkExtensions/9.0.1": {
+        "type": "package"
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1575,6 +1578,20 @@
         "lib/netstandard2.0/Dapper.dll",
         "lib/netstandard2.0/Dapper.xml",
         "readme.md"
+      ]
+    },
+    "EFCore.BulkExtensions/9.0.1": {
+      "sha512": "exOdMFHAFTzE19ux2Kyhqv+vWsyUYrdYC5euxaLOzQ3Mukm3sRdXiXyYuLoJknTxJoM86rVHYvXZD9HFPcZTBQ==",
+      "type": "package",
+      "path": "efcore.bulkextensions/9.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "EFCoreBulk.png",
+        "LICENSE.txt",
+        "README.md",
+        "efcore.bulkextensions.9.0.1.nupkg.sha512",
+        "efcore.bulkextensions.nuspec"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -4008,6 +4025,7 @@
     "net8.0": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 12.0.0",
       "Dapper >= 2.1.66",
+      "EFCore.BulkExtensions >= 9.0.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.15",
       "Microsoft.Data.SqlClient >= 6.0.1",
       "Microsoft.EntityFrameworkCore >= 8.0.14",
@@ -4073,6 +4091,10 @@
           "Dapper": {
             "target": "Package",
             "version": "[2.1.66, )"
+          },
+          "EFCore.BulkExtensions": {
+            "target": "Package",
+            "version": "[9.0.1, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",

@@ -8,11 +8,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
         "Name": "product_variant_id",
         "Type": "System.Int32",
         "IsRequired": false
@@ -20,11 +15,6 @@
       {
         "Name": "quantity",
         "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "row_version",
-        "Type": "System.Byte[]",
         "IsRequired": false
       }
     ],
@@ -71,7 +61,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "System.Int32",
         "IsRequired": false
       },
       {
@@ -177,19 +167,14 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.orderController",
-    "Method": "test",
+    "Method": "getAll",
     "RelativePath": "api/order",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "product_varinat_id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "slmua",
+        "Name": "user",
         "Type": "System.Int32",
         "IsRequired": false
       }
