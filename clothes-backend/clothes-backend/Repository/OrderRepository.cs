@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using clothes_backend.DTO.CART;
 using clothes_backend.DTO.General;
 using clothes_backend.DTO.ORDER;
 using clothes_backend.Inteface.Order;
+using clothes_backend.Inteface.User;
 using clothes_backend.Models;
+using clothes_backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,10 +16,12 @@ namespace clothes_backend.Repository
 {
     public class OrderRepository : GenericRepository<Orders>,IOrderService
     {
-        private readonly IMapper _mapper;      
-        public OrderRepository(DatabaseContext db, IMapper mapper) : base(db)
+        private readonly IMapper _mapper;
+        private readonly IAuthService _authService;
+        public OrderRepository(DatabaseContext db, IMapper mapper, IAuthService authService) : base(db)
         {
             _mapper = mapper;
+            _authService = authService;
         }     
         public async Task<PayloadDTO<Orders>> add([FromForm] orderItemDTO request)
         {
@@ -75,22 +80,26 @@ namespace clothes_backend.Repository
             }       
             if (orderHistoriesUpdate.Count() > 0) _db.order_history.UpdateRange(orderHistoriesUpdate);
             if (orderHistoriesAdd.Count() > 0) _db.order_history.AddRange(orderHistoriesAdd);           
-                //xoa cartItem cu
+            //xoa cartItem cu
             _db.cart_items.RemoveRange(cartItem);
             _db.SaveChanges();          
             return PayloadDTO<Orders>.OK(order);
         }
-        public async Task<PayloadDTO<List<orderDTO>>> getAll(int user)
+        public async Task<PayloadDTO<List<orderDTO>>> getAll()
         {
-            var order = await _db.orders.Where(x => x.user_id == user).ToListAsync();
+            var user_id = _authService.convertToInt(_authService.getValueAuth());
+            if (user_id == 0) return PayloadDTO<List<orderDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);
+            var order = await _db.orders.Where(x => x.user_id == user_id).ToListAsync();
             var data = _mapper.Map<List<orderDTO>>(order);
             return PayloadDTO<List<orderDTO>>.OK(data);   
         }
-        public async Task<PayloadDTO<List<orderDTO>>> getId(int user, int id)
+        public async Task<PayloadDTO<List<orderDTO>>> getId( int id)
         {
-            var order = await _db.order_details.Include(x=>x.orders).Where(x => x.orders.user_id == user && x.id == x.orders.id).ToListAsync();
+            var user_id = _authService.convertToInt(_authService.getValueAuth());
+            if (user_id == 0) return PayloadDTO<List<orderDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);
+            var order = await _db.order_details.Include(x=>x.orders).Where(x => x.orders.user_id == user_id && x.id == x.orders.id).ToListAsync();
             var data = _mapper.Map<List<orderDTO>>(order);
             return PayloadDTO<List<orderDTO>>.OK(data);
-        }
+        }       
     }
 }

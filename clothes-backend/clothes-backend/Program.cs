@@ -5,6 +5,7 @@ using clothes_backend.Middleware;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
+using clothes_backend.Utils.General;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -101,10 +102,10 @@ namespace clothes_backend
             builder.Services.AddScoped<CartRepository>();
             builder.Services.AddScoped<IAuthService,AuthService>();
             builder.Services.AddScoped<OrderRepository>();
-
+            //
+            builder.Services.AddScoped<MailKitHandle>();
             builder.Services.AddAutoMapper(typeof(Program));
-            var app = builder.Build();
-
+            var app = builder.Build();      
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || app.Environment.IsStaging())
             {

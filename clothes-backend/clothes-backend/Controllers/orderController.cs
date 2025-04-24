@@ -29,9 +29,16 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpGet]
-        public async Task<IActionResult> getAll(int user)
+        public async Task<IActionResult> getAll()
         {
-            var data = await _orderRepo.getAll(user);
+            var data = await _orderRepo.getAll();
+            return Ok(data);
+        }
+        [HttpGet("get-id")]
+        public async Task<IActionResult> getId(int id)
+        {
+            var data = await _orderRepo.getId(id);
+            if (data.statusCode == Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
 

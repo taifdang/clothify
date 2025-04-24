@@ -8,18 +8,22 @@ using clothes_backend.Models;
 using clothes_backend.Service;
 using clothes_backend.Utils;
 using clothes_backend.Utils.Enum;
+using clothes_backend.Utils.General;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 namespace clothes_backend.Repository
 {
     public class UserRepositpory : GenericRepository<Users>,IUsers
     {
         private readonly UserService _auth;
         private readonly IMapper _mapper;
-        public UserRepositpory(DatabaseContext db, UserService auth, IMapper mapper) : base(db)
+        private readonly MailKitHandle _mailHandle;
+        public UserRepositpory(DatabaseContext db, UserService auth, IMapper mapper, MailKitHandle mailKitHandle) : base(db)
         {
             _auth = auth;
             _mapper = mapper;
+            _mailHandle = mailKitHandle;
         }      
         public async Task<PayloadDTO<TokenReponse>> login([FromForm] loginDTO DTO)
         {
@@ -54,7 +58,9 @@ namespace clothes_backend.Repository
         public async Task<PayloadDTO<userInfoDTO>> register([FromForm] registerDTO DTO)
         {
             if (await _db.users.AnyAsync(x => x.email == DTO.email)) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
+
             //hash password
+            if (_mailHandle.sendMail(DTO.email,DTO.name) == true) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
             try
             {
                 _auth.hashPassword(DTO.password, out string passwordHash, out byte[] passwordSalt);

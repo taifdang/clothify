@@ -308,9 +308,21 @@
         "tags": [
           "order"
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/order/get-id": {
+      "get": {
+        "tags": [
+          "order"
+        ],
         "parameters": [
           {
-            "name": "user",
+            "name": "id",
             "in": "query",
             "schema": {
               "type": "integer",

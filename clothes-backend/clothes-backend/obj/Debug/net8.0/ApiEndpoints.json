@@ -172,9 +172,19 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.orderController",
+    "Method": "getId",
+    "RelativePath": "api/order/get-id",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": false
       }

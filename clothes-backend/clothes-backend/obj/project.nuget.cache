@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SZcEVLgUEPI=",
+  "dgSpecHash": "7330ZXACnIg=",
   "success": true,
   "projectFilePath": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\clothes-backend.csproj",
   "expectedPackageFiles": [
@@ -8,9 +8,11 @@
     "C:\\Users\\taida\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\efcore.bulkextensions\\9.0.1\\efcore.bulkextensions.9.0.1.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\mailkit\\4.11.0\\mailkit.4.11.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.15\\microsoft.aspnetcore.authentication.jwtbearer.8.0.15.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
@@ -50,6 +52,7 @@
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.5.0\\microsoft.identitymodel.tokens.7.5.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\mimekit\\4.11.0\\mimekit.4.11.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",

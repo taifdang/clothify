@@ -11,6 +11,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="EFCore.BulkExtensions" Version="9.0.1" />
+    <PackageReference Include="MailKit" Version="4.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.15" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
@@ -25,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="Utils\General\" />
   </ItemGroup>
 
 </Project>

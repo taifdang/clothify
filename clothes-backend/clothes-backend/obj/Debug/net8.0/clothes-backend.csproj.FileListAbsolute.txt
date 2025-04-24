@@ -156,3 +156,6 @@ C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\clothes-backend.genruntimeconfig.cache
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\obj\Debug\net8.0\ref\clothes-backend.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\MailKit.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\MimeKit.dll

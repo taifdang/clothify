@@ -11,6 +11,7 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "Dapper": "2.1.66",
           "EFCore.BulkExtensions": "9.0.1",
+          "MailKit": "4.11.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.15",
           "Microsoft.Data.SqlClient": "6.0.1",
           "Microsoft.EntityFrameworkCore": "8.0.14",
@@ -80,6 +81,14 @@
           }
         }
       },
+      "BouncyCastle.Cryptography/2.5.1": {
+        "runtime": {
+          "lib/net6.0/BouncyCastle.Cryptography.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.5.1.28965"
+          }
+        }
+      },
       "Dapper/2.1.66": {
         "runtime": {
           "lib/net8.0/Dapper.dll": {
@@ -94,6 +103,18 @@
           "lib/net6.0/Humanizer.dll": {
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
+          }
+        }
+      },
+      "MailKit/4.11.0": {
+        "dependencies": {
+          "MimeKit": "4.11.0",
+          "System.Formats.Asn1": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/MailKit.dll": {
+            "assemblyVersion": "4.11.0.0",
+            "fileVersion": "4.11.0.0"
           }
         }
       },
@@ -701,6 +722,18 @@
           }
         }
       },
+      "MimeKit/4.11.0": {
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.5.1",
+          "System.Security.Cryptography.Pkcs": "8.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/MimeKit.dll": {
+            "assemblyVersion": "4.11.0.0",
+            "fileVersion": "4.11.0.0"
+          }
+        }
+      },
       "Mono.TextTemplating/2.2.1": {
         "dependencies": {
           "System.CodeDom": "4.4.0"
@@ -971,6 +1004,13 @@
       "path": "azure.identity/1.11.4",
       "hashPath": "azure.identity.1.11.4.nupkg.sha512"
     },
+    "BouncyCastle.Cryptography/2.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zy8TMeTP+1FH2NrLaNZtdRbBdq7u5MI+NFZQOBSM69u5RFkciinwzV2eveY6Kjf5MzgsYvvl6kTStsj3JrXqkg==",
+      "path": "bouncycastle.cryptography/2.5.1",
+      "hashPath": "bouncycastle.cryptography.2.5.1.nupkg.sha512"
+    },
     "Dapper/2.1.66": {
       "type": "package",
       "serviceable": true,
@@ -991,6 +1031,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "MailKit/4.11.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JVoRxJ+QRqFMRtEM4veStj3pMLBPRulQGV+iZm6Tq1pnr66Dy6dFYOW9Uw02nxAVzdZAN8G+y3BsUPtgZcKXhA==",
+      "path": "mailkit/4.11.0",
+      "hashPath": "mailkit.4.11.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.15": {
       "type": "package",
@@ -1264,6 +1311,13 @@
       "sha512": "sha512-N4KeF3cpcm1PUHym1RmakkzfkEv3GRMyofVv40uXsQhCQeglr2OHNcUk2WOG51AKpGO8ynGpo9M/kFXSzghwug==",
       "path": "microsoft.sqlserver.server/1.0.0",
       "hashPath": "microsoft.sqlserver.server.1.0.0.nupkg.sha512"
+    },
+    "MimeKit/4.11.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6p0RC1qwBGBHxf7hvzuR1GngzigF+Q6HQUTbD2RbmDrnS2m1qO2rgqOhYtn8n8JH7WGZ+7RthS8lfMuMzeg8AA==",
+      "path": "mimekit/4.11.0",
+      "hashPath": "mimekit.4.11.0.nupkg.sha512"
     },
     "Mono.TextTemplating/2.2.1": {
       "type": "package",
