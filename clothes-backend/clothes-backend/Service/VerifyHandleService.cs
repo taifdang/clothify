@@ -13,11 +13,11 @@ using System.Text;
 
 namespace clothes_backend.Service
 {
-    public class UserService : IAuth,IAuthJWT
+    public class VerifyHandleService : IAuth,IAuthJWT
     {
         private readonly IConfiguration _config;
         private readonly DatabaseContext _db;
-        public UserService(IConfiguration configuration, DatabaseContext db)
+        public VerifyHandleService(IConfiguration configuration, DatabaseContext db)
         {
             _config = configuration;
             _db = db;

@@ -19,9 +19,9 @@ namespace clothes_backend.Controllers
     public class usersController : ControllerBase
     {
         private readonly UserRepositpory _userRepo;
-        private readonly UserService _auth;
+        private readonly VerifyHandleService _auth;
         private readonly DatabaseContext _db;
-        public usersController(UserRepositpory userRepo, UserService auth, DatabaseContext database)
+        public usersController(UserRepositpory userRepo, VerifyHandleService auth, DatabaseContext database)
         {
             _userRepo = userRepo;
             _auth = auth;
@@ -94,6 +94,20 @@ namespace clothes_backend.Controllers
                 Console.WriteLine(ex);
                 return BadRequest(ex);
             }
+        }
+        [HttpPost("sign_up")]
+        public async Task<IActionResult> sessionId([FromForm] registerDTO DTO)
+        {
+            //var value = Guid.NewGuid().ToString();
+            //HttpContext.Session.SetString(key, value);
+            //return Ok(key+" "+value);
+            _userRepo.registerCache(DTO);
+            return Ok("Da gui otp");
+        }
+        [HttpGet("getSessionId")]
+        public async Task<IActionResult> getSessionId()
+        {
+            return Ok(HttpContext.Session.GetString("user_test"));
         }
     }
 }

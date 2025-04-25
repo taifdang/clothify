@@ -159,3 +159,4 @@ C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\MailKit.dll
 C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\MimeKit.dll
+C:\Users\taida\Project\clothes-backend\clothes-backend\clothes-backend\bin\Debug\net8.0\Microsoft.Extensions.Caching.SqlServer.dll

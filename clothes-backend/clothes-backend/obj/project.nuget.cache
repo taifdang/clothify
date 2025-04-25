@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "7330ZXACnIg=",
+  "dgSpecHash": "3GoFBKjbKC8=",
   "success": true,
   "projectFilePath": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\clothes-backend.csproj",
   "expectedPackageFiles": [
@@ -34,6 +34,7 @@
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.caching.memory\\8.0.1\\microsoft.extensions.caching.memory.8.0.1.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.caching.sqlserver\\8.0.15\\microsoft.extensions.caching.sqlserver.8.0.15.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.1\\microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",

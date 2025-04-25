@@ -9,21 +9,36 @@ using clothes_backend.Service;
 using clothes_backend.Utils;
 using clothes_backend.Utils.Enum;
 using clothes_backend.Utils.General;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Caching.Distributed;
 using System.Net.Mail;
 namespace clothes_backend.Repository
 {
     public class UserRepositpory : GenericRepository<Users>,IUsers
     {
-        private readonly UserService _auth;
+        private readonly VerifyHandleService _auth;
         private readonly IMapper _mapper;
         private readonly MailKitHandle _mailHandle;
-        public UserRepositpory(DatabaseContext db, UserService auth, IMapper mapper, MailKitHandle mailKitHandle) : base(db)
+        //
+        private readonly IHttpContextAccessor _context;
+        private readonly IDistributedCache _cache;
+        public UserRepositpory(
+            DatabaseContext db, 
+            VerifyHandleService auth, 
+            IMapper mapper, 
+            MailKitHandle mailKitHandle,
+            IHttpContextAccessor contextAccessor,
+            IDistributedCache cache
+            ) : base(db)
         {
             _auth = auth;
             _mapper = mapper;
             _mailHandle = mailKitHandle;
+            _context = contextAccessor;
+            _cache = cache;
         }      
         public async Task<PayloadDTO<TokenReponse>> login([FromForm] loginDTO DTO)
         {
@@ -60,7 +75,7 @@ namespace clothes_backend.Repository
             if (await _db.users.AnyAsync(x => x.email == DTO.email)) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
 
             //hash password
-            if (_mailHandle.sendMail(DTO.email,DTO.name) == true) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
+            //if (_mailHandle.sendMail(DTO.email,DTO.name) == true) return PayloadDTO<userInfoDTO>.Error(StatusCode.NotFound);
             try
             {
                 _auth.hashPassword(DTO.password, out string passwordHash, out byte[] passwordSalt);
@@ -105,8 +120,36 @@ namespace clothes_backend.Repository
         //    };
         //    _db.blacklist_token.Add()
         //    return PayloadDTO<Users>.OK(user);
-
-
         //}
+        //# user dang ky => luu tam thong tin vao cache, khi xac thuc OTP thanh cong => callback => luu vao database
+        public void registerCache([FromForm] registerDTO DTO)
+        {
+            var sessionId = Guid.NewGuid().ToString();
+            _context.HttpContext.Session.SetString("user_test", sessionId);
+            var OTP = Random.Shared.Next(1000, 9999).ToString();
+            //1.sessionId(5 phut) + otp  =>cache , enqueue => gui otp                    
+            //luu cache [sessionId, sessionValue(OTP,regiterDTO)]
+            //hash password
+            _auth.hashPassword(DTO.password, out string passwordHash, out byte[] passwordSalt);
+            var user = new Users()
+            {
+                email = DTO.email,
+                phone = DTO.phone,
+                password = passwordHash,
+                passwordSalt = passwordSalt,
+                name = DTO.name,
+                role = "User",
+                is_lock = false,
+            };
+            var sessionValue = new RegisterSession()
+            {
+                otp = OTP,
+                user = user,
+            };
+            var cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+            //save cache
+            _cache.SetAsync($"signup_{sessionId}", sessionValue,cacheOptions);
+            //enqueue => send mail (email,otp)....
+        }
     }
 }

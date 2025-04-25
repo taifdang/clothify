@@ -7,6 +7,7 @@ using clothes_backend.Models;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
@@ -16,10 +17,25 @@ namespace clothes_backend.Repository
     public class ProductRepository : GenericRepository<Products>,ICacheProduct
     {
         private readonly IMapper _mapper;
-        private readonly ICacheService _cache;
-        public ProductRepository(DatabaseContext db, IMapper mapper, ICacheService _cache) : base(db)
+        //private readonly ICacheService _cache;
+        private readonly IDistributedCache _cache;
+        private readonly ILogger<ProductRepository> _logger;    
+        public static SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+        private static readonly string cache_key = "product_cachev1";
+        public ProductRepository(
+            DatabaseContext db,
+            IMapper mapper,
+            //ICacheService _cache,
+            IDistributedCache distributedCache,
+            ILogger<ProductRepository> logger,
+            IConfiguration configuration
+            ) : base(db)
         {
+            _cache = distributedCache;
+            _logger = logger;         
             _mapper = mapper;
+
         }       
         //custom list variants = product => product_variants => variants => option_values => options
          public async Task<object?> getTest()
@@ -68,17 +84,54 @@ namespace clothes_backend.Repository
         }
         //custom list images = products => product_options_image => options_value => options 
         public async Task<object?> getAll()
-        {           
-            var product = await _db.products
-                .AsNoTracking()
-                .Where(p => p.id == 15)
-                .ProjectTo<listProductDTO>(_mapper.ConfigurationProvider)       
-                .AsSingleQuery()
-                .ToListAsync();    
-          
-            if (product == null) return null;
+        {
+            //var product = await _db.products
+            //    .AsNoTracking()
+            //    .Where(p => p.id == 15)
+            //    .ProjectTo<listProductDTO>(_mapper.ConfigurationProvider)
+            //    .AsSingleQuery()
+            //    .ToListAsync();
 
-            return product;
+            //if (product == null) return null;
+            //cache
+            _logger.Log(LogLevel.Information,"Trying get cache from database");
+            if (_cache.TryGetValue(cache_key, out List<listProductDTO>? products))
+            {
+                _logger.Log(LogLevel.Information, "Found cache");
+            }
+            else
+            {
+                try
+                {
+                    await _semaphore.WaitAsync();
+                    if(_cache.TryGetValue(cache_key, out products))
+                    {
+                        _logger.Log(LogLevel.Information, "Found cache v2");
+                    }
+                    else
+                    {
+                        _logger.Log(LogLevel.Information, "Not found cache from database");
+                         products = await _db.products
+                                .AsNoTracking()
+                                .Where(p => p.id == 15)
+                                .ProjectTo<listProductDTO>(_mapper.ConfigurationProvider)
+                                .AsSingleQuery()
+                                .ToListAsync();
+
+                        var cacheOptions = new DistributedCacheEntryOptions()
+                            .SetSlidingExpiration(TimeSpan.FromSeconds(60))
+                            .SetAbsoluteExpiration(TimeSpan.FromSeconds(90));
+                        await _cache.SetAsync(cache_key, products, cacheOptions);
+                       
+                    }                      
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
+            }
+
+            return products;
         }
         public override Task add(Products entity)
         {
@@ -158,17 +211,17 @@ namespace clothes_backend.Repository
         {
             return base.pagination(entity, currentPage, limit);
         }
-        public async Task<Dictionary<int, Products>> getCacheProduct(string cacheKey)
-        {
-            if (_cache.isCached(CacheKeys.products_cacheKey))
-            {
-                return _cache.Get<Dictionary<int, Products>>(CacheKeys.products_cacheKey);
-            }
-            //??
-            var products = await _db.products.AsNoTracking().Include(x => x.categories).Include(x => x.product_option_images).Include(x => x.product_options).ToDictionaryAsync(p => p.id, p => p);
-            _cache.Set(CacheKeys.products_cacheKey, products, TimeSpan.FromMinutes(10));
-            return products;
-        }
+        //public async Task<Dictionary<int, Products>> getCacheProduct(string cacheKey)
+        //{
+        //    if (_cache.isCached(CacheKeys.products_cacheKey))
+        //    {
+        //        return _cache.Get<Dictionary<int, Products>>(CacheKeys.products_cacheKey);
+        //    }
+        //    //??
+        //    var products = await _db.products.AsNoTracking().Include(x => x.categories).Include(x => x.product_option_images).Include(x => x.product_options).ToDictionaryAsync(p => p.id, p => p);
+        //    _cache.Set(CacheKeys.products_cacheKey, products, TimeSpan.FromMinutes(10));
+        //    return products;
+        //}
     }
 }
 

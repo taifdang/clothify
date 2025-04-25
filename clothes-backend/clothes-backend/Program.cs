@@ -72,6 +72,13 @@ namespace clothes_backend
             //builder.Services.AddLogging();
             //Database
             builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+            //Distributed Cache
+            builder.Services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = builder.Configuration.GetConnectionString("Database");
+                options.SchemaName = "dbo";
+                options.TableName = "cache_store";
+            });
             //JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => 
@@ -86,9 +93,7 @@ namespace clothes_backend
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
                     };
-
                 });
-
             //
             builder.Services.AddHttpContextAccessor();
             //
@@ -97,7 +102,7 @@ namespace clothes_backend
             builder.Services.AddScoped<ProductOptionImageRepository>();
             builder.Services.AddScoped<ProductVariantsRepository>();
             builder.Services.AddScoped<UserRepositpory>();
-            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<VerifyHandleService>();
             //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.AddScoped<CartRepository>();
             builder.Services.AddScoped<IAuthService,AuthService>();
@@ -105,6 +110,16 @@ namespace clothes_backend
             //
             builder.Services.AddScoped<MailKitHandle>();
             builder.Services.AddAutoMapper(typeof(Program));
+            //session
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = "user_request";
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddSession();
             var app = builder.Build();      
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || app.Environment.IsStaging())
@@ -116,13 +131,12 @@ namespace clothes_backend
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
                 RequestPath = "/Images"
-            });
-
-            app.UseHttpsRedirection();
-            //
-           
+            });            
+            app.UseHttpsRedirection();          
             app.UseAuthentication();
             app.UseAuthorization();
+            //
+            app.UseSession();
             //MIDDLEWARE
             //check token
             app.Use(async (context, next) =>
@@ -154,8 +168,7 @@ namespace clothes_backend
                 }
                 //save current user
                 await next(context);
-            });
-          
+            });         
             //store user
             app.Use(async (context, next) =>
             {
@@ -165,9 +178,10 @@ namespace clothes_backend
                     {
                         context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
                     }
-                }              
+                } 
+                //sessionId
                 await next();
-            });          
+            });              
             app.MapControllers();
             app.Run();
         }

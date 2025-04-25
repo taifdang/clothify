@@ -17,6 +17,7 @@
           "Microsoft.EntityFrameworkCore": "8.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.14",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.14",
+          "Microsoft.Extensions.Caching.SqlServer": "8.0.15",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
         "runtime": {
@@ -546,6 +547,20 @@
           "lib/net8.0/Microsoft.Extensions.Caching.Memory.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.1024.46610"
+          }
+        }
+      },
+      "Microsoft.Extensions.Caching.SqlServer/8.0.15": {
+        "dependencies": {
+          "Azure.Identity": "1.11.4",
+          "Microsoft.Data.SqlClient": "6.0.1",
+          "Microsoft.Extensions.Caching.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Options": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Caching.SqlServer.dll": {
+            "assemblyVersion": "8.0.15.0",
+            "fileVersion": "8.0.1525.16505"
           }
         }
       },
@@ -1185,6 +1200,13 @@
       "sha512": "sha512-HFDnhYLccngrzyGgHkjEDU5FMLn4MpOsr5ElgsBMC4yx6lJh4jeWO7fHS8+TXPq+dgxCmUa/Trl8svObmwW4QA==",
       "path": "microsoft.extensions.caching.memory/8.0.1",
       "hashPath": "microsoft.extensions.caching.memory.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Caching.SqlServer/8.0.15": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y3/DESnO8HN/ObbRjOgIUP+G63eck01UuNRhcsq6AKRjlIKlmrKerWSLq9FdFqjjOmeGHQLX3RQNOJRMhaX5jQ==",
+      "path": "microsoft.extensions.caching.sqlserver/8.0.15",
+      "hashPath": "microsoft.extensions.caching.sqlserver.8.0.15.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration.Abstractions/8.0.0": {
       "type": "package",

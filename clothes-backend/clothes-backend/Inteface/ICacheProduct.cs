@@ -4,6 +4,6 @@ namespace clothes_backend.Inteface
 {
     public interface ICacheProduct
     {
-        Task<Dictionary<int, Products>> getCacheProduct(string cacheKey);
+       // Task<Dictionary<int, Products>> getCacheProduct(string cacheKey);
     }
 }
