@@ -109,5 +109,20 @@ namespace clothes_backend.Controllers
         {
             return Ok(HttpContext.Session.GetString("user_test"));
         }
+        //verify OTP
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> verifyOPT(string inputOTP)
+        {
+            var data = _userRepo.verifyOPT(inputOTP);
+            if(!data) return BadRequest("Xac thuc that bai");
+            return Ok("Xac thuc thanh cong. Da tao tai khoan moi");
+        }
+        [HttpPost("sign-up")]
+        public async Task<IActionResult> signUpValidation([FromForm] registerDTO DTO)
+        {
+            var data =  await _userRepo.registerCache(DTO);
+            if (!data) return BadRequest("Co loi xay ra");
+            return Ok("Da gui OTP");
+        }
     }
 }

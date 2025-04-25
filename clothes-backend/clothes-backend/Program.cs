@@ -1,11 +1,14 @@
 
 using clothes_backend.Inteface;
 using clothes_backend.Inteface.User;
+using clothes_backend.Inteface.Utils;
 using clothes_backend.Middleware;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
+using clothes_backend.Service.EmailHandle;
 using clothes_backend.Utils.General;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -79,6 +82,14 @@ namespace clothes_backend
                 options.SchemaName = "dbo";
                 options.TableName = "cache_store";
             });
+            //Hangfire
+            builder.Services.AddHangfire(options =>
+            {
+                options.UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(builder.Configuration.GetConnectionString("Database"));               
+            });
+            builder.Services.AddHangfireServer();
             //JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(option => 
@@ -107,8 +118,10 @@ namespace clothes_backend
             builder.Services.AddScoped<CartRepository>();
             builder.Services.AddScoped<IAuthService,AuthService>();
             builder.Services.AddScoped<OrderRepository>();
-            //
+            //mail
             builder.Services.AddScoped<MailKitHandle>();
+            builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+            //automapper
             builder.Services.AddAutoMapper(typeof(Program));
             //session
             builder.Services.AddDistributedMemoryCache();
@@ -137,6 +150,7 @@ namespace clothes_backend
             app.UseAuthorization();
             //
             app.UseSession();
+            app.UseHangfireDashboard();
             //MIDDLEWARE
             //check token
             app.Use(async (context, next) =>

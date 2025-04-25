@@ -4,17 +4,20 @@ using clothes_backend.DTO.USER;
 using clothes_backend.Inteface;
 using clothes_backend.Inteface.Security;
 using clothes_backend.Inteface.User;
+using clothes_backend.Inteface.Utils;
 using clothes_backend.Models;
 using clothes_backend.Service;
 using clothes_backend.Utils;
 using clothes_backend.Utils.Enum;
 using clothes_backend.Utils.General;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Net.Mail;
+using System.Threading.Tasks;
 namespace clothes_backend.Repository
 {
     public class UserRepositpory : GenericRepository<Users>,IUsers
@@ -25,13 +28,18 @@ namespace clothes_backend.Repository
         //
         private readonly IHttpContextAccessor _context;
         private readonly IDistributedCache _cache;
+        //
+        private readonly IBackgroundJobService _jobService;
+        private readonly IBackgroundJobClient _backgroundJobClient;
         public UserRepositpory(
             DatabaseContext db, 
             VerifyHandleService auth, 
             IMapper mapper, 
             MailKitHandle mailKitHandle,
             IHttpContextAccessor contextAccessor,
-            IDistributedCache cache
+            IDistributedCache cache,
+            IBackgroundJobService jobService,
+            IBackgroundJobClient backgroundJobClient
             ) : base(db)
         {
             _auth = auth;
@@ -39,6 +47,8 @@ namespace clothes_backend.Repository
             _mailHandle = mailKitHandle;
             _context = contextAccessor;
             _cache = cache;
+            _jobService = jobService;
+            _backgroundJobClient = backgroundJobClient;
         }      
         public async Task<PayloadDTO<TokenReponse>> login([FromForm] loginDTO DTO)
         {
@@ -122,34 +132,65 @@ namespace clothes_backend.Repository
         //    return PayloadDTO<Users>.OK(user);
         //}
         //# user dang ky => luu tam thong tin vao cache, khi xac thuc OTP thanh cong => callback => luu vao database
-        public void registerCache([FromForm] registerDTO DTO)
+        public async Task<bool> registerCache([FromForm] registerDTO DTO)
         {
-            var sessionId = Guid.NewGuid().ToString();
-            _context.HttpContext.Session.SetString("user_test", sessionId);
-            var OTP = Random.Shared.Next(1000, 9999).ToString();
-            //1.sessionId(5 phut) + otp  =>cache , enqueue => gui otp                    
-            //luu cache [sessionId, sessionValue(OTP,regiterDTO)]
-            //hash password
-            _auth.hashPassword(DTO.password, out string passwordHash, out byte[] passwordSalt);
-            var user = new Users()
+            try
             {
-                email = DTO.email,
-                phone = DTO.phone,
-                password = passwordHash,
-                passwordSalt = passwordSalt,
-                name = DTO.name,
-                role = "User",
-                is_lock = false,
-            };
-            var sessionValue = new RegisterSession()
+                var sessionId = Guid.NewGuid().ToString();
+                _context.HttpContext?.Session.SetString("user_test", sessionId);
+                var OTP = Random.Shared.Next(1000, 9999).ToString();
+                //1.sessionId(5 phut) + otp  =>cache , enqueue => gui otp                    
+                //luu cache [sessionId, sessionValue(OTP,regiterDTO)]
+                //hash password
+                _auth.hashPassword(DTO.password, out string passwordHash, out byte[] passwordSalt);
+                var user = new Users()
+                {
+                    email = DTO.email,
+                    phone = DTO.phone,
+                    password = passwordHash,
+                    passwordSalt = passwordSalt,
+                    name = DTO.name,
+                    role = "User",
+                    is_lock = false,
+                };
+                var sessionValue = new RegisterSession()
+                {
+                    otp = OTP,
+                    user = user,
+                };
+                var cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+                //save cache
+                _cache.SetAsync($"signup_{sessionId}", sessionValue, cacheOptions);
+                //enqueue deplay 10 seconds=> send mail (email,otp)....
+                _backgroundJobClient.Schedule(() => _jobService.DelayedJob(user.email, OTP), TimeSpan.FromSeconds(10));
+                return true;
+            }
+            catch
             {
-                otp = OTP,
-                user = user,
-            };
-            var cacheOptions = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
-            //save cache
-            _cache.SetAsync($"signup_{sessionId}", sessionValue,cacheOptions);
-            //enqueue => send mail (email,otp)....
+                return false;
+            }
+        }
+        public bool verifyOPT(string inputOPT)
+        {
+            //get sessionId from client
+            string sessionId = _context.HttpContext?.Session.GetString("user_test")?.ToString() ?? string.Empty;
+            if (string.IsNullOrEmpty(sessionId)) return false;
+            //get cache
+            if(_cache.TryGetValue($"signup_{sessionId}",out RegisterSession? sessionValue))
+            {
+                if(sessionValue.otp == inputOPT)
+                {
+                    //save user
+                    _db.users.Add(sessionValue.user);
+                    _db.SaveChanges();
+                    //remove cache
+                    _cache.Remove($"signup_{sessionId}");
+                    //remove session
+                    _context.HttpContext?.Session.Remove("user_test");
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

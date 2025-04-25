@@ -3,32 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\repository\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\repository\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\repository\\userrepositpory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\repository\\userrepositpory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\dto\\user\\registersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\dto\\user\\registersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\service\\emailhandle\\backgroundjobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\service\\emailhandle\\backgroundjobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\inteface\\user\\iusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\inteface\\user\\iusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\repository\\userrepositpory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\repository\\userrepositpory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\inteface\\utils\\ibackgroundjobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\inteface\\utils\\ibackgroundjobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\utils\\general\\mailkithandle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\utils\\general\\mailkithandle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|c:\\users\\taida\\project\\clothes-backend\\clothes-backend\\clothes-backend\\service\\emailhandle\\handlequeue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C317F38-3089-414B-9EE6-7D3C9F656F27}|clothes-backend\\clothes-backend.csproj|solutionrelative:clothes-backend\\service\\emailhandle\\handlequeue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,8 +38,22 @@
       "DocumentGroups": [
         {
           "DockedHeight": 714,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 12,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MailKitHandle.cs",
+              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Utils\\General\\MailKitHandle.cs",
+              "RelativeDocumentMoniker": "clothes-backend\\Utils\\General\\MailKitHandle.cs",
+              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Utils\\General\\MailKitHandle.cs",
+              "RelativeToolTip": "clothes-backend\\Utils\\General\\MailKitHandle.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAgAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T18:33:21.205Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -66,45 +80,36 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RegisterSession.cs",
-              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\DTO\\USER\\RegisterSession.cs",
-              "RelativeDocumentMoniker": "clothes-backend\\DTO\\USER\\RegisterSession.cs",
-              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\DTO\\USER\\RegisterSession.cs",
-              "RelativeToolTip": "clothes-backend\\DTO\\USER\\RegisterSession.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T16:37:34.929Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\appsettings.json",
-              "RelativeDocumentMoniker": "clothes-backend\\appsettings.json",
-              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\appsettings.json",
-              "RelativeToolTip": "clothes-backend\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-25T16:33:28.434Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Program.cs",
               "RelativeDocumentMoniker": "clothes-backend\\Program.cs",
               "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Program.cs",
               "RelativeToolTip": "clothes-backend\\Program.cs",
-              "ViewState": "AgIAAKIAAAAAAAAAAAAkwLcAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAALEAAAAAAAAAAAAswLgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T15:19:13.226Z",
+              "WhenOpened": "2025-04-25T18:38:03.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BackgroundJobService.cs",
+              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Service\\EmailHandle\\BackgroundJobService.cs",
+              "RelativeDocumentMoniker": "clothes-backend\\Service\\EmailHandle\\BackgroundJobService.cs",
+              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Service\\EmailHandle\\BackgroundJobService.cs",
+              "RelativeToolTip": "clothes-backend\\Service\\EmailHandle\\BackgroundJobService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAgwAgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T18:34:12.436Z",
               "EditorCaption": ""
             },
             {
@@ -115,48 +120,48 @@
               "RelativeDocumentMoniker": "clothes-backend\\Repository\\UserRepositpory.cs",
               "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Repository\\UserRepositpory.cs",
               "RelativeToolTip": "clothes-backend\\Repository\\UserRepositpory.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAnwJcAAAAyAAAAAAAAAA==",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAUwMEAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T14:50:13.954Z",
+              "WhenOpened": "2025-04-25T18:22:12.675Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IUsers.cs",
-              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Inteface\\User\\IUsers.cs",
-              "RelativeDocumentMoniker": "clothes-backend\\Inteface\\User\\IUsers.cs",
-              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Inteface\\User\\IUsers.cs",
-              "RelativeToolTip": "clothes-backend\\Inteface\\User\\IUsers.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T14:49:19.369Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "usersController.cs",
               "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Controllers\\usersController.cs",
               "RelativeDocumentMoniker": "clothes-backend\\Controllers\\usersController.cs",
               "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Controllers\\usersController.cs",
               "RelativeToolTip": "clothes-backend\\Controllers\\usersController.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAQwGYAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAswGwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T14:48:54.156Z",
+              "WhenOpened": "2025-04-25T18:20:49.465Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProductRepository.cs",
-              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Repository\\ProductRepository.cs",
-              "RelativeDocumentMoniker": "clothes-backend\\Repository\\ProductRepository.cs",
-              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Repository\\ProductRepository.cs",
-              "RelativeToolTip": "clothes-backend\\Repository\\ProductRepository.cs",
-              "ViewState": "AgIAAJEAAAAAAAAAAAAcwHoAAABNAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "IBackgroundJobService.cs",
+              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Inteface\\Utils\\IBackgroundJobService.cs",
+              "RelativeDocumentMoniker": "clothes-backend\\Inteface\\Utils\\IBackgroundJobService.cs",
+              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Inteface\\Utils\\IBackgroundJobService.cs",
+              "RelativeToolTip": "clothes-backend\\Inteface\\Utils\\IBackgroundJobService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-25T16:41:42.436Z",
+              "WhenOpened": "2025-04-25T18:43:10.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "HandleQueue.cs",
+              "DocumentMoniker": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Service\\EmailHandle\\HandleQueue.cs",
+              "RelativeDocumentMoniker": "clothes-backend\\Service\\EmailHandle\\HandleQueue.cs",
+              "ToolTip": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\Service\\EmailHandle\\HandleQueue.cs",
+              "RelativeToolTip": "clothes-backend\\Service\\EmailHandle\\HandleQueue.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-25T18:33:52.327Z",
               "EditorCaption": ""
             }
           ]
