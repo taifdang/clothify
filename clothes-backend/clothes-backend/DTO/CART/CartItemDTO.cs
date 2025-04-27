@@ -1,9 +1,4 @@
-﻿using clothes_backend.Service;
-using clothes_backend.Utils.Enum;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 namespace clothes_backend.DTO.CART
 {
     public class CartItemDTO

@@ -1,6 +1,5 @@
 ﻿using Azure.Core;
 using clothes_backend.DTO.USER;
-using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
 using clothes_backend.Utils.Enum;
@@ -11,6 +10,8 @@ using clothes_backend.DTO.General;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http.HttpResults;
+using clothes_backend.Data;
+using clothes_backend.Models;
 
 namespace clothes_backend.Controllers
 {
@@ -39,6 +40,7 @@ namespace clothes_backend.Controllers
           
             return Ok(data);
         }
+        [NonAction]
         [HttpPost("register")]
         public async Task<IActionResult> register([FromForm] registerDTO DTO)
         {
@@ -101,9 +103,10 @@ namespace clothes_backend.Controllers
             //var value = Guid.NewGuid().ToString();
             //HttpContext.Session.SetString(key, value);
             //return Ok(key+" "+value);
-            _userRepo.registerCache(DTO);
+            _userRepo?.registerCache(DTO);
             return Ok("Da gui otp");
         }
+        [NonAction]
         [HttpGet("getSessionId")]
         public async Task<IActionResult> getSessionId()
         {
@@ -114,15 +117,15 @@ namespace clothes_backend.Controllers
         public async Task<IActionResult> verifyOPT(string inputOTP)
         {
             var data = _userRepo.verifyOPT(inputOTP);
-            if(!data) return BadRequest("Xac thuc that bai");
-            return Ok("Xac thuc thanh cong. Da tao tai khoan moi");
+            if(!data) return BadRequest("Xác thực thất bại");
+            return Ok("Xác thực thành công, đã tạo tài khoản mới");
         }
         [HttpPost("sign-up")]
         public async Task<IActionResult> signUpValidation([FromForm] registerDTO DTO)
         {
             var data =  await _userRepo.registerCache(DTO);
-            if (!data) return BadRequest("Co loi xay ra");
-            return Ok("Da gui OTP");
+            if (!data) return BadRequest("Có lỗi xảy ra");
+            return Ok("Đã gửi OTP");
         }
     }
 }

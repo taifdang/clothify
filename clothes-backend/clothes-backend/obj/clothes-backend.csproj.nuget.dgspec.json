@@ -66,6 +66,10 @@
               "target": "Package",
               "version": "[1.8.18, )"
             },
+            "Hangfire.Dashboard.Basic.Authentication": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[4.11.0, )"

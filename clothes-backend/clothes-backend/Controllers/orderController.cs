@@ -1,6 +1,6 @@
-﻿using clothes_backend.DTO.ORDER;
-using clothes_backend.Inteface;
-using clothes_backend.Models;
+﻿using clothes_backend.Data;
+using clothes_backend.DTO.ORDER;
+using clothes_backend.Interfaces.Service;
 using clothes_backend.Repository;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;

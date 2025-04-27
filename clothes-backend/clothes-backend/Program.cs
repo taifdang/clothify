@@ -1,19 +1,13 @@
-
-using clothes_backend.Inteface;
-using clothes_backend.Inteface.User;
-using clothes_backend.Inteface.Utils;
-using clothes_backend.Middleware;
-using clothes_backend.Models;
-using clothes_backend.Repository;
+using clothes_backend.Data;
+using clothes_backend.Heplers.Middleware;
+using clothes_backend.Interfaces.Repository;
+using clothes_backend.Interfaces.Service;
 using clothes_backend.Service;
-using clothes_backend.Service.EmailHandle;
-using clothes_backend.Utils.General;
 using Hangfire;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,8 +15,6 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
-
 namespace clothes_backend
 {
     public class Program
@@ -108,22 +100,23 @@ namespace clothes_backend
             //
             builder.Services.AddHttpContextAccessor();
             //
-            builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));          
-            builder.Services.AddScoped<ProductRepository>();
-            builder.Services.AddScoped<ProductOptionImageRepository>();
-            builder.Services.AddScoped<ProductVariantsRepository>();
-            builder.Services.AddScoped<UserRepositpory>();
-            builder.Services.AddScoped<VerifyHandleService>();
-            //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddScoped<CartRepository>();
-            builder.Services.AddScoped<IAuthService,AuthService>();
-            builder.Services.AddScoped<OrderRepository>();
-            //mail
-            builder.Services.AddScoped<MailKitHandle>();
-            builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
-            //automapper
-            builder.Services.AddAutoMapper(typeof(Program));
+            //builder.Services.AddScoped(typeof(IBaseRepository<>),typeof(BaseRepository<>));          
+            //builder.Services.AddScoped<ProductRepository>();
+            //builder.Services.AddScoped<ProductOptionImageRepository>();
+            //builder.Services.AddScoped<ProductVariantsRepository>();
+            //builder.Services.AddScoped<UserRepositpory>();
+            //builder.Services.AddScoped<VerifyHandleService>();          
+            //builder.Services.AddScoped<CartRepository>();
+            //builder.Services.AddScoped<IAuthService,AuthService>();
+            //builder.Services.AddScoped<OrderRepository>();
+            ////mail
+            //builder.Services.AddScoped<MailKitHandle>();
+            //builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+            ////automapper
+            //builder.Services.AddAutoMapper(typeof(Program));
             //session
+            builder.Services.AddApplicationServices();
+
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
@@ -150,17 +143,28 @@ namespace clothes_backend
             app.UseAuthorization();
             //
             app.UseSession();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                //AppPath = "" //The path for the Back To Site link. Set to null in order to hide the Back To  Site link.
+                DashboardTitle = "My Website",
+                Authorization = new[]
+                {
+                new HangfireCustomBasicAuthenticationFilter{
+                    User = builder.Configuration.GetSection("HangfireSettings:UserName").Value,
+                    Pass = builder.Configuration.GetSection("HangfireSettings:Password").Value
+                }
+            }
+            });
             //MIDDLEWARE
             //check token
             app.Use(async (context, next) =>
-            {              
+            {
                 var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
                 if (!string.IsNullOrEmpty(access_token))
                 {
                     //Check expired
                     var check_token = new JwtSecurityTokenHandler().ReadToken(access_token) as JwtSecurityToken;
-                    if(check_token.ValidTo <= DateTime.UtcNow)
+                    if (check_token?.ValidTo <= DateTime.UtcNow)
                     {
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         await context.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
@@ -173,7 +177,7 @@ namespace clothes_backend
                         if (isblockToken)
                         {
                             //block request
-                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;                        
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             await context.Response.WriteAsync("Token is revoked");
                             Console.WriteLine("Token is revoked");
                             return;
@@ -182,20 +186,22 @@ namespace clothes_backend
                 }
                 //save current user
                 await next(context);
-            });         
+            });
+            //app.UseMiddleware<CheckTokenMiddleware>();
             //store user
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path.StartsWithSegments("/api/cart"))
-                {
-                    if (context.User.Identity.IsAuthenticated)
-                    {
-                        context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
-                    }
-                } 
-                //sessionId
-                await next();
-            });              
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Path.StartsWithSegments("/api/cart") || context.Request.Path.StartsWithSegments("/api/order"))
+            //    {
+            //        if (context.User.Identity!.IsAuthenticated)
+            //        {
+            //            context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
+            //        }
+            //    } 
+            //    //sessionId
+            //    await next();
+            //});              
+            app.UseMiddleware<GetUserMiddleware>();
             app.MapControllers();
             app.Run();
         }

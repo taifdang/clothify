@@ -1,4 +1,5 @@
-﻿using clothes_backend.DTO.VARIANT;
+﻿using clothes_backend.Data;
+using clothes_backend.DTO.VARIANT;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,7 @@ namespace clothes_backend.Controllers
             return Ok(GenericResponse<ProductVariants>.Success(result));
         }
         [HttpPost("add")]
-        public async Task<ActionResult<GenericResponse<ProductVariants>>> add([FromForm] productVariantsDTO DTO)
+        public async Task<ActionResult<GenericResponse<ProductVariants>>> add([FromForm] ProductVariantDTO DTO)
         {
             if (!ModelState.IsValid)
             {

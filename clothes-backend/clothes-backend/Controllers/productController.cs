@@ -1,16 +1,11 @@
-﻿using clothes_backend.DTO.PRODUCT;
-using clothes_backend.Inteface;
+﻿using clothes_backend.Data;
+using clothes_backend.DTO.PRODUCT;
+using clothes_backend.Interfaces.Service;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Service;
 using clothes_backend.Utils.Enum;
-using Dapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace clothes_backend.Controllers
 {
@@ -18,20 +13,19 @@ namespace clothes_backend.Controllers
     [ApiController]
     public class productController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-        private readonly DatabaseContext _db;
+           
         private readonly ProductRepository _productRepo;
-
-        public productController(IConfiguration configuration, DatabaseContext db, ProductRepository productRepository)
-        {
-            this.configuration = configuration;
-            this._db = db;
+        private readonly IProductService _productService;
+        public productController(ProductRepository productRepository, IProductService productService)
+        {            
+          
             _productRepo = productRepository;
+            _productService = productService;
         }
         [HttpGet]
         public async Task<IActionResult> getList()
         {
-            var data = await _productRepo.getAll();
+            var data = await _productService.GetAllProductAsync();
             return Ok(data);
         }
         [HttpGet("test")]
@@ -49,11 +43,10 @@ namespace clothes_backend.Controllers
             return Ok(GenericResponse<Products>.Success(data));
         }
         [HttpGet("filter")]
-        public IActionResult filter(SortType type)
-        {
-            var data = _db.products.ToList();
+        public IActionResult filter(SortType type,List<Products> products)
+        {         
             var sortStategy = SortTypeStategy.getSortType(type);
-            var getListData = new SortService<Products>(sortStategy).GetList(data);
+            var getListData = new SortService<Products>(sortStategy).GetList(products);
             return Ok(getListData);
         }
         [HttpGet("pagination")]
@@ -64,7 +57,7 @@ namespace clothes_backend.Controllers
             return Ok();
         }
         [HttpPost("add")]
-        public async Task<ActionResult<GenericResponse<Products>>> add([FromForm] productsDTO DTO)
+        public async Task<ActionResult<GenericResponse<Products>>> add([FromForm] ProductDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -86,7 +79,7 @@ namespace clothes_backend.Controllers
             return Ok(GenericResponse<Products>.Success(result));
         }
         [HttpPost("update")]
-        public async Task<IActionResult> update(int id, [FromForm] productsDTO DTO)
+        public async Task<IActionResult> update(int id, [FromForm] ProductDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -104,7 +97,7 @@ namespace clothes_backend.Controllers
             {
                 return BadRequest(GenericResponse<Products>.Fail("ModelState.IsValid"));
             }
-            var result = await _productRepo.delete(id);
+            var result = await _productService.DeleteProduct(id);
             if (result == null) return BadRequest(GenericResponse<Products>.Fail());
             return Ok(GenericResponse<Products?>.Success(null));
             

@@ -192,6 +192,21 @@
           }
         }
       },
+      "Hangfire.Dashboard.Basic.Authentication/7.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Hangfire.AspNetCore": "1.7.34",
+          "Hangfire.Core": "1.7.34",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Primitives": "7.0.0"
+        },
+        "compile": {
+          "lib/net7.0/HangfireBasicAuthenticationFilter.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/HangfireBasicAuthenticationFilter.dll": {}
+        }
+      },
       "Hangfire.NetCore/1.8.18": {
         "type": "package",
         "dependencies": {
@@ -1978,6 +1993,18 @@
         "lib/netstandard2.0/tr-TR/Hangfire.Core.resources.dll",
         "lib/netstandard2.0/zh-TW/Hangfire.Core.resources.dll",
         "lib/netstandard2.0/zh/Hangfire.Core.resources.dll"
+      ]
+    },
+    "Hangfire.Dashboard.Basic.Authentication/7.0.1": {
+      "sha512": "SsWDM/FcgNOiZaG9RbOZzg9ZbAw2NJUzZY2V4ChnGaHFI3yT7CXE+LB9EshqE/MX/jT55QTtmnZ2JYy6atSJWA==",
+      "type": "package",
+      "path": "hangfire.dashboard.basic.authentication/7.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "hangfire.dashboard.basic.authentication.7.0.1.nupkg.sha512",
+        "hangfire.dashboard.basic.authentication.nuspec",
+        "lib/net7.0/HangfireBasicAuthenticationFilter.dll"
       ]
     },
     "Hangfire.NetCore/1.8.18": {
@@ -4621,6 +4648,7 @@
       "Dapper >= 2.1.66",
       "EFCore.BulkExtensions >= 9.0.1",
       "Hangfire >= 1.8.18",
+      "Hangfire.Dashboard.Basic.Authentication >= 7.0.1",
       "MailKit >= 4.11.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.15",
       "Microsoft.Data.SqlClient >= 6.0.1",
@@ -4696,6 +4724,10 @@
           "Hangfire": {
             "target": "Package",
             "version": "[1.8.18, )"
+          },
+          "Hangfire.Dashboard.Basic.Authentication": {
+            "target": "Package",
+            "version": "[7.0.1, )"
           },
           "MailKit": {
             "target": "Package",

@@ -1,6 +1,5 @@
 ﻿using clothes_backend.Utils.Validate;
 using System.ComponentModel.DataAnnotations;
-
 namespace clothes_backend.DTO.IMAGE
 {
     public class imageUploadDTO

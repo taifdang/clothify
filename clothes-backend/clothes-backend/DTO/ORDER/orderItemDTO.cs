@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace clothes_backend.DTO.ORDER
 {
     public class orderItemDTO
-    {
-        public int user_id { get; set; }
+    {       
         public string? note { get; set; }
         [Phone]
         public string phone { get; set; }

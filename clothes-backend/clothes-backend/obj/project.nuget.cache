@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "m+oNcymArC4=",
+  "dgSpecHash": "1n+seY+asZQ=",
   "success": true,
   "projectFilePath": "C:\\Users\\taida\\Project\\clothes-backend\\clothes-backend\\clothes-backend\\clothes-backend.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,7 @@
     "C:\\Users\\taida\\.nuget\\packages\\hangfire\\1.8.18\\hangfire.1.8.18.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\hangfire.aspnetcore\\1.8.18\\hangfire.aspnetcore.1.8.18.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\hangfire.core\\1.8.18\\hangfire.core.1.8.18.nupkg.sha512",
+    "C:\\Users\\taida\\.nuget\\packages\\hangfire.dashboard.basic.authentication\\7.0.1\\hangfire.dashboard.basic.authentication.7.0.1.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\hangfire.netcore\\1.8.18\\hangfire.netcore.1.8.18.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\hangfire.sqlserver\\1.8.18\\hangfire.sqlserver.1.8.18.nupkg.sha512",
     "C:\\Users\\taida\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

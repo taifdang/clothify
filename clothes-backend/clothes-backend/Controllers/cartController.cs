@@ -25,7 +25,7 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpPost("add")]
-        public async Task<IActionResult> addCartItem([FromForm] addCartDTO DTO)
+        public async Task<IActionResult> addCartItem([FromForm] cartAddDTO DTO)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace clothes_backend.Controllers
             return Ok(data);
         }
         [HttpDelete("delete")]
-        public async Task<IActionResult> deleteCartItem([FromForm] deleteCartItemDTO DTO)
+        public async Task<IActionResult> deleteCartItem([FromForm] cartDeleteDTO DTO)
         {
             if (!ModelState.IsValid)
             {

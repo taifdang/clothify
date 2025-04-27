@@ -133,11 +133,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user_id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
         "Name": "note",
         "Type": "System.String",
         "IsRequired": false
@@ -285,6 +280,11 @@
         "Name": "type",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "products",
+        "Type": "System.Collections.Generic.List\u00601[[clothes_backend.Models.Products, clothes-backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -394,16 +394,6 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "getSessionId",
-    "RelativePath": "api/users/getSessionId",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.usersController",
     "Method": "login",
     "RelativePath": "api/users/login",
     "HttpMethod": "POST",
@@ -448,42 +438,6 @@
       },
       {
         "Name": "refreshToken",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "register",
-    "RelativePath": "api/users/register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "phone",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "password",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "confirm_password",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -576,6 +530,16 @@
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.ValuesController",
+    "Method": "get",
+    "RelativePath": "api/Values",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
