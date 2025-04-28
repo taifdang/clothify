@@ -2,7 +2,7 @@
 {
     public enum StatusCode
     {
-        None = 500,      
+        None = 0,       
         NotFound = 404,
         Isvalid = 400,
         Unauthorized = 401,

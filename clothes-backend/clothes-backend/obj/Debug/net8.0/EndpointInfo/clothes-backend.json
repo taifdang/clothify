@@ -342,18 +342,6 @@
         }
       }
     },
-    "/api/product/test": {
-      "get": {
-        "tags": [
-          "product"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/product/id": {
       "get": {
         "tags": [
@@ -418,18 +406,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/product/pagination": {
-      "get": {
-        "tags": [
-          "product"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -506,24 +482,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductsGenericResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductsGenericResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductsGenericResponse"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -1343,19 +1302,6 @@
               "$ref": "#/components/schemas/ProductOptionImages"
             },
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProductsGenericResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "$ref": "#/components/schemas/Products"
           }
         },
         "additionalProperties": false

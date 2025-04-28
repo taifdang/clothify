@@ -7,8 +7,8 @@ namespace clothes_backend.Interfaces
 {
     public interface IOrderService
     {
-        Task<PayloadDTO<Orders>> add([FromForm]orderItemDTO DTO);
-        Task<PayloadDTO<List<orderDetailDTO>>> getId(int id);
-        Task<PayloadDTO<List<orderDTO>>> getAll();
+        Task<Result<Orders>> add([FromForm]orderItemDTO DTO);
+        Task<Result<List<orderDetailDTO>>> getId(int id);
+        Task<Result<List<orderDTO>>> getAll();
     }
 }

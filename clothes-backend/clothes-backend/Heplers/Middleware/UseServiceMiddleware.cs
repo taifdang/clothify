@@ -12,8 +12,7 @@ namespace clothes_backend.Heplers.Middleware
     {
        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
        {          
-           services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-           services.AddScoped<ProductRepository>();
+           services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));         
            services.AddScoped<ProductOptionImageRepository>();
            services.AddScoped<ProductVariantsRepository>();
            services.AddScoped<UserRepositpory>();
@@ -23,7 +22,8 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<OrderRepository>();
            //mail           
            services.AddScoped<IBackgroundJobService, BackgroundJobService>();
-           services.AddScoped<EmailService>();          
+           services.AddScoped<EmailService>(); 
+            //
            services.AddScoped<IProductRepository, ProductRepository>();
            services.AddScoped<IProductService, ProductService>();
            services.AddScoped<RemoveFileService>();

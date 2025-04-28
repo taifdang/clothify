@@ -188,7 +188,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "getList",
+    "Method": "GetAll",
     "RelativePath": "api/product",
     "HttpMethod": "GET",
     "IsController": true,
@@ -198,7 +198,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "add",
+    "Method": "Add",
     "RelativePath": "api/product/add",
     "HttpMethod": "POST",
     "IsController": true,
@@ -240,21 +240,11 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "clothes_backend.Repository.GenericResponse\u00601[[clothes_backend.Models.Products, clothes-backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "delete",
+    "Method": "Delete",
     "RelativePath": "api/product/delete",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -291,7 +281,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "getId",
+    "Method": "GetId",
     "RelativePath": "api/product/id",
     "HttpMethod": "GET",
     "IsController": true,
@@ -307,27 +297,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "pagination",
-    "RelativePath": "api/product/pagination",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "getListTest",
-    "RelativePath": "api/product/test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.productController",
-    "Method": "update",
+    "Method": "Update",
     "RelativePath": "api/product/update",
     "HttpMethod": "POST",
     "IsController": true,

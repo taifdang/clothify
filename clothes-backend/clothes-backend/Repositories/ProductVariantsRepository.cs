@@ -22,7 +22,7 @@ namespace clothes_backend.Repository
             _mapper = mapper;
             _cache = cache;
         }
-        public override async Task<ProductVariants> getId(int id)
+        public override async Task<ProductVariants> GetIdBase(int id)
         {
             var product_variant = await _db.product_variants.FirstOrDefaultAsync(x => x.id == id);
             if (product_variant is null) return null;

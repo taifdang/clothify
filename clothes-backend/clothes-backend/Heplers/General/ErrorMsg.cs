@@ -2,7 +2,7 @@
 
 namespace clothes_backend.Heplers.General
 {
-    public static class MessageResponse
+    public static class ErrorMsg
     {
         //match error message
         public static readonly Dictionary<StatusCode, string> dictionary = new Dictionary<StatusCode, string>()
@@ -27,7 +27,7 @@ namespace clothes_backend.Heplers.General
             }
 
         };
-        //get message
+        //GetAllBase message
         public static string getMessage(StatusCode error)
         {
             if(dictionary.TryGetValue(error,out var message))
@@ -35,6 +35,6 @@ namespace clothes_backend.Heplers.General
                 return message;
             }
             return dictionary[StatusCode.None];
-        }
+        }       
     }
 }

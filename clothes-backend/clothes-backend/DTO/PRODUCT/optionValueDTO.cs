@@ -3,7 +3,7 @@
     public class optionValueDTO
     {
         public string title { get; set; }
-        //public List<string> images { get; set; }
+        //public List<string> images { GetAllBase; set; }
         public List<imageDTO> image { get; set; }     
     }
 }

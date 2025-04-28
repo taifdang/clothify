@@ -20,12 +20,12 @@ namespace clothes_backend.Repository
             _mapper = mapper;        
             _authService = authService;
         }
-        public async Task<PayloadDTO<CartItemDTO>> addCartItem([FromForm] cartAddDTO DTO)
+        public async Task<Result<CartItemDTO>> addCartItem([FromForm] cartAddDTO DTO)
         {
             try
             {
                 var user_id = _authService.convertToInt(_authService.getValueAuth());
-                if (user_id == 0) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Unauthorized);
+                if (user_id == 0) return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.Unauthorized);
 
                 var carts = _db.carts.Include(x => x.cartItems).FirstOrDefault(x => x.user_id == user_id);
                 if (carts is null)
@@ -51,81 +51,81 @@ namespace clothes_backend.Repository
                 await _db.SaveChangesAsync();
                 //automapper
                 var data = _mapper.Map<CartItemDTO>(cartItem);
-                return PayloadDTO<CartItemDTO>.OK(data);
+                return Result<CartItemDTO>.Success(data);
             }
             catch
             {
-                return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.None);
+                return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.None);
             }              
         }            
-        public async Task<PayloadDTO<List<CartItemDTO>>> getCart()
+        public async Task<Result<List<CartItemDTO>>> getCart()
         {
             try
             {
                 var user_id =_authService.convertToInt(_authService.getValueAuth());
-                if (user_id == 0) return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);             
+                if (user_id == 0) return Result<List<CartItemDTO>>.Failure(Utils.Enum.StatusCode.Unauthorized);             
                 var carts = await _db.carts.FirstOrDefaultAsync(x => x.user_id == user_id);
-                if (carts == null) return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.NotFound);
+                if (carts == null) return Result<List<CartItemDTO>>.Failure(Utils.Enum.StatusCode.NotFound);
                 var listCartItem = await _db.cart_items.Where(x => x.cart_id == carts.id).ProjectTo<CartItemDTO>(_mapper.ConfigurationProvider).ToListAsync();              
-                return PayloadDTO<List<CartItemDTO>>.OK(listCartItem);
+                return Result<List<CartItemDTO>>.Success(listCartItem);
             }
             catch
             {
-                return PayloadDTO<List<CartItemDTO>>.Error(Utils.Enum.StatusCode.Isvalid);
+                return Result<List<CartItemDTO>>.Failure(Utils.Enum.StatusCode.Isvalid);
             }
         }
         //Concurrenttly conflict 1
-        public async Task<PayloadDTO<CartItems>> removeCartItem([FromForm] cartDeleteDTO DTO)
+        public async Task<Result<CartItems>> removeCartItem([FromForm] cartDeleteDTO DTO)
         {
             try
             {
                 var user_id = _authService.convertToInt(_authService.getValueAuth());
-                if (user_id == 0) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Unauthorized);
+                if (user_id == 0) return Result<CartItems>.Failure(Utils.Enum.StatusCode.Unauthorized);
                 //kiem tra gio hang cua user            
                 var cartItem = await checkCartItems(DTO.id, user_id);
-                if (cartItem == null) return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.NotFound);
+                if (cartItem == null) return Result<CartItems>.Failure(Utils.Enum.StatusCode.NotFound);
                 if (!cartItem.row_version.SequenceEqual(DTO.row_version))//neu row_version khac nhau thi loi
                 {
-                    return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Conflict);
+                    return Result<CartItems>.Failure(Utils.Enum.StatusCode.Conflict);
                 }
                 _db.cart_items.Remove(cartItem); //neu ton tai thi xoa                
                 await _db.SaveChangesAsync();
-                return PayloadDTO<CartItems>.OK(null!);               
+                return Result<CartItems>.Success(null!);               
             }
             catch
             {
-                return PayloadDTO<CartItems>.Error(Utils.Enum.StatusCode.Isvalid);
+                return Result<CartItems>.Failure(Utils.Enum.StatusCode.Isvalid);
             }
         }
         //kiem tra cart cua user co cartItem do thi xoa
         public async Task<CartItems?> checkCartItems(int? cartItem_id, int user) => await _db.cart_items.Include(x => x.carts).FirstOrDefaultAsync(x => x.carts.user_id == user && x.id == cartItem_id) ?? null;    
         //Concurrenttly conflict 2  
-        public async Task<PayloadDTO<CartItemDTO>> updateCartItem([FromForm] CartItemDTO DTO)
+        public async Task<Result<CartItemDTO>> updateCartItem([FromForm] CartItemDTO DTO)
         {
             try
             {
                 var user_id = _authService.convertToInt(_authService.getValueAuth());
-                if (user_id == 0) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Unauthorized);
+                if (user_id == 0) return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.Unauthorized);
                 var cartItem = await checkCartItems(DTO.id, user_id);
-                if (cartItem == null) return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.NotFound);
+                if (cartItem == null) return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.NotFound);
                 cartItem.product_variant_id = DTO.product_variant_id;
                 cartItem.quantity = DTO.quantity;            
                 _db.Entry(cartItem).Property(p => p.row_version).OriginalValue = DTO.row_version;                         
                 try
                 {
                     await _db.SaveChangesAsync();
-                    return PayloadDTO<CartItemDTO>.OK(null!);
+                    return Result<CartItemDTO>.Success(null!);
                 }
                 catch(DbUpdateConcurrencyException ex)
                 {                   
                     //neu that bai => reload rowversion
                     ex.Entries.Single().Reload();
-                    return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Conflict);
+                    return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.Conflict);
                 }
             }
             catch
             {
-                return PayloadDTO<CartItemDTO>.Error(Utils.Enum.StatusCode.Isvalid);
+                return Result<CartItemDTO>.Failure(Utils.Enum.StatusCode.Isvalid);
             }       
         }
     }

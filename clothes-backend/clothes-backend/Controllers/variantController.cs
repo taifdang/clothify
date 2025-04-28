@@ -24,7 +24,7 @@ namespace clothes_backend.Controllers
         [HttpGet("getId")]
         public async Task<IActionResult> getId(int id)
         {
-            var result = await _productVariantsRepo.getId(id);
+            var result = await _productVariantsRepo.GetIdBase(id);
             if(result is null) return BadRequest(GenericResponse<ProductVariants>.Fail());
             return Ok(GenericResponse<ProductVariants>.Success(result));
         }

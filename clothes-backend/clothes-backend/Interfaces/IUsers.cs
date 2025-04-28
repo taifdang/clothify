@@ -8,10 +8,10 @@ namespace clothes_backend.Interfaces
 {
     public interface IUsers
     {
-        Task<PayloadDTO<TokenReponse>> login([FromForm] loginDTO DTO);
-        Task<PayloadDTO<userInfoDTO>> register([FromForm] registerDTO DTO);
-        Task<PayloadDTO<TokenReponse>> verify([FromForm] refreshTokenDTO DTO);
-        Task<PayloadDTO<TokenReponse>> createToken(Users user);
+        Task<Result<TokenReponse>> login([FromForm] loginDTO DTO);
+        Task<Result<userInfoDTO>> register([FromForm] registerDTO DTO);
+        Task<Result<TokenReponse>> verify([FromForm] refreshTokenDTO DTO);
+        Task<Result<TokenReponse>> createToken(Users user);
 
     }
 }

@@ -7,10 +7,10 @@ namespace clothes_backend.Interfaces
 {
     public interface ICartService
     {
-        Task<PayloadDTO<CartItemDTO>> addCartItem([FromForm] cartAddDTO DTO);
-        Task<PayloadDTO<CartItems>> removeCartItem([FromForm] cartDeleteDTO DTO);
-        Task<PayloadDTO<CartItemDTO>> updateCartItem([FromForm]CartItemDTO DTO);
-        Task<PayloadDTO<List<CartItemDTO>>> getCart();
+        Task<Result<CartItemDTO>> addCartItem([FromForm] cartAddDTO DTO);
+        Task<Result<CartItems>> removeCartItem([FromForm] cartDeleteDTO DTO);
+        Task<Result<CartItemDTO>> updateCartItem([FromForm]CartItemDTO DTO);
+        Task<Result<List<CartItemDTO>>> getCart();
         //void mergeCart();
     }
 }

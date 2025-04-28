@@ -28,7 +28,7 @@ namespace clothes_backend.Heplers.Middleware
         }
     }
 
-    // Extension method used to add the middleware to the HTTP request pipeline.
+    // Extension method used to AddBase the middleware to the HTTP request pipeline.
     public static class GetUserMiddlewareExtensions
     {
         public static IApplicationBuilder UseGetUserMiddleware(this IApplicationBuilder builder)

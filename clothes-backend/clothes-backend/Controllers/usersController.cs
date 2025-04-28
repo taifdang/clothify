@@ -76,7 +76,7 @@ namespace clothes_backend.Controllers
             var token_auth = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             //check user have token_auth
             if (string.IsNullOrEmpty(token_auth)) return null;
-            //read token => get expiry(datetime) of current access_token
+            //read token => GetAllBase expiry(datetime) of current access_token
             var access_token = new JwtSecurityTokenHandler().ReadToken(token_auth) as JwtSecurityToken;
             var expiry = access_token.ValidTo;
             try

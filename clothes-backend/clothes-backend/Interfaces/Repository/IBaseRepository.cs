@@ -2,12 +2,12 @@
 {
     public interface IBaseRepository<T> where T:class
     {
-        Task<IEnumerable<T>> get();
-        Task<T> getId(int id);
-        Task add(T entity);
-        Task<T> update(int id,T entity);
-        Task delete(int id);
-        IEnumerable<T> pagination(IEnumerable<T> entity, int currentPage, int limit);
+        Task<List<T>> GetAllBase();
+        Task<T> GetIdBase(int id);
+        Task AddBase(T entity);
+        Task<T> UpdateBase(int id,T entity);
+        Task DeleteBase(int id);
+        IEnumerable<T> PaginationBase(IEnumerable<T> entity, int currentPage, int limit);
         
     }
 }

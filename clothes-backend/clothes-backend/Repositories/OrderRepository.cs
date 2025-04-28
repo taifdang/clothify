@@ -24,18 +24,18 @@ namespace clothes_backend.Repository
             _mapper = mapper;
             _authService = authService;
         }     
-        public async Task<PayloadDTO<Orders>> add([FromForm] orderItemDTO request)
+        public async Task<Result<Orders>> add([FromForm] orderItemDTO request)
         {
             var user_id = _authService.convertToInt(_authService.getValueAuth());
-            if (user_id == 0) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.Unauthorized);
+            if (user_id == 0) return Result<Orders>.Failure(Utils.Enum.StatusCode.Unauthorized);
             //lay danh sach san pham o cartItem           
             var cartItem = await _db.cart_items
                 .Include(x => x.product_variants)
                 .Where(x => request.cartItem.Contains(x.id) && x.carts.user_id == user_id)
                 .ToListAsync(); //tracking
             //kiem tra
-            if (!cartItem.Any()) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.NotFound);
-            if (cartItem.Count() != request.cartItem.Count()) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.NotFound);
+            if (!cartItem.Any()) return Result<Orders>.Failure(Utils.Enum.StatusCode.NotFound);
+            if (cartItem.Count() != request.cartItem.Count()) return Result<Orders>.Failure(Utils.Enum.StatusCode.NotFound);
             //kiem tra so luong (slban, slmua, slkho)
             //1.lay so luong ban
             //2.lay so luong ton kho
@@ -50,8 +50,8 @@ namespace clothes_backend.Repository
             {
                 //var sold_quantity = _sold.TryGetValue(item.id, out int value) ? value : 0;
                 var sold_quantity = _sold.FirstOrDefault(x => x.product_variant_id == item.product_variant_id)?.sold_quantity ?? 0;
-                //if (sold_quantity + item.quantity > item.product_variants.quantity) return PayloadDTO<List<Orders>>.Error(Utils.Enum.StatusCode.Isvalid);
-                if (sold_quantity + item.quantity > item.product_variants.quantity) return PayloadDTO<Orders>.Error(Utils.Enum.StatusCode.Isvalid);
+                //if (sold_quantity + item.quantity > item.product_variants.quantity) return Result<List<Orders>>.Failure(Utils.Enum.StatusCode.Isvalid);
+                if (sold_quantity + item.quantity > item.product_variants.quantity) return Result<Orders>.Failure(Utils.Enum.StatusCode.Isvalid);
             }
             //dat hang
             //chi tiet don hang
@@ -86,23 +86,23 @@ namespace clothes_backend.Repository
             //xoa cartItem cu
             _db.cart_items.RemoveRange(cartItem);
             _db.SaveChanges();          
-            return PayloadDTO<Orders>.OK(order);
+            return Result<Orders>.Success(order);
         }
-        public async Task<PayloadDTO<List<orderDTO>>> getAll()
+        public async Task<Result<List<orderDTO>>> getAll()
         {
             var user_id = _authService.convertToInt(_authService.getValueAuth());
-            if (user_id == 0) return PayloadDTO<List<orderDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);
+            if (user_id == 0) return Result<List<orderDTO>>.Failure(Utils.Enum.StatusCode.Unauthorized);
             var order = await _db.orders.Where(x => x.user_id == user_id).ToListAsync();
             var data = _mapper.Map<List<orderDTO>>(order);
-            return PayloadDTO<List<orderDTO>>.OK(data);   
+            return Result<List<orderDTO>>.Success(data);   
         }
-        public async Task<PayloadDTO<List<orderDetailDTO>>> getId( int id)
+        public async Task<Result<List<orderDetailDTO>>> getId( int id)
         {
             var user_id = _authService.convertToInt(_authService.getValueAuth());
-            if (user_id == 0) return PayloadDTO<List<orderDetailDTO>>.Error(Utils.Enum.StatusCode.Unauthorized);
+            if (user_id == 0) return Result<List<orderDetailDTO>>.Failure(Utils.Enum.StatusCode.Unauthorized);
             var order = await _db.order_details.Include(x=>x.orders).Where(x => x.orders.user_id == user_id && x.id == x.orders.id).ToListAsync();
             var data = _mapper.Map<List<orderDetailDTO>>(order);
-            return PayloadDTO<List<orderDetailDTO>>.OK(data);
+            return Result<List<orderDetailDTO>>.Success(data);
         }    
     }
 }

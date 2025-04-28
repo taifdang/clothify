@@ -14,13 +14,13 @@ namespace clothes_backend.Repository
             _dbSet = _db.Set<T>();
         }
 
-        public virtual async Task add(T entity)
+        public virtual async Task AddBase(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _db.SaveChangesAsync();
         }
 
-        public virtual async Task delete(int id)
+        public virtual async Task DeleteBase(int id)
         {
             var item = await _dbSet.FindAsync(id);
             if(item != null)
@@ -29,28 +29,29 @@ namespace clothes_backend.Repository
                await _db.SaveChangesAsync();             
             }
         }
-        public virtual async Task<IEnumerable<T>> get()
+        public virtual async Task<List<T>> GetAllBase()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> getId(int id)
+        public virtual async Task<T> GetIdBase(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual IEnumerable<T> pagination(IEnumerable<T> entity, int currentPage, int limit)
+        public virtual IEnumerable<T> PaginationBase(IEnumerable<T> entity, int currentPage, int limit)
         {       
             int skip = (currentPage - 1) * limit;
             entity =  entity.Skip(skip).Take(limit);
             return entity;
         }
 
-        public virtual async Task<T> update(int id, T entity)
+        public virtual async Task<T> UpdateBase(int id, T entity)
         {
             var item = await _dbSet.FindAsync(id);
             if (item == null) throw new NotImplementedException();
             _db.Entry(item).CurrentValues.SetValues(entity);//same value,type
+            await _db.SaveChangesAsync();
             return entity;
         }
         
