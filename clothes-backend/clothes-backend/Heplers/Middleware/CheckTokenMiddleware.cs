@@ -1,5 +1,8 @@
 ﻿using Azure.Core;
 using clothes_backend.Data;
+using clothes_backend.DTO.PRODUCT_DTO;
+using clothes_backend.Utils;
+using Microsoft.Extensions.Caching.Distributed;
 using System.IdentityModel.Tokens.Jwt;
 namespace clothes_backend.Heplers.Middleware
 {
@@ -13,7 +16,7 @@ namespace clothes_backend.Heplers.Middleware
             _next = next;
         }
 
-        public  async Task Invoke(HttpContext httpContext,DatabaseContext db)
+        public  async Task Invoke(HttpContext httpContext,DatabaseContext db,IDistributedCache distributedCache)
         {
             var access_token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");      
             if (!string.IsNullOrEmpty(access_token))
@@ -25,13 +28,13 @@ namespace clothes_backend.Heplers.Middleware
                     await httpContext.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
                     return;
                 }
-                var isBlockToken = db.blacklist_token.Any(x => x.token == access_token);
-                if (isBlockToken)
+                //var isBlockToken = db.blacklist_token.Any(x => x.token == access_token);
+                if(distributedCache.TryGetValue($"bl_{access_token}", out string? token))
                 {
                     httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    await httpContext.Response.WriteAsync("Token is revoked");             
+                    await httpContext.Response.WriteAsync("Token is revoked");
                     return;
-                }
+                }           
             }
             await _next(httpContext);
         }

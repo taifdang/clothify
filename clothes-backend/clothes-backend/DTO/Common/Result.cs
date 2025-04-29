@@ -5,9 +5,12 @@ namespace clothes_backend.DTO.General
     public class Result<T>
     {      
         public StatusCode statusCode { get; set; }
+        private string error;
         public string message
         {
-            get { return ErrorMsg.getMessage(statusCode); }
+            //get { return ErrorMsg.getMessage(statusCode); }
+            get => string.IsNullOrEmpty(error) ? ErrorMsg.getMessage(statusCode) : error;
+            set => error = value;
         }
         public T data { get; set; }       
         public static Result<T> Success(T data = default!)
@@ -20,7 +23,12 @@ namespace clothes_backend.DTO.General
         }
         public static Result<T> IsValid(string? errmsg = null)
         {
-            return new Result<T> { statusCode = StatusCode.Isvalid };
+            return new Result<T>
+            {
+                statusCode = StatusCode.Isvalid,
+                data = default,
+                message = errmsg
+            };
         }
     }
 }

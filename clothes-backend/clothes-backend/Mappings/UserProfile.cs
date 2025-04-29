@@ -9,7 +9,7 @@ namespace clothes_backend.AutoMapper
         public UserProfile()
         {
             CreateMap<Users, userInfoDTO>()
-                .ForMember(x=>x.id,target=>target.MapFrom(y=>y.id));
+                .ForMember(x=>x.id,target=>target.MapFrom(y=>y.id));                  
         }
     }
 }

@@ -18,7 +18,7 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<UserRepositpory>();
            services.AddScoped<VerifyHandleService>();
            services.AddScoped<CartRepository>();
-           services.AddScoped<IAuthService, AuthService>();
+           services.AddScoped<IUserContextService, UserContextService>();
            services.AddScoped<OrderRepository>();
            //mail           
            services.AddScoped<IBackgroundJobService, BackgroundJobService>();
@@ -26,6 +26,8 @@ namespace clothes_backend.Heplers.Middleware
             //
            services.AddScoped<IProductRepository, ProductRepository>();
            services.AddScoped<IProductService, ProductService>();
+           services.AddScoped<IUserRepository, UserRepositpory>();
+           services.AddScoped<IUserService, UserService>();
            services.AddScoped<RemoveFileService>();
            //automapper
            services.AddAutoMapper(typeof(Program));

@@ -107,7 +107,7 @@ namespace clothes_backend
             //builder.Services.AddScoped<UserRepositpory>();
             //builder.Services.AddScoped<VerifyHandleService>();          
             //builder.Services.AddScoped<CartRepository>();
-            //builder.Services.AddScoped<IAuthService,AuthService>();
+            //builder.Services.AddScoped<IUserContextService,UserContextService>();
             //builder.Services.AddScoped<OrderRepository>();
             ////mail
             //builder.Services.AddScoped<MailKitHandle>();
@@ -157,37 +157,38 @@ namespace clothes_backend
             });
             //MIDDLEWARE
             //check token
-            app.Use(async (context, next) =>
-            {
-                var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                if (!string.IsNullOrEmpty(access_token))
-                {
-                    //Check expired
-                    var check_token = new JwtSecurityTokenHandler().ReadToken(access_token) as JwtSecurityToken;
-                    if (check_token?.ValidTo <= DateTime.UtcNow)
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        await context.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
-                        return;
-                    }
-                    using (var scope = app.Services.CreateScope())
-                    {
-                        var _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                        var isblockToken = await _db.blacklist_token.AnyAsync(x => x.token == access_token);
-                        if (isblockToken)
-                        {
-                            //block request
-                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                            await context.Response.WriteAsync("Token is revoked");
-                            Console.WriteLine("Token is revoked");
-                            return;
-                        }
-                    }
-                }
-                //save current user
-                await next(context);
-            });
-            //app.UseMiddleware<CheckTokenMiddleware>();
+            //app.Use(async (context, next) =>
+            //{
+            //    var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //    if (!string.IsNullOrEmpty(access_token))
+            //    {
+            //        //Check expired
+            //        var check_token = new JwtSecurityTokenHandler().ReadToken(access_token) as JwtSecurityToken;
+            //        if (check_token?.ValidTo <= DateTime.UtcNow)
+            //        {
+            //            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            //            await context.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
+            //            return;
+            //        }
+            //        using (var scope = app.Services.CreateScope())
+            //        {
+            //            var _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            //            var isblockToken = await _db.blacklist_token.AnyAsync(x => x.token == access_token);
+                        
+            //            if (isblockToken)
+            //            {
+            //                //block request
+            //                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            //                await context.Response.WriteAsync("Token is revoked");
+            //                Console.WriteLine("Token is revoked");
+            //                return;
+            //            }
+            //        }
+            //    }
+            //    //save current user
+            //    await next(context);
+            //});
+            app.UseMiddleware<CheckTokenMiddleware>();
             //store user
             //app.Use(async (context, next) =>
             //{

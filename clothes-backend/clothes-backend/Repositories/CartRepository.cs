@@ -14,8 +14,8 @@ namespace clothes_backend.Repository
     public class CartRepository : BaseRepository<Carts>,ICartService,ICartUtils
     {
         private readonly IMapper _mapper;     
-        private readonly IAuthService _authService;
-        public CartRepository(DatabaseContext db,IMapper mapper, IAuthService authService) : base(db)
+        private readonly IUserContextService _authService;
+        public CartRepository(DatabaseContext db,IMapper mapper, IUserContextService authService) : base(db)
         {          
             _mapper = mapper;        
             _authService = authService;

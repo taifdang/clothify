@@ -2,10 +2,10 @@
 
 namespace clothes_backend.Service
 {
-    public class AuthService : IAuthService
+    public class UserContextService : IUserContextService
     {
         public readonly IHttpContextAccessor _context;
-        public AuthService(IHttpContextAccessor context)
+        public UserContextService(IHttpContextAccessor context)
         {
             _context = context;
         }

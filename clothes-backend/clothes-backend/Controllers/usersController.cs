@@ -12,6 +12,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http.HttpResults;
 using clothes_backend.Data;
 using clothes_backend.Models;
+using clothes_backend.Interfaces.Service;
+using static System.Net.WebRequestMethods;
 
 namespace clothes_backend.Controllers
 {
@@ -20,35 +22,35 @@ namespace clothes_backend.Controllers
     public class usersController : ControllerBase
     {
         private readonly UserRepositpory _userRepo;
-        private readonly VerifyHandleService _auth;
+        private readonly IUserService _userService;
+      
         private readonly DatabaseContext _db;
-        public usersController(UserRepositpory userRepo, VerifyHandleService auth, DatabaseContext database)
+        public usersController(UserRepositpory userRepo, DatabaseContext database,IUserService userService)
         {
-            _userRepo = userRepo;
-            _auth = auth;
+            _userRepo = userRepo;          
             _db = database;
+            _userService = userService;
         }
         [HttpPost("login")]
         public async Task<IActionResult> login([FromForm] loginDTO DTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
+                return BadRequest(Result<Users>.IsValid(ModelState.Values.ToString()));
             }
-            var data = await _userRepo.login(DTO);
-            if (data.statusCode != Utils.Enum.StatusCode.Success) return Unauthorized(data);
-          
-            return Ok(data);
+            var user = await _userService.login(DTO);
+            if (user.statusCode != Utils.Enum.StatusCode.Success) return Unauthorized(user);
+            return Ok(user);
         }
-        [NonAction]
+        
         [HttpPost("register")]
         public async Task<IActionResult> register([FromForm] registerDTO DTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
+                return BadRequest(Result<Users>.IsValid(ModelState.Values.ToString()));
             }
-            var data = await _userRepo.register(DTO);
+            var data = await _userService.register(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
@@ -57,54 +59,26 @@ namespace clothes_backend.Controllers
         {           
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<Users>.Fail(ModelState.Values.ToString()));
+                return BadRequest(Result<Users>.IsValid(ModelState.Values.ToString()));
             }
-            var data = await _userRepo.verify(DTO);
+            var data = await _userService.verifyToken(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
+        [NonAction]
         [HttpPost("get-id")]
         public async Task<IActionResult> test_get_id(int id)
         {
             var data = await _userRepo.get_user(id);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
-        }
+        }     
         [HttpPost("logout")]
-        public async Task<IActionResult> logout()
+        public async Task<IActionResult> logout2()
         {
-            var token_auth = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            //check user have token_auth
-            if (string.IsNullOrEmpty(token_auth)) return null;
-            //read token => GetAllBase expiry(datetime) of current access_token
-            var access_token = new JwtSecurityTokenHandler().ReadToken(token_auth) as JwtSecurityToken;
-            var expiry = access_token.ValidTo;
-            try
-            {
-                var bl_token = new BlackListToken()
-                {
-                    //string.Join("_","bl", token_auth),
-                    token = token_auth,
-                    create_at = expiry
-                };
-                _db.blacklist_token.Add(bl_token);
-                await _db.SaveChangesAsync();
-                return Ok(bl_token);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-                return BadRequest(ex);
-            }
-        }
-        [HttpPost("sign_up")]
-        public async Task<IActionResult> sessionId([FromForm] registerDTO DTO)
-        {
-            //var value = Guid.NewGuid().ToString();
-            //HttpContext.Session.SetString(key, value);
-            //return Ok(key+" "+value);
-            _userRepo?.registerCache(DTO);
-            return Ok("Da gui otp");
+            var result = await _userService.logout();
+            if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
+            return Ok(result);
         }
         [NonAction]
         [HttpGet("getSessionId")]
@@ -112,20 +86,13 @@ namespace clothes_backend.Controllers
         {
             return Ok(HttpContext.Session.GetString("user_test"));
         }
-        //verify OTP
         [HttpPost("verify-otp")]
-        public async Task<IActionResult> verifyOPT(string inputOTP)
+        public async Task<IActionResult> verifyOPT(string OTP)
         {
-            var data = _userRepo.verifyOPT(inputOTP);
-            if(!data) return BadRequest("Xác thực thất bại");
-            return Ok("Xác thực thành công, đã tạo tài khoản mới");
-        }
-        [HttpPost("sign-up")]
-        public async Task<IActionResult> signUpValidation([FromForm] registerDTO DTO)
-        {
-            var data =  await _userRepo.registerCache(DTO);
-            if (!data) return BadRequest("Có lỗi xảy ra");
-            return Ok("Đã gửi OTP");
-        }
+            var result = await _userService.verifyOTP(OTP);
+            if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);         
+            return Ok(result);
+
+        }     
     }
 }

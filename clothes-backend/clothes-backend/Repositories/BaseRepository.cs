@@ -1,6 +1,7 @@
 ﻿using clothes_backend.Data;
 using clothes_backend.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace clothes_backend.Repository
 {
@@ -16,7 +17,7 @@ namespace clothes_backend.Repository
 
         public virtual async Task AddBase(T entity)
         {
-            await _dbSet.AddAsync(entity);
+            _db.Set<T>().Add(entity);
             await _db.SaveChangesAsync();
         }
 
@@ -29,6 +30,12 @@ namespace clothes_backend.Repository
                await _db.SaveChangesAsync();             
             }
         }
+
+        public async Task<T?> FindBase(Expression<Func<T, bool>> condition)
+        {
+            return await _dbSet.FirstOrDefaultAsync(condition);
+        }
+
         public virtual async Task<List<T>> GetAllBase()
         {
             return await _dbSet.ToListAsync();
@@ -54,6 +61,7 @@ namespace clothes_backend.Repository
             await _db.SaveChangesAsync();
             return entity;
         }
+        
         
     }
 }

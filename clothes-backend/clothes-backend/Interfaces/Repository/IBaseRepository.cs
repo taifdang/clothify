@@ -1,4 +1,6 @@
-﻿namespace clothes_backend.Interfaces.Repository
+﻿using System.Linq.Expressions;
+
+namespace clothes_backend.Interfaces.Repository
 {
     public interface IBaseRepository<T> where T:class
     {
@@ -8,6 +10,9 @@
         Task<T> UpdateBase(int id,T entity);
         Task DeleteBase(int id);
         IEnumerable<T> PaginationBase(IEnumerable<T> entity, int currentPage, int limit);
-        
+        Task<T> FindBase(Expression<Func<T,bool>> condition);
+       
+
+
     }
 }

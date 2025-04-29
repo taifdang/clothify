@@ -18,8 +18,8 @@ namespace clothes_backend.Repository
     public class OrderRepository : BaseRepository<Orders>,IOrderService
     {
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
-        public OrderRepository(DatabaseContext db, IMapper mapper, IAuthService authService) : base(db)
+        private readonly IUserContextService _authService;
+        public OrderRepository(DatabaseContext db, IMapper mapper, IUserContextService authService) : base(db)
         {
             _mapper = mapper;
             _authService = authService;

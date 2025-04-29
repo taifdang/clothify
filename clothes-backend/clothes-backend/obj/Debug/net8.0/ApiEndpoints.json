@@ -348,22 +348,6 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "test_get_id",
-    "RelativePath": "api/users/get-id",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.usersController",
     "Method": "login",
     "RelativePath": "api/users/login",
     "HttpMethod": "POST",
@@ -385,7 +369,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "logout",
+    "Method": "logout2",
     "RelativePath": "api/users/logout",
     "HttpMethod": "POST",
     "IsController": true,
@@ -416,44 +400,8 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "sessionId",
-    "RelativePath": "api/users/sign_up",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "phone",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "password",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "confirm_password",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.usersController",
-    "Method": "signUpValidation",
-    "RelativePath": "api/users/sign-up",
+    "Method": "register",
+    "RelativePath": "api/users/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -495,21 +443,11 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "inputOTP",
+        "Name": "OTP",
         "Type": "System.String",
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.ValuesController",
-    "Method": "get",
-    "RelativePath": "api/Values",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {

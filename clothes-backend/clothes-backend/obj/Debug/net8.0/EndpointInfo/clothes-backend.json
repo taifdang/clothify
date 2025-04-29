@@ -636,6 +636,72 @@
         }
       }
     },
+    "/api/users/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "email",
+                  "name",
+                  "password"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "format": "tel"
+                  },
+                  "password": {
+                    "maxLength": 100,
+                    "minLength": 8,
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "confirm_password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              },
+              "encoding": {
+                "email": {
+                  "style": "form"
+                },
+                "name": {
+                  "style": "form"
+                },
+                "phone": {
+                  "style": "form"
+                },
+                "password": {
+                  "style": "form"
+                },
+                "confirm_password": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/users/refresh-token": {
       "post": {
         "tags": [
@@ -678,99 +744,11 @@
         }
       }
     },
-    "/api/users/get-id": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/users/logout": {
       "post": {
         "tags": [
           "users"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/users/sign_up": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "email",
-                  "name",
-                  "password"
-                ],
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "format": "tel"
-                  },
-                  "password": {
-                    "maxLength": 100,
-                    "minLength": 8,
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "confirm_password": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              },
-              "encoding": {
-                "email": {
-                  "style": "form"
-                },
-                "name": {
-                  "style": "form"
-                },
-                "phone": {
-                  "style": "form"
-                },
-                "password": {
-                  "style": "form"
-                },
-                "confirm_password": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -785,90 +763,12 @@
         ],
         "parameters": [
           {
-            "name": "inputOTP",
+            "name": "OTP",
             "in": "query",
             "schema": {
               "type": "string"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/users/sign-up": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "email",
-                  "name",
-                  "password"
-                ],
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "format": "tel"
-                  },
-                  "password": {
-                    "maxLength": 100,
-                    "minLength": 8,
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "confirm_password": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              },
-              "encoding": {
-                "email": {
-                  "style": "form"
-                },
-                "name": {
-                  "style": "form"
-                },
-                "phone": {
-                  "style": "form"
-                },
-                "password": {
-                  "style": "form"
-                },
-                "confirm_password": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Values": {
-      "get": {
-        "tags": [
-          "Values"
         ],
         "responses": {
           "200": {

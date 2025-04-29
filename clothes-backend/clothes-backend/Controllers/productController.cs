@@ -52,9 +52,8 @@ namespace clothes_backend.Controllers
                        error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                     );
                 var fullErrorMessage =
-                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
-                //return BadRequest(GenericResponse<Products>.Fail(fullErrorMessage));
-                return BadRequest(Result<Products>.Failure());
+                    string.Join(" ;", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));           
+                return BadRequest(Result<Products>.IsValid(fullErrorMessage));
             }
             var result = await _productService.AddAsync(DTO);
             if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
@@ -65,7 +64,15 @@ namespace clothes_backend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(GenericResponse<Products>.Fail("ModelState.IsValid"));
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(" ;", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+                return BadRequest(Result<Products>.IsValid(fullErrorMessage));
             }
             var result = await _productService.UpdateAsync(id, DTO);
             if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
@@ -75,14 +82,9 @@ namespace clothes_backend.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(GenericResponse<Products>.Fail("ModelState.IsValid"));
-            }
             var data = await _productService.DeleteAsync(id);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
-            return Ok(data);
-            
+            return Ok(data);          
         }
     }
 }
