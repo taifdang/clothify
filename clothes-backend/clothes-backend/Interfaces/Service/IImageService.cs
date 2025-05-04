@@ -1,10 +1,12 @@
-﻿namespace clothes_backend.Interfaces.Service
+﻿using clothes_backend.DTO.General;
+using clothes_backend.DTO.IMAGE;
+using clothes_backend.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace clothes_backend.Interfaces.Service
 {
     public interface IImageService
     {
-        Task saveImage(IFormFile file, string file_path);
-        string getFileName(string file_name,string attribute);
-        string getFilePath(string file_path);
-       
+        Task<Result<ProductOptionImages>> AddImage([FromForm] imageUploadDTO DTO);
     }
 }

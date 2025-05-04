@@ -1,5 +1,6 @@
 using clothes_backend.Data;
 using clothes_backend.Heplers.Middleware;
+using clothes_backend.Interfaces;
 using clothes_backend.Interfaces.Repository;
 using clothes_backend.Interfaces.Service;
 using clothes_backend.Service;
@@ -99,6 +100,7 @@ namespace clothes_backend
                 });
             //
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddAutoMapper(typeof(Program));
             //
             //builder.Services.AddScoped(typeof(IBaseRepository<>),typeof(BaseRepository<>));          
             //builder.Services.AddScoped<ProductRepository>();

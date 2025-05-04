@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace clothes_backend.Repository
 {
-    public class ProductOptionImageRepository : BaseRepository<ProductOptionImages>,IImageService
+    public class ProductOptionImageRepository : BaseRepository<ProductOptionImages>, IImageHandler
     {
         public ProductOptionImageRepository(DatabaseContext db) : base(db)
         {
@@ -15,13 +15,14 @@ namespace clothes_backend.Repository
         {          
             try
             {          
-                var is_product = _db.products.FirstOrDefault(x => x.id == DTO.product_id);//check product id           
+                var is_product = _db.products.FirstOrDefault(x => x.id == DTO.product_id);//check product id              
                 if (is_product == null) return null!;          
                 _db.Entry(is_product).Collection(opt => opt.product_options).Load(); //explicit loading: product_options    
                 var product_option = is_product.product_options.Select(opt=>opt.option_id).ToList();  //has product => list option
                 var option_value = _db.option_values.FirstOrDefault(p => p.id == DTO.option_value_id);           
                 if (!product_option.Contains(option_value!.option_id)) return null!;  //not include
                 _db.Entry(is_product).Reference(cate => cate.categories).Load();  //file_name = sku = category.label + product.id + option_value.label+ file extension
+                
                 string file_name = String.Join('-',"MAU", is_product.categories.label , is_product.id, option_value.label);                                          
                 foreach (var item in DTO.files)   //save image => loop.//new image can same old image name        
                 {
@@ -88,7 +89,12 @@ namespace clothes_backend.Repository
             return Path.Combine(Directory.GetCurrentDirectory(), "Images", file_path);
         }
 
-        public async Task saveImage(IFormFile file,string file_path)
+        public Task<List<ProductOptionImages>> loopImage([FromForm] imageUploadDTO DTO, string file_name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task saveImage(IFormFile file, string file_path)
         {
             using (var stream = new FileStream(file_path, FileMode.Create))
             {

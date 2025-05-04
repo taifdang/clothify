@@ -1,5 +1,6 @@
 ﻿using clothes_backend.Interfaces.Repository;
 using clothes_backend.Interfaces.Service;
+using clothes_backend.Repositories;
 using clothes_backend.Repository;
 using clothes_backend.Service;
 using clothes_backend.Services;
@@ -8,7 +9,7 @@ using clothes_backend.Services;
 namespace clothes_backend.Heplers.Middleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public static class UseServiceMiddleware
+    public static class AppServiceMiddleware
     {
        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
        {          
@@ -29,8 +30,10 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<IUserRepository, UserRepositpory>();
            services.AddScoped<IUserService, UserService>();
            services.AddScoped<RemoveFileService>();
+           services.AddScoped<IImageRepository, ImageRepository>();
+           services.AddScoped<IImageService, ImageSerivce>();
            //automapper
-           services.AddAutoMapper(typeof(Program));
+          
            return services;
        }
     }      
