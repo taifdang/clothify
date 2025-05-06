@@ -6,6 +6,7 @@
         void RecurringJob();
         Task DelayedJob(string email,string otp);
         void ContinuationJob();
+        Task FileWorker(IFormFile[] file);
 
     }
 }

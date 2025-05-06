@@ -32,9 +32,9 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<RemoveFileService>();
            services.AddScoped<IImageRepository, ImageRepository>();
            services.AddScoped<IImageService, ImageSerivce>();
+           services.AddScoped<IImageHandler, ImageHandler>();
            //automapper
-          
-           return services;
+            return services;
        }
     }      
 }

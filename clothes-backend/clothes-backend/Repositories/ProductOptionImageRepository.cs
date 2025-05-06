@@ -34,7 +34,7 @@ namespace clothes_backend.Repository
                         full_path = getFileName(full_path, index.ToString());
                         index++;
                     }                            
-                    await saveImage(item, getFilePath(full_path));
+                    await SaveImage(item, getFilePath(full_path));
                     ProductOptionImages entity = new ProductOptionImages()
                     {
                         product_id = DTO.product_id,
@@ -52,6 +52,12 @@ namespace clothes_backend.Repository
                 return null!;
             }
         }
+
+        public void ClearWorker(string file_path)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> delete(int id)
         {
             var is_exist = await _db.product_option_images.FindAsync(id);
@@ -74,6 +80,12 @@ namespace clothes_backend.Repository
                 return null!;
             }       
         }
+
+        public void DeleteImage(string file_path)
+        {
+            throw new NotImplementedException();
+        }
+
         public string getFileName(string file_name,string? attribute = null)
         {        
             if(!string.IsNullOrEmpty(attribute)) //split => extention
@@ -94,12 +106,20 @@ namespace clothes_backend.Repository
             throw new NotImplementedException();
         }
 
-        public async Task saveImage(IFormFile file, string file_path)
+        
+        public async Task SaveImage(IFormFile file, string file_path)
         {
             using (var stream = new FileStream(file_path, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
         }
+
+        Task IImageHandler.DeleteImage(string file_path)
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 }

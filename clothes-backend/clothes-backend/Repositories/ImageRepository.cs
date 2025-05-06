@@ -38,31 +38,8 @@ namespace clothes_backend.Repositories
             {
                 option_value = option_value,
                 product = product
-            };
-            //_db.Entry(product).Reference(cate => cate.categories).Load();//get category
+            };          
             return data;
-        }
-
-        public ImageInfoDTO findProduct([FromForm] imageUploadDTO DTO)
-        {
-            var product = _db.products
-                .Include(p => p.categories)
-                .Include(q=>q.product_options)
-                .FirstOrDefault(x => x.id == DTO.product_id);//check product id                                                                                      //
-            if (product is null) return null!;
-            var product_option = product.product_options.Select(opt => opt.option_id).ToList();  //has product => list option          
-            var option_value = _db.option_values.FirstOrDefault(p => p.id == DTO.option_value_id);// chi them anh 1 option
-            
-            if (!product_option.Contains(option_value!.option_id)) return null!;  //not include
-
-            var data = new ImageInfoDTO()
-            {
-                option_value = option_value,
-                product = product
-            };
-            //_db.Entry(product).Reference(cate => cate.categories).Load();//get category
-            return data;
-            //option_value | product => cate
-        }
+        }        
     }
 }

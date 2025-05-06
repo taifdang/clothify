@@ -161,12 +161,12 @@ namespace clothes_backend
             //check token
             //app.Use(async (context, next) =>
             //{
-            //    var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //    var access_token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
             //    if (!string.IsNullOrEmpty(access_token))
             //    {
             //        //Check expired
             //        var check_token = new JwtSecurityTokenHandler().ReadToken(access_token) as JwtSecurityToken;
-            //        if (check_token?.ValidTo <= DateTime.UtcNow)
+            //        if (check_token.ValidTo <= DateTime.UtcNow)
             //        {
             //            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             //            await context.Response.WriteAsync($"Token is expired {check_token.ValidTo}");
@@ -176,7 +176,7 @@ namespace clothes_backend
             //        {
             //            var _db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
             //            var isblockToken = await _db.blacklist_token.AnyAsync(x => x.token == access_token);
-                        
+
             //            if (isblockToken)
             //            {
             //                //block request
@@ -190,7 +190,7 @@ namespace clothes_backend
             //    //save current user
             //    await next(context);
             //});
-            app.UseMiddleware<CheckTokenMiddleware>();
+            //app.UseMiddleware<CheckTokenMiddleware>();
             //store user
             //app.Use(async (context, next) =>
             //{

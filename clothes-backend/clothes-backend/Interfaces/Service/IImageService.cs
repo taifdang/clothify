@@ -8,5 +8,6 @@ namespace clothes_backend.Interfaces.Service
     public interface IImageService
     {
         Task<Result<ProductOptionImages>> AddImage([FromForm] imageUploadDTO DTO);
+        Task<Result<ProductOptionImages>> DeleteImage(int id);
     }
 }

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using clothes_backend.Data;
 using clothes_backend.Models;
 using clothes_backend.Interfaces.Service;
-using static System.Net.WebRequestMethods;
 
 namespace clothes_backend.Controllers
 {

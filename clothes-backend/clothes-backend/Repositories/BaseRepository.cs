@@ -21,9 +21,8 @@ namespace clothes_backend.Repository
             await _db.SaveChangesAsync();
         }
 
-        public virtual async Task DeleteBase(int id)
+        public virtual async Task DeleteBase(T item)
         {
-            var item = await _dbSet.FindAsync(id);
             if(item != null)
             {
                _dbSet.Remove(item);

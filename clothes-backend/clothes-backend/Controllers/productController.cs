@@ -15,7 +15,7 @@ namespace clothes_backend.Controllers
     [ApiController]
     public class productController : ControllerBase
     {  
-        private readonly IProductService _productService;
+        private readonly IProductService _productService;      
         public productController(IProductService productService)
         {                              
             _productService = productService;
