@@ -1,4 +1,6 @@
 ﻿using clothes_backend.DTO.CART;
+using clothes_backend.DTO.General;
+using clothes_backend.Interfaces.Service;
 using clothes_backend.Models;
 using clothes_backend.Repository;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +14,17 @@ namespace clothes_backend.Controllers
     [ApiController]
     public class cartController : ControllerBase
     {
-        private readonly CartRepository _cartRepo;      
-        public cartController(CartRepository cartRepo)
+        private readonly CartRepositoryOld _cartRepo;      
+        private readonly ICartService _service;
+        public cartController(ICartService service, CartRepositoryOld cartRepo)
         {
-            _cartRepo = cartRepo;       
+            _service = service;
+            _cartRepo = cartRepo;
         }
         [HttpGet("get")]
-        public async Task<IActionResult> getId()
+        public async Task<IActionResult> getCart()
         {         
-            var data = await _cartRepo.getCart();
+            var data = await _service.getCart();
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
@@ -37,9 +41,9 @@ namespace clothes_backend.Controllers
                     );
                 var fullErrorMessage =
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
-                return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));               
+                return BadRequest(Result<CartItems>.IsValid(fullErrorMessage));               
             }
-            var data = await _cartRepo.addCartItem(DTO);
+            var data = await _service.addCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
@@ -58,7 +62,7 @@ namespace clothes_backend.Controllers
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
                 return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));
             }
-            var data = await _cartRepo.updateCartItem(DTO);
+            var data = await _service.updateCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
@@ -77,7 +81,7 @@ namespace clothes_backend.Controllers
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
                 return BadRequest(GenericResponse<CartItems>.Fail(fullErrorMessage));
             }
-            var data = await _cartRepo.removeCartItem(DTO);
+            var data = await _service.removeCartItem(DTO);
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }     

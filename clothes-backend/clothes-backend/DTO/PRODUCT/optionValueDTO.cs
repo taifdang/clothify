@@ -4,6 +4,6 @@
     {
         public string title { get; set; }
         //public List<string> images { GetAllBase; set; }
-        public List<imageDTO> image { get; set; }     
+        public List<ImageDTO> image { get; set; }     
     }
 }

@@ -2,8 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using clothes_backend.Data;
 using clothes_backend.DTO.General;
+using clothes_backend.DTO.Product;
 using clothes_backend.DTO.PRODUCT;
 using clothes_backend.DTO.PRODUCT_DTO;
+using clothes_backend.DTO.Test;
 using clothes_backend.Interfaces;
 using clothes_backend.Interfaces.Repository;
 using clothes_backend.Interfaces.Service;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 
@@ -38,42 +41,42 @@ namespace clothes_backend.Repository
             _cache = distributedCache;
             _logger = logger;         
             _mapper = mapper;
-        }           
-        //public async Task<object> getTest()
-        // {          
-        //    var image =  _db.product_option_images
-        //          .Where(p => p.product_id == 15)
-        //          .OrderBy(x => x.id)
-        //          .GroupBy(op => op.option_value_id)
-        //          .Select(g => g.First())
-        //          .AsEnumerable()
-        //          .Select(x => new
-        //          {
-        //              x.id,
-        //              x.src
-        //          })
-        //          .ToList();
-        //    var images =  _db.product_option_images
-        //    .Where(p => p.product_id == 15)
-        //    .OrderBy(x => x.id)
-        //    .AsEnumerable()
-        //    .GroupBy(p => p.option_value_id) 
-        //    .SelectMany(g => g.OrderBy(x => x.id).Take(1)) 
-        //    .Select(x => new
-        //    {
-        //        id = x.id,
-        //        src = x.src
-        //    })
-        //    .ToList();
-      
-        //    return images;
-        //}   
-        
+        }
+        public async Task<object> getTest()
+        {
+            var image = _db.product_option_images
+                  .Where(p => p.product_id == 15)
+                  .OrderBy(x => x.id)
+                  .GroupBy(op => op.option_value_id)
+                  .Select(g => g.First())
+                  .AsEnumerable()
+                  .Select(x => new
+                  {
+                      x.id,
+                      x.src
+                  })
+                  .ToList();
+            var images = _db.product_option_images
+            .Where(p => p.product_id == 15)
+            .OrderBy(x => x.id)
+            .AsEnumerable()
+            .GroupBy(p => p.option_value_id)
+            .SelectMany(g => g.OrderBy(x => x.id).Take(1))
+            .Select(x => new
+            {
+                id = x.id,
+                src = x.src
+            })
+            .ToList();
+
+            return images;
+        }
+
         public override IEnumerable<Products> PaginationBase(IEnumerable<Products> entity, int currentPage, int limit)
         {
             return base.PaginationBase(entity, currentPage, limit);
         }
-        public async Task<List<productListDTO>?> GetProductAllAsync()
+        public async Task<List<productListDTO>> GetProductAllAsync()
         {
             _logger.Log(LogLevel.Information, "Trying get cache from database");
             if (_cache.TryGetValue(cache_key, out List<productListDTO>? products))
@@ -92,13 +95,88 @@ namespace clothes_backend.Repository
                     else
                     {
                         _logger.Log(LogLevel.Information, "Not found cache from database");
-                        products = await _db.products
-                               .AsNoTracking()
-                               .Where(p => p.id == 15)
-                               .ProjectTo<productListDTO>(_mapper.ConfigurationProvider)
-                               .AsSingleQuery()
-                               .ToListAsync();
+                        //var products = await _db.products
+                        //       .AsNoTracking()
+                        //       .Where(p => p.id == 15)
+                        //       .ProjectTo<productListDTO>(_mapper.ConfigurationProvider)
+                        //       .AsSingleQuery()
+                        //       .ToListAsync();
+                        var data = await _db.products
+                                           .Include(p => p.product_option_images)
+                                           .Include(v => v.product_variants)
+                                               .ThenInclude(vr => vr.variants)
+                                                   .ThenInclude(vr => vr.option_values)
+                                                       .ThenInclude(vr => vr.options)
+                                           .AsSplitQuery()
+                                           .ToListAsync();
+                        products = data.Select(product =>
+                        {
+                            //images
+                            var images = product.product_option_images
+                                .GroupBy(s => s.option_value_id)
+                                .OrderBy(x => x.Key)
+                                .SelectMany(g => g
+                                    .Where(c => c.src!.StartsWith("MAU"))
+                                    .OrderBy(c => c.id)
+                                    .Take(1)
+                                    .Select(x => new ImageDTO
+                                    {
+                                        id = x.id,
+                                        src = x.src!
+                                    })
+                                ).ToList();
+                            //variant 
+                            var variant = product.product_variants
+                                         .Select(x => new VariantDTO
+                                         {
+                                             id = x.id,
+                                             title = x.title,
+                                             price = x.price,
+                                             old_price = x.old_price,
+                                             sku = x.sku,
+                                             percent = x.percent,
+                                             quantity = x.quantity
+                                         })
+                                         .ToList();
+                            //options_value
+                            var options_value = product.product_option_images
+                                                .GroupBy(x => x.options_values.options.title)
+                                                .Select(group_option => new OptionImageDTO
+                                                {
+                                                    title = group_option.Key,
+                                                    option_id = group_option.Select(k => k.options_values.option_id).FirstOrDefault() ?? null!,
+                                                    options = group_option
+                                                        .GroupBy(v => v.options_values.value)
+                                                        .Select(group_option_value => new optionValueDTO
+                                                        {
+                                                            //image =  valueGroup.Select(i => i.src).ToList()
+                                                            title = group_option_value.Key,
+                                                            image = group_option_value.Select(i => new ImageDTO { id = i.id, src = i.src }).ToList()
+                                                        })
+                                                        .ToList()
+                                                })
+                                                .ToList();
+                            //options
+                            var options = product.product_variants
+                                        .SelectMany(v => v.variants)
+                                        .GroupBy(ovid => ovid.option_values.option_id)
+                                        .Select(x => new OptionDTO
+                                        {
+                                            option_id = x.Key,
+                                            title = x.Select(x => x.option_values.options.title).FirstOrDefault(),
+                                            values = x.Select(a => a.option_values.value).Distinct().ToList()
+                                        })
+                                        .ToList();
 
+
+                            var dto = _mapper.Map<productListDTO>(product);
+                            dto.variants = variant;
+                            dto.images = images;
+                            dto.options_value = options_value;
+                            dto.options = options;
+                            return dto;
+                        }).ToList();
+                        //
                         var cacheOptions = new DistributedCacheEntryOptions()
                             .SetSlidingExpiration(TimeSpan.FromSeconds(60))
                             .SetAbsoluteExpiration(TimeSpan.FromSeconds(90));
@@ -182,38 +260,127 @@ namespace clothes_backend.Repository
             }
         }
 
-        public async Task<productListDTO> GetIdq(int id)
+        public async Task<Result<List<productListDTO>>> GetId(int id)
         {
+            var semophore = new SemaphoreSlim(1, 1);
             try
             {
-                var products = await _db.products
-                    .AsNoTracking()
-                    .Where(p => p.id == id)
-                    .ProjectTo<productListDTO>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync();                           
-                return products!;
+                //var isHas = _db.products.FirstOrDefault(x => x.id == id);
+                //if(isHas is null) return Result<productListDTO>.Failure(StatusCode.NotFound);
+                //var products = await _db.products
+                //    .AsNoTracking()                 
+                //    .ProjectTo<productListDTO>(_mapper.ConfigurationProvider)
+                //    .FirstOrDefaultAsync(x=>x.id == id);
+                await semophore.WaitAsync();
+
+                var data = await _db.products
+                                           .Where(p=>p.id == id)
+                                           .Include(p => p.product_option_images)
+                                           .Include(v => v.product_variants)
+                                               .ThenInclude(vr => vr.variants)
+                                                   .ThenInclude(vr => vr.option_values)
+                                                       .ThenInclude(vr => vr.options)
+                                           .AsSplitQuery()
+                                           .ToListAsync();
+                var products = data.Select(product =>
+                {
+                    //images
+                    var images = product.product_option_images
+                        .GroupBy(s => s.option_value_id)
+                        .OrderBy(x => x.Key)
+                        .SelectMany(g => g
+                            .Where(c => c.src!.StartsWith("MAU"))
+                            .OrderBy(c => c.id)
+                            .Take(1)
+                            .Select(x => new ImageDTO
+                            {
+                                id = x.id,
+                                src = x.src!
+                            })
+                        ).ToList();
+                    //variant 
+                    var variant = product.product_variants
+                                 .Select(x => new VariantDTO
+                                 {
+                                     id = x.id,
+                                     title = x.title,
+                                     price = x.price,
+                                     old_price = x.old_price,
+                                     sku = x.sku,
+                                     percent = x.percent,
+                                     quantity = x.quantity
+                                 })
+                                 .ToList();
+                    //options_value
+                    var options_value = product.product_option_images
+                                        .GroupBy(x => x.options_values.options.title)
+                                        .Select(group_option => new OptionImageDTO
+                                        {
+                                            title = group_option.Key,
+                                            option_id = group_option.Select(k => k.options_values.option_id).FirstOrDefault() ?? null!,
+                                            options = group_option
+                                                .GroupBy(v => v.options_values.value)
+                                                .Select(group_option_value => new optionValueDTO
+                                                {
+                                                    //image =  valueGroup.Select(i => i.src).ToList()
+                                                    title = group_option_value.Key,
+                                                    image = group_option_value.Select(i => new ImageDTO { id = i.id, src = i.src }).ToList()
+                                                })
+                                                .ToList()
+                                        })
+                                        .ToList();
+                    //options
+                    var options = product.product_variants
+                                .SelectMany(v => v.variants)
+                                .GroupBy(ovid => ovid.option_values.option_id)
+                                .Select(x => new OptionDTO
+                                {
+                                    option_id = x.Key,
+                                    title = x.Select(x => x.option_values.options.title).FirstOrDefault(),
+                                    values = x.Select(a => a.option_values.value).Distinct().ToList()
+                                })
+                                .ToList();
+
+
+                    var dto = _mapper.Map<productListDTO>(product);
+                    dto.variants = variant;
+                    dto.images = images;
+                    dto.options_value = options_value;
+                    dto.options = options;
+                    return dto;
+                }).ToList();
+                return Result<List<productListDTO>>.Success(products);
             }
             catch
             {
-                return null!;
+                return Result<List<productListDTO>>.Failure();
+            }
+            finally
+            {
+                semophore.Release();
             }
         }
 
-        public async Task<Result<productListDTO>> GetId(int id)
+        public async Task<Result<List<OptionDTO>>> GetSizeByColor(int id, [FromForm] string color)
         {
             try
             {
-                var isHas = _db.products.FirstOrDefault(x => x.id == id);
-                if(isHas is null) return Result<productListDTO>.Failure(StatusCode.NotFound);
-                var products = await _db.products
-                    .AsNoTracking()                 
-                    .ProjectTo<productListDTO>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(x=>x.id == id);
-                return Result<productListDTO>.Success(products!);
+                var options = await _db.product_variants
+                 .Where(x => x.product_id == id && x.title.StartsWith(color))
+                 .SelectMany(v => v.variants)
+                 .GroupBy(ovid => ovid.option_values.option_id == "size")
+                 .Select(x => new OptionDTO
+                 {                 
+                     title = x.Select(x => x.option_values.options.title).FirstOrDefault(),
+                     option_id = x.Select(x => x.option_values.option_id).FirstOrDefault(),
+                     values = x.Select(a => a.option_values.value).Distinct().ToList()
+                 })
+                 .ToListAsync();
+                return Result<List<OptionDTO>>.Success(options);
             }
             catch
             {
-                return Result<productListDTO>.Failure();
+                return Result<List<OptionDTO>>.Failure(StatusCode.Isvalid);
             }
         }
     }

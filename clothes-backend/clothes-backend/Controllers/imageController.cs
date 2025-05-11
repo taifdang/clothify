@@ -45,10 +45,9 @@ namespace clothes_backend.Controllers
                     string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
 
                 return BadRequest(Result<ProductOptionImages>.IsValid(fullErrorMessage));
-            }
-            //var result = await _service.AddImage(DTO);
+            }      
             var result = await _service.AddImage(DTO);
-            //if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
+            if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
             return Ok(result);
         }
         [HttpDelete("delete")]

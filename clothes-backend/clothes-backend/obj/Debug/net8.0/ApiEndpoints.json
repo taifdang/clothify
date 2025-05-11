@@ -43,7 +43,7 @@
   },
   {
     "ContainingType": "clothes_backend.Controllers.cartController",
-    "Method": "getId",
+    "Method": "getCart",
     "RelativePath": "api/cart/get",
     "HttpMethod": "GET",
     "IsController": true,
@@ -173,7 +173,7 @@
   {
     "ContainingType": "clothes_backend.Controllers.orderController",
     "Method": "getId",
-    "RelativePath": "api/order/get-id",
+    "RelativePath": "api/order/getId",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -194,6 +194,27 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.productController",
+    "Method": "GetProductColor",
+    "RelativePath": "api/product/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "color",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -282,7 +303,7 @@
   {
     "ContainingType": "clothes_backend.Controllers.productController",
     "Method": "GetId",
-    "RelativePath": "api/product/id",
+    "RelativePath": "api/product/getId",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -344,6 +365,37 @@
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.testController",
+    "Method": "getTestOptions",
+    "RelativePath": "api/test/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "color",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "clothes_backend.Controllers.testController",
+    "Method": "getTest",
+    "RelativePath": "api/test/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -516,22 +568,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "clothes_backend.Controllers.variantController",
-    "Method": "getId",
-    "RelativePath": "api/variant/getId",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "clothes_backend.Controllers.WeatherForecastController",

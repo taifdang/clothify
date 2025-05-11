@@ -15,7 +15,6 @@ namespace clothes_backend.Heplers.Middleware
         {
             _next = next;
         }
-
         public  async Task Invoke(HttpContext httpContext,DatabaseContext db,IDistributedCache distributedCache)
         {
             var access_token = httpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");      

@@ -1,4 +1,5 @@
-﻿using clothes_backend.Interfaces.Repository;
+﻿using clothes_backend.Interfaces;
+using clothes_backend.Interfaces.Repository;
 using clothes_backend.Interfaces.Service;
 using clothes_backend.Repositories;
 using clothes_backend.Repository;
@@ -18,13 +19,13 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<ProductVariantsRepository>();
            services.AddScoped<UserRepositpory>();
            services.AddScoped<VerifyHandleService>();
-           services.AddScoped<CartRepository>();
+           services.AddScoped<CartRepositoryOld>();
            services.AddScoped<IUserContextService, UserContextService>();
-           services.AddScoped<OrderRepository>();
+           services.AddScoped<OrderRepositoryOld>();
            //mail           
            services.AddScoped<IBackgroundJobService, BackgroundJobService>();
            services.AddScoped<EmailService>(); 
-            //
+           //
            services.AddScoped<IProductRepository, ProductRepository>();
            services.AddScoped<IProductService, ProductService>();
            services.AddScoped<IUserRepository, UserRepositpory>();
@@ -33,7 +34,14 @@ namespace clothes_backend.Heplers.Middleware
            services.AddScoped<IImageRepository, ImageRepository>();
            services.AddScoped<IImageService, ImageSerivce>();
            services.AddScoped<IImageHandler, ImageHandler>();
-           //automapper
+           services.AddScoped<IVariantRepository, VariantRepository>();
+           services.AddScoped<IVariantService, VariantService>();
+           //
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderReposiotry, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+            //automapper
             return services;
        }
     }      

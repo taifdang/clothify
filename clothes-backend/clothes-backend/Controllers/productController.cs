@@ -14,10 +14,10 @@ namespace clothes_backend.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class productController : ControllerBase
-    {  
-        private readonly IProductService _productService;      
+    {
+        private readonly IProductService _productService;
         public productController(IProductService productService)
-        {                              
+        {
             _productService = productService;
         }
         [HttpGet]
@@ -25,11 +25,18 @@ namespace clothes_backend.Controllers
         {
             var data = await _productService.GetAllProductAsync();
             return Ok(data);
-        }       
-        [HttpGet("id")]
+        }
+        [HttpGet("getId")]
         public async Task<IActionResult> GetId(int id)
         {
             var result = await _productService.GetId(id);
+            if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductColor(int id, [FromQuery] string color)
+        {
+            var result = await _productService.GetSizeByColor(id,color);
             if (result.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(result);
             return Ok(result);
         }
@@ -86,5 +93,6 @@ namespace clothes_backend.Controllers
             if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);          
         }
+        
     }
 }

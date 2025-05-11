@@ -1,6 +1,9 @@
 ﻿using clothes_backend.Data;
+using clothes_backend.DTO.General;
 using clothes_backend.DTO.ORDER;
+using clothes_backend.Interfaces;
 using clothes_backend.Interfaces.Service;
+using clothes_backend.Models;
 using clothes_backend.Repository;
 using clothes_backend.Utils;
 using Microsoft.AspNetCore.Http;
@@ -13,32 +16,45 @@ namespace clothes_backend.Controllers
     [ApiController]
     public class orderController : ControllerBase
     {
-        private readonly OrderRepository _orderRepo;
-        private readonly DatabaseContext _db;
-        private readonly ICacheService _cache;
-        public orderController(OrderRepository orderRepository, DatabaseContext db, ICacheService cache)
-        {
-            _orderRepo = orderRepository;
-            _db = db;
-            _cache = cache;
+        //private readonly OrderRepositoryOld _orderRepo;
+        //private readonly DatabaseContext _db;
+        private readonly IOrderService _service;
+        public orderController(OrderRepositoryOld orderRepository, DatabaseContext db, IOrderService service)
+        {          
+            _service = service;
         }
         [HttpPost]
         public async Task<IActionResult> add([FromForm]orderItemDTO DTO)
         {
-            var data = await _orderRepo.add(DTO);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                   .Where(x => x.Value?.Errors.Count > 0)
+                   .ToDictionary(
+                       error => error.Key,
+                       error => error.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                    );
+                var fullErrorMessage =
+                    string.Join(";", errors.Select(error => $"{error.Key}: {string.Join(", ", error.Value)}"));
+                return BadRequest(Result<CartItems>.IsValid(fullErrorMessage));
+            }
+            var data = await _service.add(DTO);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
         [HttpGet]
         public async Task<IActionResult> getAll()
         {
-            var data = await _orderRepo.getAll();
+            var data = await _service.getAll();
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
-        [HttpGet("get-id")]
+        [HttpGet("getId")]
         public async Task<IActionResult> getId(int id)
         {
-            var data = await _orderRepo.getId(id);
+            var data = await _service.getId(id);
             if (data.statusCode == Utils.Enum.StatusCode.Success) return BadRequest(data);
+            if (data.statusCode != Utils.Enum.StatusCode.Success) return BadRequest(data);
             return Ok(data);
         }
 

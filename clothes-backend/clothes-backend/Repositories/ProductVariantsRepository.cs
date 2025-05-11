@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using clothes_backend.Interfaces.Service;
+using clothes_backend.Interfaces.Repository;
 
 
 namespace clothes_backend.Repository
@@ -98,10 +99,8 @@ namespace clothes_backend.Repository
                 var variants = dictionary.SelectMany(x => x.Value).Select(v => new Variants { product_variant_id = product_variant.id, option_value_id = v.id }).ToList();
                 _db.variants.AddRange(variants);
                 await _db.SaveChangesAsync();
-                transaction.Commit();
-                
-                return product_variant;
-   
+                transaction.Commit();              
+                return product_variant;   
             }
             catch (Exception ex)
             {
@@ -121,6 +120,6 @@ namespace clothes_backend.Repository
             var products = await _db.products.AsNoTracking().Include(x=>x.categories).Include(x=>x.product_option_images).Include(x=>x.product_options).ToDictionaryAsync(p => p.id, p => p);
             _cache.Set(CacheKeys.products_cacheKey, products, TimeSpan.FromMinutes(10));
             return products;
-        }
+        }     
     }
 }

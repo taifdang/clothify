@@ -1,4 +1,5 @@
 ﻿using clothes_backend.DTO.General;
+using clothes_backend.DTO.Product;
 using clothes_backend.DTO.PRODUCT;
 using clothes_backend.DTO.PRODUCT_DTO;
 using clothes_backend.Interfaces.Repository;
@@ -6,7 +7,9 @@ using clothes_backend.Interfaces.Service;
 using clothes_backend.Models;
 using clothes_backend.Utils.Enum;
 using Hangfire;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 namespace clothes_backend.Services
 {
     public class ProductService : IProductService
@@ -25,10 +28,10 @@ namespace clothes_backend.Services
             _backgroundJobClient = backgroundJobClient;
            
         }
-        public async Task<Result<List<productListDTO>?>> GetAllProductAsync()
+        public async Task<Result<List<productListDTO>>> GetAllProductAsync()
         {
             var product = await _productRepository.GetProductAllAsync();
-            return Result<List<productListDTO>?>.Success(product);
+            return Result<List<productListDTO>>.Success(product);
         }
         public async Task<Result<Products>> DeleteAsync(int id)
         {
@@ -50,11 +53,18 @@ namespace clothes_backend.Services
             return Result<Products>.Success(data);
         }
 
-        public async Task<Result<productListDTO>> GetId(int id)
+        public async Task<Result<List<productListDTO>>> GetId(int id)
         {
             var data = await _productRepository.GetId(id);
-            if (data.statusCode != StatusCode.Success) return Result<productListDTO>.Failure(data.statusCode);
-            return Result<productListDTO>.Success(data.data);
+            if (data.statusCode != StatusCode.Success) return Result<List<productListDTO>>.Failure(data.statusCode);
+            return Result<List<productListDTO>>.Success(data.data);
+        }
+
+        public async Task<Result<List<OptionDTO>>> GetSizeByColor(int id, [FromQuery] string color)
+        {
+            var data = await _productRepository.GetSizeByColor(id, color);
+            if (data.statusCode != StatusCode.Success) return Result<List<OptionDTO>>.Failure(data.statusCode);
+            return Result<List<OptionDTO>>.Success(data.data);
         }
     }
 }

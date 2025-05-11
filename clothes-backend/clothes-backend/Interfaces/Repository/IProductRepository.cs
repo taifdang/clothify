@@ -1,4 +1,5 @@
 ﻿using clothes_backend.DTO.General;
+using clothes_backend.DTO.Product;
 using clothes_backend.DTO.PRODUCT;
 using clothes_backend.DTO.PRODUCT_DTO;
 using clothes_backend.Models;
@@ -10,11 +11,12 @@ namespace clothes_backend.Interfaces.Repository
 {
     public interface IProductRepository:IBaseRepository<Products>
     {
-        Task<Result<productListDTO>> GetId(int id);
-        Task<List<productListDTO>?> GetProductAllAsync();
+        Task<Result<List<productListDTO>>> GetId(int id);
+        Task<List<productListDTO>> GetProductAllAsync();
         Task<Products> AddAsync([FromForm] ProductDTO DTO); 
         Task<List<string>> DeleteAsync(int id);
         Task<Result<Products>> UpdateAsync(int id, [FromForm] ProductDTO DTO);
-     
+        Task<Result<List<OptionDTO>>> GetSizeByColor(int id, [FromForm] string color);
+
     }
 }

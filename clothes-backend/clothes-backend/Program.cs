@@ -108,9 +108,9 @@ namespace clothes_backend
             //builder.Services.AddScoped<ProductVariantsRepository>();
             //builder.Services.AddScoped<UserRepositpory>();
             //builder.Services.AddScoped<VerifyHandleService>();          
-            //builder.Services.AddScoped<CartRepository>();
+            //builder.Services.AddScoped<CartRepositoryOld>();
             //builder.Services.AddScoped<IUserContextService,UserContextService>();
-            //builder.Services.AddScoped<OrderRepository>();
+            //builder.Services.AddScoped<OrderRepositoryOld>();
             ////mail
             //builder.Services.AddScoped<MailKitHandle>();
             //builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
@@ -190,21 +190,23 @@ namespace clothes_backend
             //    //save current user
             //    await next(context);
             //});
-            //app.UseMiddleware<CheckTokenMiddleware>();
+            app.UseMiddleware<CheckTokenMiddleware>();
             //store user
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.Path.StartsWithSegments("/api/cart") || context.Request.Path.StartsWithSegments("/api/order"))
-            //    {
-            //        if (context.User.Identity!.IsAuthenticated)
-            //        {
-            //            context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
-            //        }
-            //    } 
-            //    //sessionId
-            //    await next();
-            //});              
-            app.UseMiddleware<GetUserMiddleware>();
+            app.Use(async (context, next) =>
+            {
+                if (
+                context.Request.Path.StartsWithSegments("/api/cart",StringComparison.OrdinalIgnoreCase) 
+                || context.Request.Path.StartsWithSegments("/api/order",StringComparison.OrdinalIgnoreCase))
+                {
+                    if (context.User.Identity!.IsAuthenticated)
+                    {
+                        context.Items["IsUser"] = context.User.FindFirst(ClaimTypes.Name)?.Value;
+                    }
+                }
+                //sessionId
+                await next();
+            });
+            //app.UseMiddleware<GetUserMiddleware>();
             app.MapControllers();
             app.Run();
         }

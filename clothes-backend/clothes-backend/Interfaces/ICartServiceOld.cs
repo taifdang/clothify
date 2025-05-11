@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace clothes_backend.Interfaces
 {
-    public interface ICartService
+    public interface ICartServiceOld
     {
         Task<Result<CartItemDTO>> addCartItem([FromForm] cartAddDTO DTO);
         Task<Result<CartItems>> removeCartItem([FromForm] cartDeleteDTO DTO);
