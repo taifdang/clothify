@@ -1,5 +1,5 @@
 # About
-eCommerce clothes with model EAV via backend use (.NET) REST API with N-tier architecture
+web app clothes with model EAV via backend use (.NET) REST API with N-tier architecture
 # N-Tier Architecture
 ![image](https://github.com/user-attachments/assets/19671c9c-883b-4d48-bb75-18cbf61ccfe4)
 
