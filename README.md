@@ -14,7 +14,7 @@ web app clothes with model EAV via backend use (.NET) REST API with N-tier archi
 -  JWT
 -  Caching
 #
-- Built mini web app managerment product with dynamic variants via eav model
+- Built mini web app management product with dynamic variants via eav model
 - Process push notification via email with Hangfire, MailKit
 - Authorication with JWT (access token,refresh token,revoke token via blacklist)
 - Use caching to speed up data retrieval and reduce system load
