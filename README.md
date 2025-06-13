@@ -13,6 +13,11 @@ web app clothes with model EAV via backend use (.NET) REST API with N-tier archi
 -  Mailkit send OTP and notification via email for users
 -  JWT
 -  Caching
+#
+- Built mini web app managerment product with dynamic variants via eav model
+- Process push notification via email with Hangfire, MailKit
+- Authorication with JWT (access token,refresh token,revoke token via blacklist)
+- Use caching to speed up data retrieval and reduce system load
 # Workflow
 -  User
 ![image](https://github.com/user-attachments/assets/5346eba3-543b-4f4d-a329-d4012e3b88d8)
