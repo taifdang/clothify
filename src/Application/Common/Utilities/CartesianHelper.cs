@@ -4,7 +4,11 @@ public static class CartesianHelper
 {
     public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(IEnumerable<IEnumerable<T>> sequences)
     {
+        if (!sequences.Any())
+            yield break;
+
         IEnumerable<IEnumerable<T>> result = new[] { Enumerable.Empty<T>() };
+
         foreach (var sequence in sequences)
         {
             result = result.SelectMany(
@@ -12,6 +16,8 @@ public static class CartesianHelper
                 (prefix, item) => prefix.Append(item)
             );
         }
-        return result;
+
+        foreach (var combination in result)
+            yield return combination;
     }
 }

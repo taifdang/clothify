@@ -131,7 +131,7 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
 
         //generate
         var listOptionValue = optionValues.OptionValues.Values.ToList();
-        var combinations = CartesianHelper.CartesianProduct(listOptionValue);
+        //var combinations = CartesianHelper.CartesianProduct(listOptionValue);
 
         var product = await _unitOfWork.ProductRepository.GetByIdAsync(
             filter: x => x.Id == id,
@@ -146,13 +146,14 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
         if (product == null)
             throw new Exception("Product not found");
 
-        var variants = new List<ProductVariant>();
+        const int batchSize = 100;
+        var batch = new List<ProductVariant>(batchSize);
 
-        foreach (var combination in combinations)
+        foreach (var combination in CartesianHelper.CartesianProduct(listOptionValue))
         {
-            var optionValueId = combination.ToList();
+            var optionIds = combination.ToList();
 
-            var title = string.Join(" - ", optionValueId.Select(x => optionDictation[x]));
+            var title = string.Join(" - ", optionIds.Select(id => optionDictation[id]));
 
             var variant = new ProductVariant
             {
@@ -162,24 +163,27 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
                 OldPrice = product.OldPrice,
                 Quantity = 0,
                 Percent = 0,
-                Sku = $"{product.Sku}-{string.Join("-", optionValueId)}",
-                Variants = optionValueId.Select(x => new Variant
+                Sku = $"{product.Sku}-{string.Join("-", optionIds)}",
+                Variants = optionIds.Select(x => new Variant
                 {
                     OptionValueId = x
                 }).ToList()
             };
 
-            variants.Add(variant);
-        }
+            batch.Add(variant);
 
-        const int batchSize = 100;
-
-        await _unitOfWork.ExecuteTransactionAsync(async () =>
-        {
-            foreach (var batch in variants.Chunk(batchSize))
+            if (batch.Count >= batchSize)
             {
                 await _unitOfWork.ProductVariantRepository.AddRangeAsync(batch);
+                await _unitOfWork.SaveChangesAsync(token);
+                batch.Clear();
             }
-        }, token);
+        }
+
+        if (batch.Count > 0)
+        {
+            await _unitOfWork.ProductVariantRepository.AddRangeAsync(batch);
+            await _unitOfWork.SaveChangesAsync(token);
+        }
     }
 }
