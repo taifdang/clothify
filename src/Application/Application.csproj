@@ -14,12 +14,12 @@
   <ItemGroup>
     <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\Mapping\" />
-    <Folder Include="Common\Models\Order\" />
-    <Folder Include="Common\Utils\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="6.0.0-preview.4.21253.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10" />
   </ItemGroup>
 
 </Project>

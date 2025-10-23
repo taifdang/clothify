@@ -10,7 +10,7 @@ public static class ConfigureService
     {
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IEmailService, EmailService>();
-        services.AddTransient<IFileService, FileService>();
+        services.AddTransient<IFileService, LocalStorageService>();
         services.AddTransient<IOrderService, OrderService>();
         services.AddTransient<IProductImageService, ProductImageService>();
         services.AddTransient<IProductService, ProductService>();

@@ -10,7 +10,10 @@ public class ProductOptionConfiguration : IEntityTypeConfiguration<ProductOption
     {
         builder.ToTable(nameof(ProductOption));
 
-        builder.HasKey(po => new { po.ProductId, po.OptionId });
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.HasIndex(po => new { po.ProductId, po.OptionId }).IsUnique();
 
         builder.HasOne(po => po.Products)
                .WithMany(p => p.ProductOptions)
@@ -20,6 +23,11 @@ public class ProductOptionConfiguration : IEntityTypeConfiguration<ProductOption
         builder.HasOne(po => po.Options)
                .WithMany(o => o.ProductOptions)
                .HasForeignKey(po => po.OptionId)
-               .OnDelete(DeleteBehavior.Cascade); throw new NotImplementedException();
+               .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(x => x.ProductId)
+            .HasFilter("[AllowImages] = 1")
+            .IsUnique();
+
     }
 }

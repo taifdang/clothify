@@ -7,5 +7,4 @@ public class AddProductRequest
     public decimal Price { get; set; }
     public decimal OldPrice { get; set; }
     public string? Description { get; set; }
-    public List<string> Options { get; set; }
 }

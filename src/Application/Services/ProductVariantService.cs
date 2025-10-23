@@ -1,8 +1,12 @@
 ﻿using Application.Common.Interface;
 using Application.Common.Models.ProductVariant;
+using Application.Common.Utilities;
 using AutoMapper;
 using Infrastructure.Enitites;
 using Infrastructure.Interface;
+using Microsoft.EntityFrameworkCore;
+using Shared.Models.ProductVariant;
+using System.Xml.Schema;
 
 namespace Application.Services;
 
@@ -109,5 +113,73 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
 
         await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductVariantRepository.Delete(existProductVariant), token);
         return _mapper.Map<ProductVariantDTO>(existProductVariant);
+    }
+
+    public async Task Generate(int id, GenerateVariantsRequest optionValues, CancellationToken token)
+    {
+        if (optionValues == null || optionValues.OptionValues.Count == 0)
+            throw new ArgumentException("No option values provided.");
+
+        // get optionValue
+        var listoptionValueId = optionValues.OptionValues.SelectMany(x => x.Value).ToList();
+
+        var optionValueEntity = await _unitOfWork.OptionValueRepository.GetListAsync(
+            filter: x => listoptionValueId.Contains(x.Id),
+            selector: x => new { x.Id, x.Label, x.Value});
+
+        var optionDictation = optionValueEntity.ToDictionary(x => x.Id, x => x.Label ?? x.Value);
+
+        //generate
+        var listOptionValue = optionValues.OptionValues.Values.ToList();
+        var combinations = CartesianHelper.CartesianProduct(listOptionValue);
+
+        var product = await _unitOfWork.ProductRepository.GetByIdAsync(
+            filter: x => x.Id == id,
+            selector: x => new
+            {
+                x.Id,
+                x.Price,
+                x.OldPrice,
+                Sku = string.Join(" - ", x.Categories.Label, x.Id)
+            });
+
+        if (product == null)
+            throw new Exception("Product not found");
+
+        var variants = new List<ProductVariant>();
+
+        foreach (var combination in combinations)
+        {
+            var optionValueId = combination.ToList();
+
+            var title = string.Join(" - ", optionValueId.Select(x => optionDictation[x]));
+
+            var variant = new ProductVariant
+            {
+                ProductId = product.Id,
+                Title = title,
+                Price = product.Price,
+                OldPrice = product.OldPrice,
+                Quantity = 0,
+                Percent = 0,
+                Sku = $"{product.Sku}-{string.Join("-", optionValueId)}",
+                Variants = optionValueId.Select(x => new Variant
+                {
+                    OptionValueId = x
+                }).ToList()
+            };
+
+            variants.Add(variant);
+        }
+
+        const int batchSize = 100;
+
+        await _unitOfWork.ExecuteTransactionAsync(async () =>
+        {
+            foreach (var batch in variants.Chunk(batchSize))
+            {
+                await _unitOfWork.ProductVariantRepository.AddRangeAsync(batch);
+            }
+        }, token);
     }
 }
