@@ -4,20 +4,26 @@ using Application.Common.Utilities;
 using AutoMapper;
 using Infrastructure.Enitites;
 using Infrastructure.Interface;
-using Microsoft.EntityFrameworkCore;
 using Shared.Models.ProductVariant;
-using System.Xml.Schema;
 
 namespace Application.Services;
 
-public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterService filterService, IMapper mapper) : IProductVariantService
+public class ProductVariantService(
+    IUnitOfWork unitOfWork,
+    IProductVariantFilterService filterService, 
+    IMapper mapper) : IProductVariantService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
     private readonly IProductVariantFilterService _filterService = filterService;
-    public async Task<List<ProductVariantDTO>> Get(int id, Dictionary<string, string>? selectedOptions)
+    public async Task<List<ProductVariantDTO>> GetList(int productId, Dictionary<string, string>? selectedOptions)
     {
-        _filterService.FilterByOptionValues(selectedOptions);
+        _filterService.FilterByProductId(productId);
+        
+        if(selectedOptions != null)
+        {
+            _filterService.FilterByOptionValues(selectedOptions);
+        }
 
         var _filter = _filterService.BuildCombinedFilter();
 
@@ -38,37 +44,46 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
 
         return productVariants;
         #region
-        //var productVariants = await _unitOfWork.ProductVariantRepository.GetListAsync(
         //    filter: x => x.ProductId == id && x.Variants.All(x => optionIds.Contains(x.OptionValueId)),      
         //    selector: x => new ProductVariantDTO
-        //    {
-        //        Id = x.Id,
-        //        Title = x.Title,
-        //        Price = x.Price,
-        //        OldPrice = x.OldPrice,
-        //        Percent = x.Percent,
-        //        Quantity = x.Quantity,
-        //        Sku = x.Sku,
-        //        Options = x.Variants.Select(y => y.OptionValues.Value).ToList()
-        //    });
         #endregion
     }
-    public async Task<ProductVariantDTO> Add(AddProductVariantRequest request, CancellationToken token)
+
+    public async Task<ProductVariantDTO> GetById(int productId, int id)
     {
-        var productOptionValueMap = await _unitOfWork.OptionValueRepository.GetListAsync(
-               filter: x => x.Options.ProductOptions.Any(x => x.ProductId == request.ProductId),
+        var productVariant = await _unitOfWork.ProductVariantRepository.GetByIdAsync(
+                filter: x => x.ProductId == productId && x.Id == id,
+                selector: x => new ProductVariantDTO
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Price = x.Price,
+                    OldPrice = x.OldPrice,
+                    Percent = x.Percent,
+                    Quantity = x.Quantity,
+                    Sku = x.Sku,
+                    Options = x.Variants.Select(y => y.OptionValues.Value).ToList()
+                });
+
+        return productVariant;
+    }
+
+    public async Task<ProductVariantDTO> Add(int productId, AddProductVariantRequest request, CancellationToken token)
+    {
+        var optionValueMap = await _unitOfWork.OptionValueRepository.GetListAsync(
+               filter: x => x.Options.ProductOptions.Any(y => y.ProductId == productId),
                selector: x => new{ x.Id, x.OptionId });
 
-        if (!productOptionValueMap.Any())
+        if (!optionValueMap.Any())
             throw new Exception();
 
-        var validOptionValueId = productOptionValueMap.Select(x => x.Id).ToHashSet();
+        var validOptionValueId = optionValueMap.Select(x => x.Id).ToHashSet();
 
         if (request.OptionValueIds.Any(id => !validOptionValueId.Contains(id)))
             throw new Exception();
 
         // check duplicate option value
-        var selectedOptionIds = productOptionValueMap
+        var selectedOptionIds = optionValueMap
             .Where(v => request.OptionValueIds.Contains(v.Id))
             .Select(v => v.OptionId)
             .ToList();
@@ -76,11 +91,11 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
         if (selectedOptionIds.Count != selectedOptionIds.Distinct().Count())
             throw new Exception();
 
-        var totalOptionCount = productOptionValueMap.Select(v => v.OptionId).Distinct().Count();
+        var totalOptionCount = optionValueMap.Select(v => v.OptionId).Distinct().Count();
         if (selectedOptionIds.Count != totalOptionCount)
             throw new Exception();
 
-        _filterService.FilterByProductId(request.ProductId);
+        _filterService.FilterByProductId(productId);
         _filterService.FilterByExactOptionValues(request.OptionValueIds);
         _filterService.FilterByOptionCount(request.OptionValueIds);
 
@@ -91,7 +106,7 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
 
         var variant = new ProductVariant
         {
-            ProductId = request.ProductId,
+            ProductId = productId,
             Price = request.Price,
             OldPrice = request.OldPrice,
             Quantity = request.Quantity,
@@ -106,16 +121,29 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
         return _mapper.Map<ProductVariantDTO>(variant);
     }
 
-    public async Task<ProductVariantDTO> Delete(int id, CancellationToken token)
+    public async Task<ProductVariantDTO> Update(int productId, int id, UpdateProductVariantRequest request, CancellationToken token)
     {
-        var existProductVariant = await _unitOfWork.ProductVariantRepository.FirstOrDefaultAsync(x => x.Id == id)
-           ?? throw new Exception();
+        var productVariant = await _unitOfWork.ProductVariantRepository.FirstOrDefaultAsync(x => x.ProductId == productId && x.Id == id) 
+            ?? throw new Exception();
 
-        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductVariantRepository.Delete(existProductVariant), token);
-        return _mapper.Map<ProductVariantDTO>(existProductVariant);
+        _mapper.Map(request, productVariant);
+
+        await _unitOfWork.SaveChangesAsync(token);
+
+        return _mapper.Map<ProductVariantDTO>(productVariant);
     }
 
-    public async Task Generate(int id, GenerateVariantsRequest optionValues, CancellationToken token)
+    public async Task<ProductVariantDTO> Delete(int productId, int id, CancellationToken token)
+    {
+        var productVariant = await _unitOfWork.ProductVariantRepository.FirstOrDefaultAsync(x => x.Id == id && x.ProductId == productId)
+           ?? throw new Exception();
+
+        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductVariantRepository.Delete(productVariant), token);
+
+        return _mapper.Map<ProductVariantDTO>(productVariant);
+    }
+
+    public async Task<int> Generate(int id, GenerateVariantsRequest optionValues, CancellationToken token)
     {
         if (optionValues == null || optionValues.OptionValues.Count == 0)
             throw new ArgumentException("No option values provided.");
@@ -129,9 +157,9 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
 
         var optionDictation = optionValueEntity.ToDictionary(x => x.Id, x => x.Label ?? x.Value);
 
-        //generate
+        // generate
         var listOptionValue = optionValues.OptionValues.Values.ToList();
-        //var combinations = CartesianHelper.CartesianProduct(listOptionValue);
+        // var combinations = CartesianHelper.CartesianProduct(listOptionValue);
 
         var product = await _unitOfWork.ProductRepository.GetByIdAsync(
             filter: x => x.Id == id,
@@ -185,5 +213,8 @@ public class ProductVariantService(IUnitOfWork unitOfWork,IProductVariantFilterS
             await _unitOfWork.ProductVariantRepository.AddRangeAsync(batch);
             await _unitOfWork.SaveChangesAsync(token);
         }
+
+        return id;
     }
+
 }

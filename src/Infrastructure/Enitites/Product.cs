@@ -9,6 +9,7 @@ public class Product
     public decimal Price { get; set; }
     public decimal OldPrice { get; set; }
     public string? Description { get; set; }
+    public string Status { get; set; } = "Hidden";
     public Category Categories { get; set; }
     public ICollection<ProductOption> ProductOptions { get; set; }
     public ICollection<ProductVariant> ProductVariants { get; set; }

@@ -25,6 +25,11 @@ public class BaseRepository<TEntity>(ApplicationDbContext context) : IBaseReposi
         return await _dbSet.AnyAsync(filter);
     }
 
+    public void Attach(TEntity entity)
+    {
+        _dbSet.Attach(entity);  
+    }
+
     public void Delete(TEntity entity)
     {
         _dbSet.Remove(entity);

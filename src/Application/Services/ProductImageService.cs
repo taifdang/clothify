@@ -13,15 +13,17 @@ public class ProductImageService(IUnitOfWork unitOfWork, IMapper mapper, IFileSe
     public IMapper _mapper = mapper;
     private IFileService _storageService = storageService;
 
-    public async Task<ProductImageDTO> Add(AddProductImageRequest request, CancellationToken token)
+    public async Task<ProductImageDTO> Add(int productId, AddProductImageRequest request, CancellationToken token)
     {
         if (request.OptionValueId.HasValue)
         {
-            if (await _unitOfWork.OptionValueRepository.AnyAsync(x => x.Id == request.OptionValueId.Value && x.Options.ProductOptions.Any(y => y.ProductId == request.ProductId && y.AllowImages)))
+            if (await _unitOfWork.OptionValueRepository
+                .AnyAsync(x => x.Id == request.OptionValueId.Value && x.Options.ProductOptions
+                    .Any(y => y.ProductId == productId && y.AllowImages)))
                 throw new Exception();
         }
 
-        // Save file
+        // save file
         if(request.MediaFile != null)
         {
             var pathMedia = await _storageService.AddFileAsync(request.MediaFile);
@@ -31,7 +33,7 @@ public class ProductImageService(IUnitOfWork unitOfWork, IMapper mapper, IFileSe
 
             var productImage = new ProductImage
             {
-                ProductId = request.ProductId,
+                ProductId = productId,
                 OptionValueId = request.OptionValueId.Value,
                 Image = pathMedia.Path
             };
@@ -42,12 +44,12 @@ public class ProductImageService(IUnitOfWork unitOfWork, IMapper mapper, IFileSe
         return _mapper.Map<ProductImageDTO>(request);
     }
 
-    public async Task<ProductImageDTO> Delete(int id, CancellationToken token)
+    public async Task<ProductImageDTO> Delete(int productId, int id, CancellationToken token)
     {
-        var productImage = await _unitOfWork.ProductImageRepository.FirstOrDefaultAsync(x => x.Id == id)
+        var productImage = await _unitOfWork.ProductImageRepository.FirstOrDefaultAsync(x => x.Id == id && x.ProductId == productId)
             ?? throw new Exception();
 
-        // Remove file
+        // remove file
         if (productImage != null)
         {
             if(productImage.Image != null)

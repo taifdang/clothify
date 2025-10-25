@@ -2,5 +2,5 @@
 
 public class GenerateVariantsRequest
 {
-    public Dictionary<string, List<int>> OptionValues { get; set; } = new();
+    public Dictionary<string, List<int>>? OptionValues { get; set; } = new();
 }

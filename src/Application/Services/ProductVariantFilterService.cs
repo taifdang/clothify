@@ -5,16 +5,6 @@ namespace Application.Services;
 
 public class ProductVariantFilterService : BaseFilterService<ProductVariant>, IProductVariantFilterService
 {
-    //public Expression<Func<ProductVariant, bool>> BuildFilter(int productId, Dictionary<string, string> selectedOptions)
-    //{
-    //    return p =>
-    //        p.ProductId == productId &&
-    //        (selectedOptions.Count == 0 ||
-    //         selectedOptions.All(opt =>
-    //             p.Variants.Any(v =>
-    //                 v.OptionValues.Options.Title == opt.Key &&
-    //                 v.OptionValues.Value == opt.Value)));
-    //}
     public void FilterByOptionValues(Dictionary<string, string>? options)
     {
         if (options != null && options.Count > 0)
@@ -40,7 +30,12 @@ public class ProductVariantFilterService : BaseFilterService<ProductVariant>, IP
 
     public void FilterByExactOptionValues(List<int> items)
     {
-        AddFilter(x => x.Variants.All(x => items.Contains(x.OptionValueId)));
+        //AddFilter(x => x.Variants.All(x => items.Contains(x.OptionValueId)));
+
+        AddFilter(x => x.Variants
+            .Select(v => v.OptionValueId)
+            .OrderBy(v => v)
+            .SequenceEqual(items.OrderBy(i => i)));
     }
 
     public void FilterByOptionCount(List<int> items)

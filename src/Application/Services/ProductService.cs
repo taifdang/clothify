@@ -6,6 +6,7 @@ using AutoMapper;
 using Infrastructure.Enitites;
 using Infrastructure.Interface;
 using Infrastructure.Models;
+using Shared.Models.ProductImage;
 
 namespace Application.Services;
 
@@ -14,7 +15,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ProductDTO> Get(int id)
+    public async Task<ProductDTO> GetById(int id)
     {
         var product = await _unitOfWork.ProductRepository.GetByIdAsync(
                 filter: x => x.Id == id,
@@ -27,7 +28,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                     Description = x.Description,
                     Category = x.Categories.Value,
                     ProductType = x.Categories.ProductTypes.Title,
-                    Images = x.ProductImages.Select(y => y.Image).ToList(),
+                    Images = x.ProductImages.Select(y => new ProductImageDTO { Id = y.Id, Image = y.Image}).ToList(),
                     Options = x.ProductOptions.Select(y => new OptionDTO
                     {
                         Id = y.OptionId,
@@ -37,13 +38,14 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                             Id = z.Id,
                             Value = z.Value                      
                         }).ToList()
+                        
                     }).ToList()
                 }  
             );
         return product;
 
     }
-    public async Task<Pagination<ProductDTO>> Get(int pageIndex, int pageSize)
+    public async Task<Pagination<ProductDTO>> GetList(int pageIndex, int pageSize)
     {
         var products = await _unitOfWork.ProductRepository.ToPagination(
             pageIndex: pageIndex,
@@ -59,7 +61,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                  Description = x.Description,
                  Category = x.Categories.Value,
                  ProductType = x.Categories.ProductTypes.Title,
-                 Images = x.ProductImages.Select(y => y.Image).ToList(),
+                 Images = x.ProductImages.Select(y => new ProductImageDTO { Id = y.Id, Image = y.Image }).ToList(),
                  Options = x.ProductOptions.Select(y => new OptionDTO
                  {
                      Id = y.OptionId,
@@ -75,30 +77,46 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
 
         return products;
     }
-    // ????
+
     public async Task<ProductDTO> Add(AddProductRequest request, CancellationToken token)
     {
         var product = _mapper.Map<Product>(request);
+
         await _unitOfWork.ExecuteTransactionAsync(async() => await _unitOfWork.ProductRepository.AddAsync(product), token);
+
         return _mapper.Map<ProductDTO>(product);
     }
     
-    public async Task<ProductDTO> Update(UpdateProductRequest request, CancellationToken token)
+    public async Task<ProductDTO> Update(int id, UpdateProductRequest request, CancellationToken token)
     {
-        if (await _unitOfWork.ProductRepository.AnyAsync(x => x.Id != request.Id))
-            throw new Exception();
+        var product = await _unitOfWork.ProductRepository.FirstOrDefaultAsync(x => x.Id == id)
+           ?? throw new Exception();
 
-        var product = _mapper.Map<Product>(request);
-        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductRepository.Update(product), token);
+        _mapper.Map(request, product);
+
+        await _unitOfWork.SaveChangesAsync(token);
+
         return _mapper.Map<ProductDTO>(product);
-
     }
     public async Task<ProductDTO> Delete(int id, CancellationToken token)
     {
-        var existProduct = await _unitOfWork.ProductRepository.FirstOrDefaultAsync(x => x.Id == id)
+        var product = await _unitOfWork.ProductRepository.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new Exception();
+        
+        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductRepository.Delete(product), token);
+
+        return _mapper.Map<ProductDTO>(product);
+    }
+
+    public async Task<ProductDTO> Publish(int id, CancellationToken token)
+    {
+        var product = await _unitOfWork.ProductRepository.FirstOrDefaultAsync(x => x.Id == id) 
             ?? throw new Exception();
 
-        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.ProductRepository.Delete(existProduct), token);
-        return _mapper.Map<ProductDTO>(existProduct);
+        product.Status = "Visible";
+
+        await _unitOfWork.SaveChangesAsync(token);
+
+        return _mapper.Map<ProductDTO>(product);
     }
 }

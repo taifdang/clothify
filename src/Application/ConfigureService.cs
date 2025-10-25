@@ -19,6 +19,9 @@ public static class ConfigureService
 
         services.AddTransient<IProductVariantFilterService, ProductVariantFilterService>();
 
+
+        services.AddAutoMapper(typeof(ApplicationRoot).Assembly);
+
         return services;
     }
 }

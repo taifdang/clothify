@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models.Option;
+using Shared.Models.ProductImage;
 
 namespace Application.Common.Models.Product;
 
@@ -11,6 +12,6 @@ public class ProductDTO
     public string Description { get; set; }
     public string Category { get; set; }
     public string ProductType { get; set; }
-    public List<string> Images { get; set; }
+    public List<ProductImageDTO> Images { get; set; }
     public List<OptionDTO> Options { get; set; }
 }

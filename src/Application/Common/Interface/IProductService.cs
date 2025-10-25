@@ -5,9 +5,10 @@ namespace Application.Common.Interface;
 
 public interface IProductService
 {
-    Task<ProductDTO> Get(int id);
-    Task<Pagination<ProductDTO>> Get(int pageIndex, int pageSize);
+    Task<ProductDTO> GetById(int id);
+    Task<Pagination<ProductDTO>> GetList(int pageIndex, int pageSize);
     Task<ProductDTO> Add(AddProductRequest request, CancellationToken token);
-    Task<ProductDTO> Update(UpdateProductRequest request, CancellationToken token);
+    Task<ProductDTO> Update(int id, UpdateProductRequest request, CancellationToken token);
     Task<ProductDTO> Delete(int id, CancellationToken token);
+    Task<ProductDTO> Publish(int id, CancellationToken token);
 }
