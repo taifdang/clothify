@@ -4,6 +4,7 @@ using Application.Common.Utilities;
 using AutoMapper;
 using Infrastructure.Enitites;
 using Infrastructure.Interface;
+using Shared.Models.OptionValue;
 using Shared.Models.ProductVariant;
 
 namespace Application.Services;
@@ -16,7 +17,7 @@ public class ProductVariantService(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
     private readonly IProductVariantFilterService _filterService = filterService;
-    public async Task<List<ProductVariantDTO>> GetList(int productId, Dictionary<string, string>? selectedOptions)
+    public async Task<List<ProductVariantReadModel>> GetList(int productId, Dictionary<string, string>? selectedOptions)
     {
         _filterService.FilterByProductId(productId);
         
@@ -29,7 +30,7 @@ public class ProductVariantService(
 
         var productVariants = await _unitOfWork.ProductVariantRepository.GetListAsync(
                 filter: _filter,
-                selector: x => new ProductVariantDTO
+                selector: x => new ProductVariantReadModel
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -38,9 +39,12 @@ public class ProductVariantService(
                     Percent = x.Percent,
                     Quantity = x.Quantity,
                     Sku = x.Sku,
-                    Options = x.Variants.Select(y => y.OptionValues.Value).ToList()
-                }
-            );
+                    Options = x.Variants.Select(y => new OptionValueVariantReadModel
+                    {
+                        Title = y.OptionValues.OptionId,
+                        Value = y.OptionValues.Value
+                    }).ToList()
+                });
 
         return productVariants;
         #region
@@ -49,11 +53,11 @@ public class ProductVariantService(
         #endregion
     }
 
-    public async Task<ProductVariantDTO> GetById(int productId, int id)
+    public async Task<ProductVariantReadModel> GetById(int productId, int id)
     {
         var productVariant = await _unitOfWork.ProductVariantRepository.GetByIdAsync(
                 filter: x => x.ProductId == productId && x.Id == id,
-                selector: x => new ProductVariantDTO
+                selector: x => new ProductVariantReadModel
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -62,7 +66,11 @@ public class ProductVariantService(
                     Percent = x.Percent,
                     Quantity = x.Quantity,
                     Sku = x.Sku,
-                    Options = x.Variants.Select(y => y.OptionValues.Value).ToList()
+                    Options = x.Variants.Select(y => new OptionValueVariantReadModel
+                    {
+                        Title = y.OptionValues.OptionId,
+                        Value = y.OptionValues.Value
+                    }).ToList()
                 });
 
         return productVariant;
