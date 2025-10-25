@@ -1,11 +1,12 @@
 ﻿using Application.Common.Interface;
-using Application.Common.Models.Option;
-using Application.Common.Models.OptionValue;
 using Application.Common.Models.Product;
 using AutoMapper;
 using Infrastructure.Enitites;
 using Infrastructure.Interface;
 using Infrastructure.Models;
+using Shared.Models.Option;
+using Shared.Models.OptionValue;
+using Shared.Models.Product;
 using Shared.Models.ProductImage;
 
 namespace Application.Services;
@@ -15,11 +16,11 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ProductDTO> GetById(int id)
+    public async Task<ProductReadModel> GetById(int id)
     {
-        var product = await _unitOfWork.ProductRepository.GetByIdAsync(
+        var productReadModel = await _unitOfWork.ProductRepository.GetByIdAsync(
                 filter: x => x.Id == id,
-                selector: x => new ProductDTO
+                selector: x => new ProductReadModel
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -28,54 +29,81 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                     Description = x.Description,
                     Category = x.Categories.Value,
                     ProductType = x.Categories.ProductTypes.Title,
-                    Images = x.ProductImages.Select(y => new ProductImageDTO { Id = y.Id, Image = y.Image}).ToList(),
-                    Options = x.ProductOptions.Select(y => new OptionDTO
+                    Images = x.ProductImages.Select(img => new ProductImageReadModel
                     {
-                        Id = y.OptionId,
-                        Title = y.Options.Title,
-                        Values = y.Options.OptionValues.Select(z => new OptionValueDTO
+                        Id = img.Id,
+                        Image = img.Image
+                    }).ToList(),
+                    Options = x.ProductOptions.Select(po => new OptionReadModel
+                    {
+                        Title = po.Options.Title,
+                        Label = po.OptionId,
+                        Values = po.Options.OptionValues.Select(v => v.Value).ToList()
+                    }).ToList(),
+                    OptionValues = x.ProductOptions.Select(po => new OptionValueReadModel
+                    {
+                        Title = po.Options.Title,
+                        OptionId = po.OptionId,
+                        Values = po.Options.OptionValues.Select(v => v.Value).ToList(),
+                        Options = po.Options.OptionValues.Select(ov => new OptionValueImageReadModel
                         {
-                            Id = z.Id,
-                            Value = z.Value                      
+                            Title = ov.Value,
+                            Label = ov.Label,
+                            Image = ov.ProductImages.Select(pi => new ProductImageReadModel
+                            {
+                                Id = pi.Id,
+                                Image = pi.Image
+                            }).ToList()
                         }).ToList()
-                        
                     }).ToList()
-                }  
-            );
-        return product;
-
+                });
+        return productReadModel;
     }
-    public async Task<Pagination<ProductDTO>> GetList(int pageIndex, int pageSize)
+    public async Task<Pagination<ProductReadModel>> GetList(int pageIndex, int pageSize)
     {
-        var products = await _unitOfWork.ProductRepository.ToPagination(
-            pageIndex: pageIndex,
-            pageSize: pageSize,
-            orderBy: x => x.Title,
-            ascending: true,
-            selector: x => new ProductDTO
-            {
-                 Id = x.Id,
-                 Title = x.Title,
-                 Price = x.Price,
-                 OldPrice = x.OldPrice,
-                 Description = x.Description,
-                 Category = x.Categories.Value,
-                 ProductType = x.Categories.ProductTypes.Title,
-                 Images = x.ProductImages.Select(y => new ProductImageDTO { Id = y.Id, Image = y.Image }).ToList(),
-                 Options = x.ProductOptions.Select(y => new OptionDTO
-                 {
-                     Id = y.OptionId,
-                     Title = y.Options.Title,
-                     Values = y.Options.OptionValues.Select(z => new OptionValueDTO
-                     {
-                         Id = z.Id,
-                         Value = z.Value
-                     }).ToList()
-                 }).ToList()
-            }
-        );
-
-        return products;
+        var productsReadModel = await _unitOfWork.ProductRepository.ToPagination(
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                orderBy: x => x.Title,
+                ascending: true,
+                selector: x => new ProductReadModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Price = x.Price,
+                    OldPrice = x.OldPrice,
+                    Description = x.Description,
+                    Category = x.Categories.Value,
+                    ProductType = x.Categories.ProductTypes.Title,
+                    Images = x.ProductImages.Select(img => new ProductImageReadModel
+                    {
+                        Id = img.Id,
+                        Image = img.Image
+                    }).ToList(),
+                    Options = x.ProductOptions.Select(po => new OptionReadModel
+                    {
+                        Title = po.Options.Title,
+                        Label = po.OptionId,
+                        Values = po.Options.OptionValues.Select(v => v.Value).ToList()
+                    }).ToList(),
+                    OptionValues = x.ProductOptions.Select(po => new OptionValueReadModel
+                    {
+                        Title = po.Options.Title,
+                        OptionId = po.OptionId,
+                        Values = po.Options.OptionValues.Select(v => v.Value).ToList(),
+                        Options = po.Options.OptionValues.Select(ov => new OptionValueImageReadModel
+                        {
+                            Title = ov.Value,
+                            Label = ov.Label,
+                            Image = ov.ProductImages.Select(pi => new ProductImageReadModel
+                            {
+                                Id = pi.Id,
+                                Image = pi.Image
+                            }).ToList()
+                        }).ToList()
+                    }).ToList()
+                });
+        return productsReadModel;
     }
 
     public async Task<ProductDTO> Add(AddProductRequest request, CancellationToken token)

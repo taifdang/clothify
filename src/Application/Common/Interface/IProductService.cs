@@ -1,12 +1,13 @@
 ﻿using Application.Common.Models.Product;
 using Infrastructure.Models;
+using Shared.Models.Product;
 
 namespace Application.Common.Interface;
 
 public interface IProductService
 {
-    Task<ProductDTO> GetById(int id);
-    Task<Pagination<ProductDTO>> GetList(int pageIndex, int pageSize);
+    Task<ProductReadModel> GetById(int id);
+    Task<Pagination<ProductReadModel>> GetList(int pageIndex, int pageSize);
     Task<ProductDTO> Add(AddProductRequest request, CancellationToken token);
     Task<ProductDTO> Update(int id, UpdateProductRequest request, CancellationToken token);
     Task<ProductDTO> Delete(int id, CancellationToken token);

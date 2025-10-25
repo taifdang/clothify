@@ -12,6 +12,4 @@ public class ProductDTO
     public string Description { get; set; }
     public string Category { get; set; }
     public string ProductType { get; set; }
-    public List<ProductImageDTO> Images { get; set; }
-    public List<OptionDTO> Options { get; set; }
 }
