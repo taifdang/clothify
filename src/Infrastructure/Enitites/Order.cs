@@ -3,8 +3,9 @@
 public class Order
 {
     public int Id { get; set; }
-    public int? UserId { get; set; }
-    public int? SessionId { get; set; }
+    //public int? UserId { get; set; }
+    public int CustomerId { get; set; }
+    //public int? SessionId { get; set; }
     public string Status { get; set; } = "PENDING"; // PENDING, PAID, SHIPPED, CANCELED
     public string? Note { get; set; }
     public decimal Total { get; set; }
@@ -14,6 +15,7 @@ public class Order
     public string? PaymentStatus { get; set; } // UNPAID, PAID, REFUNDED
     public DateTime CreateAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
-    public User Users { get; set; }
-    public ICollection<OrderDetail> OrderDetails { get; set; }
+    //public User Users { get; set; }
+    public Customer Customer { get; set; }
+    public ICollection<OrderItem> OrderItems { get; set; }
 }

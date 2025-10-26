@@ -5,17 +5,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configurations;
 
-public class OrderDetailConfiguration : IEntityTypeConfiguration<OrderDetail>
+public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 {
-    public void Configure(EntityTypeBuilder<OrderDetail> builder)
+    public void Configure(EntityTypeBuilder<OrderItem> builder)
     {
-        builder.ToTable(nameof(OrderDetail));
+        builder.ToTable(nameof(OrderItem));
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+        builder.Property(p => p.Price)
+               .HasPrecision(18, 2);
+
         builder.HasOne(od => od.Orders)
-               .WithMany(o => o.OrderDetails)
+               .WithMany(o => o.OrderItems)
                .HasForeignKey(od => od.OrderId)
                .OnDelete(DeleteBehavior.Cascade);
 

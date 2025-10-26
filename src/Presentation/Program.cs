@@ -1,30 +1,19 @@
 using Api.Extensions;
-using System.Text.Json.Serialization;
+using Shared.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var configuration = builder.Configuration.Get<AppSettings>()
+    ?? throw new Exception("build fail");
 
-builder.Services.AddControllers()
-    .AddJsonOptions(opt =>
-    {
-        opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        opt.JsonSerializerOptions.WriteIndented = true;
-    });
-
-builder.Services.AddInfrastructure(builder.Environment, builder.Configuration);
+builder.Services.AddSingleton(configuration);
+builder.ConfigureServices(configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
+app.ConfigurePipelineAsync(configuration);
 
 app.Run();
+
+// test
+public partial class Program { }

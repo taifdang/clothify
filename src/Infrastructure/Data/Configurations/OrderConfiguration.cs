@@ -12,5 +12,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.Property(p => p.Total)
+               .HasPrecision(18, 2);
     }
 }

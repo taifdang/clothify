@@ -34,8 +34,8 @@ public class ProductVariantService(
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Price = x.Price,
-                    OldPrice = x.OldPrice,
+                    Price = x.RegularPrice,
+                    OldPrice = x.ComparePrice,
                     Percent = x.Percent,
                     Quantity = x.Quantity,
                     Sku = x.Sku,
@@ -61,8 +61,8 @@ public class ProductVariantService(
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Price = x.Price,
-                    OldPrice = x.OldPrice,
+                    Price = x.RegularPrice,
+                    OldPrice = x.ComparePrice,
                     Percent = x.Percent,
                     Quantity = x.Quantity,
                     Sku = x.Sku,
@@ -115,8 +115,8 @@ public class ProductVariantService(
         var variant = new ProductVariant
         {
             ProductId = productId,
-            Price = request.Price,
-            OldPrice = request.OldPrice,
+            RegularPrice = request.Price,
+            ComparePrice = request.OldPrice,
             Quantity = request.Quantity,
             Variants = request.OptionValueIds.Select(id => new Variant
             {
@@ -174,8 +174,8 @@ public class ProductVariantService(
             selector: x => new
             {
                 x.Id,
-                x.Price,
-                x.OldPrice,
+                x.RegularPrice,
+                x.ComparePrice,
                 Sku = string.Join(" - ", x.Categories.Label, x.Id)
             });
 
@@ -195,8 +195,8 @@ public class ProductVariantService(
             {
                 ProductId = product.Id,
                 Title = title,
-                Price = product.Price,
-                OldPrice = product.OldPrice,
+                RegularPrice = product.RegularPrice,
+                ComparePrice = product.ComparePrice,
                 Quantity = 0,
                 Percent = 0,
                 Sku = $"{product.Sku}-{string.Join("-", optionIds)}",

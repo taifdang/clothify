@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interface;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Shared.Constants;
@@ -9,19 +10,24 @@ namespace Application.Services;
 
 public class LocalStorageService : IFileService
 {
-    private readonly string _webRootPath;
+
     private readonly FileStorageSettings _fileStorage;
     private readonly string _userContentFolder;
-    private readonly string _baseUrl;
+    private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ILogger<LocalStorageService> _logger;
-    
-    public LocalStorageService(string webRootPath, AppSettings appSettings, ILogger<LocalStorageService> logger)
+    private readonly string _baseUrl;
+
+    public LocalStorageService(
+       IWebHostEnvironment webHostEnvironment,
+       ILogger<LocalStorageService> logger,
+       AppSettings appSettings)
     {
-        _webRootPath = webRootPath; 
+        _webHostEnvironment = webHostEnvironment;
         _logger = logger;
         _fileStorage = appSettings.FileStorageSettings;
-        _userContentFolder = Path.Combine(_webRootPath, _fileStorage.Path); 
+        _userContentFolder = Path.Combine(_webHostEnvironment.ContentRootPath, _fileStorage.Path);
         _baseUrl = appSettings.BaseUrl;
+
     }
 
     public async Task<FileUploadResult> AddFileAsync(IFormFile file)

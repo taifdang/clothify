@@ -12,5 +12,14 @@ public class ProductVariantConfiguration : IEntityTypeConfiguration<ProductVaria
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.Property(p => p.RegularPrice)
+               .HasPrecision(18, 2);
+
+        builder.Property(p => p.ComparePrice)
+               .HasPrecision(18, 2);
+
+        builder.Property(p => p.Percent)
+              .HasPrecision(5, 2);
     }
 }

@@ -1,20 +1,24 @@
 ﻿using Infrastructure.Enitites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace Infrastructure.Data.Configurations;
 
-public class CartDetailConfiguration : IEntityTypeConfiguration<CartDetail>
+public class CartitemConfiguration : IEntityTypeConfiguration<CartItem>
 {
-    public void Configure(EntityTypeBuilder<CartDetail> builder)
+    public void Configure(EntityTypeBuilder<CartItem> builder)
     {
-        builder.ToTable(nameof(CartDetail));
+        builder.ToTable(nameof(CartItem));
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+        builder.Property(p => p.UnitPrice)
+               .HasPrecision(18, 2);
+
         builder.HasOne(ci => ci.Carts)
-               .WithMany(c => c.CartDetails)
+               .WithMany(c => c.CartItems)
                .HasForeignKey(ci => ci.CartId)
                .OnDelete(DeleteBehavior.Cascade);
 
@@ -23,7 +27,6 @@ public class CartDetailConfiguration : IEntityTypeConfiguration<CartDetail>
                .HasForeignKey(ci => ci.ProductVariantId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Property(ci => ci.RowVersion)
-               .IsRowVersion();
+        builder.Property(ci => ci.Version).IsConcurrencyToken();            
     }
 }

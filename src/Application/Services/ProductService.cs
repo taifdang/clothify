@@ -24,8 +24,8 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Price = x.Price,
-                    OldPrice = x.OldPrice,
+                    Price = x.RegularPrice,
+                    OldPrice = x.ComparePrice,
                     Description = x.Description,
                     Category = x.Categories.Value,
                     ProductType = x.Categories.ProductTypes.Title,
@@ -70,8 +70,8 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    Price = x.Price,
-                    OldPrice = x.OldPrice,
+                    Price = x.RegularPrice,
+                    OldPrice = x.ComparePrice,
                     Description = x.Description,
                     Category = x.Categories.Value,
                     ProductType = x.Categories.ProductTypes.Title,

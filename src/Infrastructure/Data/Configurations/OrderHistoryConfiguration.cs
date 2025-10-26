@@ -12,5 +12,6 @@ public class OrderHistoryConfiguration : IEntityTypeConfiguration<OrderHistory>
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        
     }
 }
