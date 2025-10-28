@@ -15,6 +15,8 @@ public class UnitOfWork : IUnitOfWork
     public ICartRepository CartRepository { get; }
     public IProductOptionRepository ProductOptionRepository { get; }
     public IOptionValueRepository OptionValueRepository { get; }
+    public IForgotPasswordRepository ForgotPasswordRepository { get; }
+    public IRefreshTokenRepository RefreshTokenRepository { get; }
 
     public UnitOfWork(ApplicationDbContext context)
     {
@@ -27,6 +29,8 @@ public class UnitOfWork : IUnitOfWork
         CartRepository = new CartRepository(_context);
         ProductOptionRepository = new ProductOptionRepository(_context);
         OptionValueRepository = new OptionValueRepository(_context);
+        ForgotPasswordRepository = new ForgotPasswordRepository(_context);
+        RefreshTokenRepository = new RefreshTokenRepository(_context);
     }
 
     public async Task ExecuteTransactionAsync(Action action, CancellationToken token)

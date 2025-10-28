@@ -13,7 +13,7 @@ public static class ConfigureService
 {
     public static IServiceCollection AddInfrastructureService(this IServiceCollection services, AppSettings configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(p=>p.UseSqlServer("Server=LAPTOP-J20BGGNG\\SQLEXPRESS;Database=clothify_db;Trusted_Connection=true; MultipleActiveResultSets=true; TrustServerCertificate=True"));
+        services.AddDbContext<ApplicationDbContext>(p=>p.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
 
         services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -25,6 +25,8 @@ public static class ConfigureService
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

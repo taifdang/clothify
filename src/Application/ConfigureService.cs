@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interface;
+using Application.Common.Utilities;
 using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Constants;
@@ -24,6 +25,9 @@ public static class ConfigureService
         services.AddTransient<IUserService, UserService>();
 
         services.AddTransient<IProductVariantFilterService, ProductVariantFilterService>();
+
+        services.AddTransient<ICookieService, CookieService>();
+        services.AddTransient<ITokenService, TokenService>();
 
         services.AddAutoMapper(typeof(ApplicationRoot).Assembly);
 
